@@ -1,0 +1,7 @@
+interface:
+  display_name: "产品调研"
+  short_description: "用来源分级、证据卡、反证核查和质量门支持产品研究与决策"
+  default_prompt: "Use $product-research to research this product question and produce a source-linked decision brief."
+
+policy:
+  allow_implicit_invocation: true

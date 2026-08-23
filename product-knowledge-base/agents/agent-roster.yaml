@@ -1,0 +1,266 @@
+version: 0.2
+last_updated: 2026-08-18
+status: draft
+owner: Product Lead
+source:
+  - OpenAI official model and agent documentation
+  - product-knowledge-base/decisions/product-research-workflow-2026-08-18.md
+confidence: high
+related_decisions:
+  - product-knowledge-base/decisions/product-research-workflow-2026-08-18.md
+next_review_date: 2026-11-18
+
+language_policy:
+  default_language: zh-CN
+  human_facing_outputs: 中文优先
+  keep_english_for:
+    - model ids
+    - agent ids
+    - file paths
+    - config keys
+    - commands
+    - source titles when citing
+  summary_rule: 引用英文资料时，用中文总结并保留原始链接。
+
+official_basis:
+  models: "https://developers.openai.com/api/docs/models"
+  latest_model_guidance: "https://developers.openai.com/api/docs/guides/latest-model"
+  agents_orchestration: "https://developers.openai.com/api/docs/guides/agents/orchestration"
+  human_in_the_loop: "https://developers.openai.com/api/docs/guides/agents/guardrails-approvals"
+  agent_evals: "https://developers.openai.com/api/docs/guides/agent-evals"
+  research_evidence: "https://learn.chatgpt.com/use-cases/synthesize-research-evidence"
+  codex_subagents: "https://learn.chatgpt.com/docs/agent-configuration/subagents"
+
+model_policy:
+  default_manager_model: gpt-5.6-terra
+  default_manager_reasoning_effort: high
+  default_subagent_model: gpt-5.6-terra
+  default_subagent_reasoning_effort: medium
+  high_volume_model: gpt-5.6-luna
+  hard_reasoning_model: gpt-5.6
+  max_parallel_subagents: 4
+  routing_rules:
+    - use: gpt-5.6-luna
+      when: high-volume tagging, extraction, deduplication, clustering, or first-pass summarization
+    - use: gpt-5.6-terra
+      when: normal product analysis, weekly synthesis, PRD drafting, research synthesis, or feedback triage
+    - use: gpt-5.6
+      when: ambiguous strategy, major roadmap tradeoffs, executive-facing narratives, high-stakes review, or complex multi-step reasoning
+    - use: pro_mode
+      when: only if reliability gain matters more than latency and cost, and the task has clear evaluation criteria
+
+agents:
+  - id: product_manager_agent
+    role: 主控与综合判断负责人
+    model: gpt-5.6-terra
+    reasoning_effort: high
+    upgrade_to: gpt-5.6
+    upgrade_when:
+      - major roadmap prioritization
+      - cross-functional tradeoff with revenue, legal, or customer commitment impact
+      - conflicting evidence that affects strategic direction
+    owns:
+      - board synthesis
+      - priority recommendations
+      - deciding which specialist agents to invoke
+      - research contract and final decision synthesis
+      - final weekly product update draft
+    inputs:
+      - BOARD.md
+      - user feedback summaries
+      - metrics summaries
+      - research summaries
+      - evidence cards
+      - evidence verification reports
+      - decision records
+    outputs:
+      - updated board draft
+      - priority recommendation
+      - questions for human decision
+      - write-back plan
+    human_approval_required_for:
+      - roadmap commitment changes
+      - external-facing messaging
+      - final priority decisions
+
+  - id: knowledge_curator_agent
+    role: 知识库维护与一致性检查
+    model: gpt-5.6-terra
+    reasoning_effort: medium
+    fallback_model: gpt-5.6-luna
+    use_luna_when:
+      - checking metadata completeness
+      - tagging documents
+      - finding duplicates
+    owns:
+      - stale document detection
+      - conflict detection
+      - metadata consistency
+      - source and confidence labels
+    outputs:
+      - update candidates
+      - stale-doc list
+      - conflict report
+      - proposed knowledge-base patches
+
+  - id: user_feedback_agent
+    role: 用户反馈分诊与痛点聚类
+    model: gpt-5.6-luna
+    reasoning_effort: medium
+    upgrade_to: gpt-5.6-terra
+    upgrade_when:
+      - feedback is ambiguous or politically sensitive
+      - customer impact needs product judgment
+      - clustering conflicts with existing user taxonomy
+    owns:
+      - feedback classification
+      - frequency and severity grouping
+      - customer segment tagging
+      - evidence snippets and source links
+    outputs:
+      - pain-point clusters
+      - top feedback changes
+      - candidate opportunities
+      - evidence pack for PRD Agent
+
+  - id: research_agent
+    role: 市场、竞品和用户研究综合
+    model: gpt-5.6-terra
+    reasoning_effort: medium
+    upgrade_to: gpt-5.6
+    upgrade_when:
+      - research affects positioning, pricing, or roadmap direction
+      - sources disagree materially
+      - the result is executive-facing
+    owns:
+      - competitor notes
+      - market signal summaries
+      - positioning implications
+      - source-backed opportunity briefs
+      - fact, inference, and assumption separation
+      - options and tradeoff synthesis
+    inputs:
+      - research contract
+      - evidence cards
+      - verification report
+      - related internal context
+    outputs:
+      - research decision brief
+      - claim-to-source matrix
+      - evidence gaps and validation plan
+
+  - id: source_scout_agent
+    role: 按证据线搜索与整理来源
+    model: gpt-5.6-luna
+    reasoning_effort: medium
+    upgrade_to: gpt-5.6-terra
+    upgrade_when:
+      - source material is ambiguous, multilingual, or methodologically complex
+      - a source lane includes regulation, medicine, finance, or conflicting numbers
+    owns:
+      - source discovery within one assigned evidence lane
+      - opening original pages and recording dates
+      - evidence card creation
+      - source gaps and contradictions
+    inputs:
+      - research contract
+      - assigned evidence lane
+      - product-research source policy
+    outputs:
+      - evidence cards
+      - inaccessible or missing source list
+      - observed contradictions
+    constraints:
+      - no final recommendation
+      - no shared-document writes during parallel collection
+      - no external writes or access-control bypass
+
+  - id: evidence_verifier_agent
+    role: 关键 claim、引用和反证独立核查
+    model: gpt-5.6-terra
+    reasoning_effort: high
+    upgrade_to: gpt-5.6
+    upgrade_when:
+      - verification affects pricing, roadmap, legal, medical, financial, or executive decisions
+      - primary sources conflict or the recommendation changes under uncertainty
+    owns:
+      - citation entailment checks
+      - date, scope, unit, and methodology checks
+      - source independence checks
+      - counterevidence and conflict review
+    inputs:
+      - evidence cards
+      - draft claims
+      - product-research source policy
+    outputs:
+      - claim verification status
+      - weak or unsupported claim list
+      - required corrections
+      - confidence downgrade recommendations
+
+  - id: metrics_agent
+    role: 指标、漏斗和异常分析
+    model: gpt-5.6-terra
+    reasoning_effort: high
+    owns:
+      - metric definitions
+      - anomaly summaries
+      - funnel interpretation
+      - experiment readouts
+    outputs:
+      - metric insight summary
+      - suspected causes
+      - confidence level
+      - recommended next analysis
+    human_approval_required_for:
+      - public metric claims
+      - target metric changes
+
+  - id: prd_agent
+    role: PRD 和验收标准草拟
+    model: gpt-5.6-terra
+    reasoning_effort: high
+    upgrade_to: gpt-5.6
+    upgrade_when:
+      - feature is ambiguous, cross-functional, or high risk
+      - acceptance criteria involve complex policy, billing, permissions, or data flows
+    owns:
+      - PRD drafts
+      - user problem framing
+      - scope and non-goals
+      - acceptance criteria
+      - open questions
+    human_approval_required_for:
+      - PRD approval
+      - scope commitment
+
+  - id: decision_log_agent
+    role: 产品决策记录
+    model: gpt-5.6-luna
+    reasoning_effort: medium
+    upgrade_to: gpt-5.6-terra
+    upgrade_when:
+      - decision has conflicting evidence
+      - decision changes roadmap or commitments
+    owns:
+      - decision records
+      - rationale
+      - alternatives considered
+      - review dates
+    human_approval_required_for:
+      - final decision status
+
+  - id: review_eval_agent
+    role: Agent 输出与知识库更新的质量 review
+    model: gpt-5.6-terra
+    reasoning_effort: high
+    owns:
+      - checking if output answers the request
+      - finding unsupported claims
+      - scoring product research against the 100-point quality gate
+      - checking missing metadata
+      - verifying that approvals were requested where needed
+    outputs:
+      - pass/fail review
+      - issues by severity
+      - recommended fixes

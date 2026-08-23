@@ -1,0 +1,10 @@
+# Copy these settings into `.codex/config.toml` if project-level Codex config is allowed.
+# In this workspace, `.codex` may require additional permission before Codex can write it.
+
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 4
+default_subagent_model = "gpt-5.6-terra"
+default_subagent_reasoning_effort = "medium"
+interrupt_message = true
+
