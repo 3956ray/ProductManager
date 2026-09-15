@@ -1,0 +1,9 @@
+{
+  "scoped_markdown_files": 25,
+  "evidence_cards": 22,
+  "new_source_records": 20,
+  "errors": [],
+  "checks": "required metadata, JSON-valued YAML fields, dates/enums, added local links, source URL uniqueness, old document prefix preservation",
+  "full_library_lint": "unavailable: script missing",
+  "source_duplicate_check": "Exact source_url_or_path equality; repository root and LICENSE/commits are distinct sources"
+}

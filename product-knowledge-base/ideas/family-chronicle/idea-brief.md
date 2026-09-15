@@ -1,11 +1,17 @@
 # Idea Brief：私人家庭史／家族编年网页
 
 Owner: Product Lead
-Last updated: 2026-08-17
+Last updated: 2026-08-23
 Source: Product Lead 口述 idea；家庭史、家庭回忆录与私人家庭相册产品公开资料；GitHub Search、Repository API、仓库 README 与许可证
 Confidence: Medium（需求和相邻商业模式已有强信号；「单个家庭共建编年史网页」的持续使用与付费仍未验证）
-Related decisions: 第一验证形态（待决策）；是否只服务自家或进一步产品化（待决策）
-Next review date: 2026-08-31
+Related decisions: `../../decisions/one-person-pm-knowledge-loop-2026-08-23.md`；第一验证形态（待决策）；是否只服务自家或进一步产品化（待决策）
+Next review date: 2026-09-06
+
+Research Quality: 91 · pass
+Validation Level: V1（公开产品、交易和用户声音支持问题存在；尚无自有行为）
+Next evidence: 20 个来源可追溯证据地图；随后验证一个真实家庭是否主动讲述、纠正、补充、再次浏览或索取成册
+Allowed next investment: 公开证据编译与一个家庭的可逆 concierge 第一卷原型
+Pause/Kill condition: 只有发起人维护；时间线不优于相册或书；隐私范围无法达成；需求实际只是一项一次性成书服务
 
 ## 一句话定义
 
@@ -258,6 +264,8 @@ Star 只能反映开发者关注，不能证明真实用户、留存或收入。
 
 产品形态采用「编年体主线＋人物列传＋事件多视角＋档案证据＋定期成册」。第一步不是搭建完整平台，而是为一个真实家庭完成一个主题明确、只有 20–30 个事件的《第一卷》原型，并观察除了发起人之外，是否有人愿意讲述、纠正、补充、回来阅读或索取实体成果。
 
+V1 只允许公开研究和可逆原型，不代表「全家共建编年网页」需求、持续使用或付费已经验证。下一次必须用真实家庭行为重新评估，不预设升级到 V2。完整证据链见 `evidence-map-2026-08-23.md`。
+
 如果只有一次性成册有强需求，就把它定义为采访／整理／出版服务；只有当家庭成员持续贡献和回访成立后，才发展为长期订阅网页。
 
 ## 公开来源
@@ -279,4 +287,3 @@ Star 只能反映开发者关注，不能证明真实用户、留存或收入。
 - [Twile 后期失灵的用户报告](https://www.reddit.com/r/Genealogy/comments/nxcdaz)
 - [Twile 网站消失的用户记录](https://www.sussexgenealogist.co.uk/blog/52ancestors-fun-facts)
 - [Memrial：私人家庭时间线产品](https://memrial.com/)
-

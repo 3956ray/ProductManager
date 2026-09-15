@@ -1,10 +1,10 @@
 # 「哎呀，早知道」产品调研工作流首次 Eval
 
 Owner: Product Lead  
-Last updated: 2026-08-18  
+Last updated: 2026-08-23
 Source: `BOARD.md`；`prd-v0.1-2026-08-07.md`；`prd-approval-decision-2026-08-07.md`；项目现有决策记录；`product-research` 只读前向测试  
 Confidence: High  
-Related decisions: `../../decisions/product-research-workflow-2026-08-18.md`；`prd-approval-decision-2026-08-07.md`  
+Related decisions: `../../decisions/product-research-workflow-2026-08-18.md`；`../../decisions/one-person-pm-knowledge-loop-2026-08-23.md`；`prd-approval-decision-2026-08-07.md`
 Next review date: 2026-08-25
 
 ## 待验证判断
@@ -65,3 +65,21 @@ reviewed_at: 2026-08-18
 ## 对工作流的观察
 
 首次前向测试成功触发了三项预期 guardrail：没有把 PRD 批准等同于需求验证；在低于 85 分时收缩结论；把缺口转成下一轮原型实验。暂不调整 skill，等待至少第二个不同类型的研究任务后再复核通用性。
+
+## 双轴补充评估（2026-08-23）
+
+保留上述 82/100 历史评分，不回写或美化首次 Eval。按新版工作流补充解释：
+
+```yaml
+eval_status: revise
+research_quality: 82
+validation_level: V1
+confidence: Medium
+next_evidence: 首轮交互原型任务完成率、结果理解、跨平台裁切、保存与分享行为
+allowed_next_investment: 低保真手机网页交互原型、中英文固定模板与模拟额度测试
+pause_or_kill_condition: 用户持续误解核心金额；模板无法稳定表达；首轮样本无人愿意保存或分享
+reviewer: product_manager_agent
+reviewed_at: 2026-08-23
+```
+
+V1 来自相似产品与公开问题信号，只允许可逆原型；它不证明本产品需求、分享或支付成立。真实收款、生产行情、正式账号系统和规模化开发仍超出当前等级。

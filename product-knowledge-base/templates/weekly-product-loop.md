@@ -15,10 +15,10 @@ Next review date:
 | 领域 | 变化 | 证据 | 影响 |
 | --- | --- | --- | --- |
 
-## 当前项目
+## 当前项目（WIP：1 Build + 1 Discovery）
 
-| 项目 | 状态 | 风险 | 下一步 |
-| --- | --- | --- | --- |
+| 类型 | 项目 | Research Quality | Validation Level | 本周时间 | 下一证据 | 允许投入 | Pause/Kill condition |
+| --- | --- | ---: | --- | ---: | --- | --- | --- |
 
 ## 用户信号
 

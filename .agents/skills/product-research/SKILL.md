@@ -46,6 +46,17 @@ description: 为产品想法、市场、竞品、公开用户声音、趋势、�
 
 至少覆盖两条相互独立的证据线。涉及市场规模、价格、法律、医疗、金融或重大 roadmap 方向时，必须包含权威一手来源。
 
+### 2a. 按链接惰性调用短视频工具
+
+默认不加载平台专用处理流程。扫描用户输入和待核查材料中的完整分享文案；只有发现具体作品链接，且研究问题需要读取该作品内容时，才调用 `video-downloader`：
+
+- 抖音：`douyin.com`、`v.douyin.com`、`iesdouyin.com`
+- 小红书：`xiaohongshu.com`、`xhslink.com`
+
+按最小必要范围处理：只需标题、作者、发布时间或发布文案时使用 metadata-only；关键 claim 依赖口播时才下载并执行 ASR；依赖界面演示、实物表现或画面文字时，再检查视频画面。链接失效、内容私密、要求登录或无法合法取得时，记录为来源缺口，不绕过访问控制；可请用户提供本地视频、截图或文字稿。
+
+只有平台名称、没有具体作品链接，或研究对象是平台市场、公司、政策与平台级竞品时，不调用 `video-downloader`。来源等级按作者身份和 claim 判断，不按平台统一判断；单条短视频只能形成线索或假设，不能单独证明市场需求、代表性、付费意愿或产品效果。
+
 ### 3. 收集证据
 
 按证据线收集，不按网站堆砌材料：
@@ -90,7 +101,9 @@ description: 为产品想法、市场、竞品、公开用户声音、趋势、�
 
 - 用户只要求分析或报告时，不自动修改知识库；给出建议写回位置。
 - 用户要求更新、落地或已明确授权本地写回时，更新对应长期文档并保留历史来源。
+- 已核验 Evidence Cards 需要进入长期知识时，交给 `knowledge-loop` 执行来源登记、串行写回、INDEX/LOG 更新和 Lint；不要在两个 skill 中复制来源政策。
 - 所有新长期文档包含 Owner、Last updated、Source、Confidence、Related decisions、Next review date。
+- 所有产品研究结论同时记录 Research Quality 与 Validation Level；研究质量达到 85 不代表需求、付款或留存获得验证。
 - 影响 roadmap、定价、上线、法律/合规、客户承诺或外部系统的动作，先取得人类批准。
 - 需要持续关注时，记录基线与下次复核日期；下一次只报告变化、失效假设和新增风险。
 
@@ -101,8 +114,8 @@ description: 为产品想法、市场、竞品、公开用户声音、趋势、�
 ## 维护元数据
 
 - Owner: Product Lead
-- Last updated: 2026-08-18
-- Source: OpenAI Docs；公开产品调研方法与 GitHub 实践；本工作区运行规则
+- Last updated: 2026-09-02
+- Source: OpenAI Docs；公开产品调研方法与 GitHub 实践；本工作区运行规则；Product Lead 短视频来源路由要求；`video-downloader` provider contract
 - Confidence: High
-- Related decisions: `product-knowledge-base/decisions/product-research-workflow-2026-08-18.md`
-- Next review date: 2026-11-18
+- Related decisions: `product-knowledge-base/decisions/product-research-workflow-2026-08-18.md`；`product-knowledge-base/decisions/one-person-pm-knowledge-loop-2026-08-23.md`
+- Next review date: 2026-09-30

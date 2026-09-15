@@ -1,11 +1,11 @@
 # 证据结构与产品调研质量门
 
 Owner: Product Lead  
-Last updated: 2026-08-18  
-Source: OpenAI agent eval guidance；本工作区知识 loop  
+Last updated: 2026-08-23
+Source: OpenAI agent eval guidance；本工作区知识 loop；一人公司 PM 双轴评估决策
 Confidence: High  
-Related decisions: `product-knowledge-base/decisions/product-research-workflow-2026-08-18.md`  
-Next review date: 2026-11-18
+Related decisions: `product-knowledge-base/decisions/product-research-workflow-2026-08-18.md`；`product-knowledge-base/decisions/one-person-pm-knowledge-loop-2026-08-23.md`
+Next review date: 2026-09-30
 
 ## Evidence Card
 
@@ -13,6 +13,7 @@ Next review date: 2026-11-18
 
 ```yaml
 evidence_id: E-001
+source_id: SRC-YYYYMMDD-slug-NN
 claim: "来源直接支持的最小完整陈述"
 label: Fact | Inference | Assumption
 source_title: "原始页面标题"
@@ -74,13 +75,37 @@ confidence: High | Medium | Low | Hypothesis
 
 ```yaml
 eval_status: pass | revise | fail
-score: 0-100
+research_quality: 0-100
+validation_level: V0 | V1 | V2 | V3 | V4 | V5
 critical_failures: []
 weak_claims: []
 missing_sources: []
 recommended_repairs: []
+next_evidence: "下一条必须取得的证据"
+allowed_next_investment: "当前等级允许的可逆投入"
+pause_or_kill_condition: "暂停或终止条件"
 reviewer: review_eval_agent | human
 reviewed_at: YYYY-MM-DD
 ```
 
 优先修复会改变建议方向的 claim；不要为了提高总分而补充与决策无关的材料。
+
+## Validation Level
+
+Research Quality 评价研究是否可靠；Validation Level 评价产品假设是否已经通过行为得到验证。两者不可互相换算。
+
+| 等级 | 最低证据 | 允许的下一步 |
+| --- | --- | --- |
+| V0 | 创始人假设 | 仅调研 |
+| V1 | 可靠公开证据支持 | 可逆、低成本原型 |
+| V2 | workaround、主动求助或持续成本等行为代理 | 原型测试或小范围发布 |
+| V3 | 自有产品真实使用行为 | 有限开发 |
+| V4 | 付款或其他高成本承诺 | 单位经济成立时扩大 |
+| V5 | 留存或目标结果 | 考虑规模化 |
+
+约束：
+
+- `research_quality >= 85` 只表示研究通过质量门，不自动提高 Validation Level。
+- 社区讨论量、GitHub stars、公司宣传和宏观市场规模不能单独提高等级。
+- 等级提升必须记录新增行为证据、适用范围与反证。
+- 产品主张、投入规模和对外表述不得超过等级允许范围。

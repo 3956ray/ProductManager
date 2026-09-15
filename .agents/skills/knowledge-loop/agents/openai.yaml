@@ -1,0 +1,7 @@
+interface:
+  display_name: "产品知识循环"
+  short_description: "摄取来源、追溯回答并检查产品知识库一致性"
+  default_prompt: "Use $knowledge-loop to ingest this source, update durable product knowledge, and report lint findings."
+
+policy:
+  allow_implicit_invocation: true

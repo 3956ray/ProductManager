@@ -16,15 +16,21 @@
 做任何产品工作前，优先读取这些文件：
 
 - `product-knowledge-base/BOARD.md`：当前项目、阻塞、待决策事项和新信号。
+- `product-knowledge-base/INDEX.md`：项目、研究、来源与决策的知识地图。
 - `product-knowledge-base/agents/agent-roster.yaml`：agent 分工、模型路由和升级规则。
 - `product-knowledge-base/agents/operating-rules.md`：产品知识 loop 和审批边界。
 - `.agents/skills/product-research/SKILL.md`：市场、竞品、公开用户声音、趋势和产品决策调研的证据流程。
+- `.agents/skills/knowledge-loop/SKILL.md`：来源 Ingest、可追溯 Query、知识库 Lint 和长期写回规则。
 
 ## 工作原则
 
 把知识库当作产品团队的当前工作记忆，而不是静态文档。只要决策、项目状态或已验证认知发生变化，就优先沉淀到对应的长期记录中。
 
 涉及产品调研、市场扫描、竞品分析、公开用户声音、趋势、定位或定价假设时，使用仓库级 `product-research` skill。先定义研究支持的决策，再收集、核查和综合证据；不要把社区热度或 GitHub 热度当作需求验证。
+
+新增来源、把研究写回长期知识、追溯现有结论或检查知识质量时，使用 `knowledge-loop`。`raw/` 只追加，模型输出不能作为原始来源，最终写回必须串行并通过 Git diff 复核。
+
+所有产品判断同时记录 Research Quality 0–100 与 Validation Level V0–V5。Research Quality 合格不代表需求、付款或留存已经验证；投入上限由 Validation Level 决定。
 
 ## 审批边界
 

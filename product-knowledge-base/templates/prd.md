@@ -7,9 +7,19 @@ Confidence:
 Related decisions:
 Next review date:
 
+Research Quality:
+Validation Level:
+Next evidence:
+Allowed next investment:
+Pause/Kill condition:
+
 ## 问题
 
 ## 目标用户
+
+## 分发与价值捕获假设
+
+## 创始人时间预算
 
 ## 目标
 

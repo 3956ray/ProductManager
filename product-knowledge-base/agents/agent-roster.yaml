@@ -1,5 +1,5 @@
-version: 0.2
-last_updated: 2026-08-18
+version: 0.3
+last_updated: 2026-08-23
 status: draft
 owner: Product Lead
 source:
@@ -8,6 +8,7 @@ source:
 confidence: high
 related_decisions:
   - product-knowledge-base/decisions/product-research-workflow-2026-08-18.md
+  - product-knowledge-base/decisions/one-person-pm-knowledge-loop-2026-08-23.md
 next_review_date: 2026-11-18
 
 language_policy:
@@ -97,11 +98,20 @@ agents:
       - conflict detection
       - metadata consistency
       - source and confidence labels
+      - knowledge-loop ingest, query write-back, and lint
+      - raw source id integrity
+      - INDEX.md and LOG.md maintenance
     outputs:
       - update candidates
       - stale-doc list
       - conflict report
       - proposed knowledge-base patches
+      - impact plan and git diff for human review
+    constraints:
+      - raw source records are append-only
+      - final shared-document writes are serial
+      - model outputs and outputs/ are not original evidence
+      - no automatic lint repair or git commit during pilot
 
   - id: user_feedback_agent
     role: 用户反馈分诊与痛点聚类

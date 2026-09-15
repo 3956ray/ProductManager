@@ -1,22 +1,39 @@
 # 产品团队作战板
 
 Owner: Product Lead
-Last updated: 2026-08-18
-Source: Manual setup；ChatGPT 分享讨论；外部公开数据调研
-Confidence: Draft
-Related decisions: 暂无
-Next review date: 2026-08-31
+Last updated: 2026-08-30
+Source: Manual setup；ChatGPT 分享讨论；外部公开数据调研；一人公司 PM 知识循环决策；Product Lead 暂停决定
+Confidence: High
+Related decisions: `decisions/one-person-pm-knowledge-loop-2026-08-23.md`；`decisions/sold-too-soon-pause-2026-08-30.md`
+Next review date: 2026-09-30
 
-## 当前进行中
+## WIP 规则
 
-| 项目 | Owner | 阶段 | 目标指标 | 状态 | 下一步 | 截止 |
-| --- | --- | --- | --- | --- | --- | --- |
-| 产品知识 loop | Product Lead | Setup | 团队运转清晰度 | Research workflow pilot complete | 首次 eval 为 82/100 · revise；补齐原型用户行为证据后复评 | 2026-08-25 |
-| Rapid Situation Interpreter | Product Lead | Discovery | 验证问题强度和 MVP 切口 | Research complete | 产出访谈招募 screener 和 Wizard-of-Oz 音频测试评分表 | 2026-07-29 |
-| 中国城市日常沉浸体验 | Product Lead | Discovery | 验证外国游客是否愿为普通城市日常付费 | Positioning proposed | 等待 Product Lead 决定是否测试 After Work in Shanghai | 2026-07-29 |
-| 哎呀，早知道 | Product Lead | Prototype | 验证单输入、结果理解、图片分享与额度付费意愿 | PRD v0.1 approved | 设计手机网页交互原型与中英文「后悔账单」 | 2026-08-21 |
+- 最多 1 个 Build + 1 个 Discovery；重新激活 Parking Lot 项目前先释放同类型名额。
+- Product Knowledge Loop 属于内部基础设施，不占产品名额。
+- Research Quality 评价研究可靠性；Validation Level 决定允许投入，两者不得换算。
 
-## 候选/下一步
+## 活跃产品
+
+| 类型 | 项目 | 目标用户与场景 | 价值／分发／收入假设 | Research Quality | Validation Level | 创始人时间上限 | Next evidence | Allowed next investment | Pause/Kill condition |
+| --- | --- | --- | --- | ---: | --- | ---: | --- | --- | --- |
+| Discovery | 私人家庭史／家族编年网页 | 家族资料保管者、愿口述的长辈和以浏览为主的年轻亲属 | 用编年网页＋可导出第一卷降低整理负担；一次性成书、订阅或服务收费均待验证 | 91 · pass | V1 | 6 小时／周 | 在一个真实家庭观察非发起人的主动讲述、纠正、补充、再次浏览或索取成册 | 访谈/素材准备和一个家庭的可逆 concierge 第一卷原型 | 只有发起人愿意维护；时间线不优于相册/书；隐私无法达成；真实需求只是一次性成书服务 |
+
+## 内部系统维护（不占 WIP）
+
+| 项目 | 状态 | 成功标准 | 下一步 |
+| --- | --- | --- | --- |
+| Product Knowledge Loop | Manual pilot：source/query/blind-test complete | 20 个来源都有 `SRC-*` 与日志；至少 3 次有效 Lint；无来源丢失、历史覆盖或 AI 自我引用 | 在真实家庭第一卷周期记录耗时、误报、人工修复与新增冲突；完成后再决定是否自动化 |
+
+## Parking Lot
+
+| 项目 | 暂停原因 | 已保留资产 | 重新激活条件 |
+| --- | --- | --- | --- |
+| 哎呀，早知道 | Product Lead 于 2026-08-30 明确决定暂停；不再占用 Build 名额 | `iknewit` 代码仓库；产品策略与 PRD；CP7 Agent/身份/行情/计算/verifier 流程；301/301 unit/flow、35/35 E2E 与安全容器验证记录；当前代码尚未提交 | Product Lead 重新确定 Build 优先级并批准恢复；恢复时先复核未提交工作树与测试基线。若进入正式发布，还需替换 Yahoo 原型行情源、配置共享 usage gate、运行脱敏真实 Agent smoke eval |
+| Rapid Situation Interpreter | 当前 Discovery 名额用于 Family Chronicle | research brief、市场/用户研究、竞品能力与十年趋势评估 | Family Chronicle 释放 Discovery 名额，且取得真实音频或目标用户访问渠道 |
+| 中国城市日常沉浸体验 | 当前 Discovery 名额已满，合规与供给验证成本较高 | idea brief、竞品定位研究、公开入境游与体验证据 | 释放 Discovery 名额，并明确可合作的持证供给与第一批访客渠道 |
+
+## 候选/下一步（默认 Parking Lot）
 
 | 候选事项 | 为什么现在做 | 证据 | Owner | 需要决策 |
 | --- | --- | --- | --- | --- |
@@ -28,13 +45,18 @@ Next review date: 2026-08-31
 | 工业设备报警上下文数据传输 | 工程师当前可能只收到报警、不同时收到判断所需的设备数据；“设备无数据”还是“通知不带数据”尚未核实 | Product Lead 口述需求；学长 2026-08-04 补充回答 | Product Lead | 取得一条真实报警和后续所查数据，确认数据来源、接口、时间窗与送达渠道；未批准生产接入、外部承诺或自动控制 |
 | 女朋友专属跨端线条小狗宠物 | 私人礼物需要把角色喜好、算法开发工作节奏和伴侣留言结合成长期陪伴，而非普通循环动画 | Product Lead 口述想法 | Product Lead | 确认手机/电脑系统、可用素材来源，以及是否严格限于私人使用 |
 | AI 护理交班草稿器「班安」 | 台湾不同层级与班别的护病比约为 1:6 至 1:15；交班与护理纪录已有明确节时案例，但同类方案不空白 | Product Lead 提议；卫福部政策与指引；台湾医院公开案例 | Product Lead | 是否先访谈 5–8 名区域／地区医院病房护理师，并用 20 个虚构／脱敏音档验证可追溯草稿 |
-| 私人家庭史／家族编年网页 | 家庭史、口述回忆录和私人相册均有成熟需求信号，但「全家共建的跨人物编年史」持续使用尚未验证 | Product Lead 口述 idea；商业产品、Twile 历史与 GitHub 开源仓库调研 | Product Lead | 是否先为一个真实家庭完成 20–30 个事件的《家族纪事·第一卷》原型；先验证一次性成册还是长期网页 |
 
 ## 阻塞
 
 | 阻塞 | 影响 | 需要谁处理 | Owner | 提出日期 |
 | --- | --- | --- | --- | --- |
 | 未选择来源系统 | Agent 还不能持续摄取真实反馈 | Product/ops | Product Lead | 2026-07-22 |
+
+## 知识维护 backlog
+
+| 项目 | 严重度 | 当前数量 | 处理规则 |
+| --- | --- | ---: | --- |
+| 已过 Next review date 的历史文档 | Warning | 27 | 不批量改日期；只有项目重新激活、结论被引用或来源变化时才逐份复核 |
 
 ## 待决策
 

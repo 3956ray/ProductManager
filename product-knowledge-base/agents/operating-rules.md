@@ -1,11 +1,11 @@
 # 产品 Agent 运行规则
 
 Owner: Product Lead  
-Last updated: 2026-08-18  
-Source: 本工作区运行设计；OpenAI agent orchestration 与 eval 指南  
+Last updated: 2026-08-23
+Source: 本工作区运行设计；OpenAI agent orchestration 与 eval 指南；一人公司 PM 知识循环决策
 Confidence: High  
-Related decisions: `../decisions/product-research-workflow-2026-08-18.md`  
-Next review date: 2026-11-18
+Related decisions: `../decisions/product-research-workflow-2026-08-18.md`；`../decisions/one-person-pm-knowledge-loop-2026-08-23.md`
+Next review date: 2026-09-30
 
 ## 产品知识 Loop
 
@@ -34,13 +34,13 @@ Next review date: 2026-11-18
    给出下一步建议：更新知识库、创建 PRD、提出待决策问题、加入 backlog、更新公告板、归档为不处理或进入更深调研。
 
 9. Evaluate 评估
-   重大产品研究由 `review_eval_agent` 按 100 分质量门检查；低于 85 分、关键引用不支持 claim 或存在直接 Fail 项时，先修订，不给高置信度 GO 建议。
+   重大产品研究由 `review_eval_agent` 按 100 分质量门检查；同时单独记录 Validation Level V0–V5。低于 85 分、关键引用不支持 claim 或存在直接 Fail 项时，先修订，不给高置信度 GO 建议；研究分数不能提高验证等级。
 
 10. Approve 审批
    外部写入、roadmap 变化、客户承诺、定价/法律表述、破坏性编辑或范围扩大之前，必须先问人。
 
 11. Write Back 写回
-   获得批准或确认是低风险后，更新对应长期文档，并交叉链接相关记录。
+   获得批准或确认是低风险后，由 `knowledge_curator_agent` 串行执行 `knowledge-loop`：登记来源、更新对应长期文档、交叉链接、更新 INDEX/LOG，并展示 Git diff。
 
 12. Monitor 监控
    需要持续跟踪时保存基线和 Next review date；后续刷新只报告变化、失效假设和新风险。
@@ -93,6 +93,38 @@ Manager 负责最终综合，不能让 specialist agent 直接做最终 roadmap 
 - 限制、反证和证据缺口
 
 详细来源政策、Evidence Card 和 eval 结构见 `.agents/skills/product-research/references/`。
+
+## 知识所有权与编译规则
+
+- `raw/` 是原始证据层，只追加 `SRC-*`，不得覆盖或保存无授权第三方全文。
+- `ideas/`、`references/`、`decisions/` 是长期知识层，可以在保留来源、历史和冲突的前提下维护。
+- `outputs/` 是一次性交付层，不能作为后续 claim 的原始来源；需要长期使用时先核验并晋升。
+- `BOARD.md` 管当前行动与 WIP；`INDEX.md` 管导航；`LOG.md` 只追加操作记录。
+- 来源搜索和只读整理可以并行；共享知识文件的最终写回必须串行。
+- Ingest 写回前先列 impact plan，写回后运行确定性与语义 Lint，并由人查看 diff 后提交。
+- 试点阶段 Lint 不自动修复，Git 不自动提交、不连接远程、不自动合并。
+
+## 双轴评估与投入上限
+
+每个活跃产品至少维护 `Research Quality`、`Validation Level`、`Confidence`、`Next evidence`、`Allowed next investment` 与 `Pause/Kill condition`。
+
+| 等级 | 证据状态 | 允许投入 |
+| --- | --- | --- |
+| V0 | 创始人假设 | 仅调研 |
+| V1 | 可靠公开证据支持 | 可逆、低成本原型 |
+| V2 | 公开 workaround、主动求助或持续成本等行为代理 | 原型测试或小范围发布 |
+| V3 | 自有产品真实使用 | 有限开发 |
+| V4 | 付款或其他高成本承诺 | 单位经济成立时扩大 |
+| V5 | 留存或目标结果 | 考虑规模化 |
+
+Research Quality 的通过线仍为 85；它只约束研究结论可靠性。产品主张、投入规模与对外表述不得超过 Validation Level。
+
+## 一人公司 WIP
+
+- 同时最多 1 个 Build 与 1 个 Discovery。
+- 产品知识 loop 属于内部基础设施，不占产品 WIP。
+- Parking Lot 资料保留，重新激活前必须先释放相同类型名额并记录 decision。
+- 每个活跃项目必须写明目标用户、价值、分发、收入假设、每周时间上限、下一证据和暂停/终止条件。
 
 ## 冲突规则
 

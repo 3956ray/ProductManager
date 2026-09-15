@@ -1,0 +1,4 @@
+interface:
+  display_name: "老年陪伴调研与产品设计"
+  short_description: "延续中国老年陪伴研究，连接证据、服务设计与验证，复用现有 PM 调度"
+  default_prompt: "使用 $elder-companion-product 继续老年陪伴项目：先复用现有证据，明确本轮决策，再形成相应的研究或服务设计产物。"

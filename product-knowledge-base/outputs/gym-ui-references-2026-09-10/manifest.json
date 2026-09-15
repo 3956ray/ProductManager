@@ -1,0 +1,28 @@
+{
+  "accessed_date": "2026-09-10",
+  "purpose": "带来源的内部界面研究参考；未作为本产品素材，未取得复用授权",
+  "transformations": "原图转PNG；并排图等比缩小与添加独立标题，界面数字与内容未重绘",
+  "assets": [
+    {
+      "product": "PureGym",
+      "local_file": "puregym.png",
+      "source_page": "https://www.puregym.com/app/",
+      "asset_url": "https://www.puregym.com/media/edqjrh5n/attendance-app-image.jpg?quality=80",
+      "source_id": "SRC-20260910-gym-reference-10"
+    },
+    {
+      "product": "Gentler Streak",
+      "local_file": "gentler-streak.png",
+      "source_page": "https://gentlerstories.com/gentlerstreak",
+      "asset_url": "https://framerusercontent.com/images/xVnJpLiKDtoqOZuuczWVnTtBHOM.png?scale-down-to=2048&width=1206&height=2622",
+      "source_id": "SRC-20260910-gym-reference-08"
+    },
+    {
+      "product": "PeakWatch",
+      "local_file": "peakwatch.png",
+      "source_page": "https://www.peakwatch.co/",
+      "asset_url": "https://www.peakwatch.co/_next/image?url=%2Fimages%2Fphone.webp&w=750&q=75",
+      "source_id": "SRC-20260910-gym-reference-07"
+    }
+  ]
+}

@@ -24,6 +24,8 @@ Proposed / Approved / Rejected / Superseded
 
 ## 影响
 
+## Research Quality / Validation Level 影响
+
 ## 后续动作
 
 ## 复查触发条件

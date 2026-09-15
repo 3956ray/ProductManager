@@ -1,5 +1,12 @@
 # 模型路由说明
 
+Owner: Product Lead
+Last updated: 2026-08-23
+Source: OpenAI 官方模型与 agent 文档；本工作区 agent roster
+Confidence: High
+Related decisions: `../decisions/product-research-workflow-2026-08-18.md`；`../decisions/one-person-pm-knowledge-loop-2026-08-23.md`
+Next review date: 2026-09-30
+
 Last updated: 2026-07-22
 
 ## 推荐

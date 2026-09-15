@@ -1,0 +1,1638 @@
+--- /dev/null
++++ product-knowledge-base/ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md
+@@ -0,0 +1,146 @@
++# 单店健身房：产品功能与界面参考调研
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: [20个公开来源与证据卡](evidence-cards-2026-09-10.md)；[已确认的单店需求](idea-brief.md)
++Confidence: Medium（公开功能可核查；界面取舍属于设计判断）
++Related decisions: 用户已确认单店实验、会员入口必需、简洁首页方向；本文新增功能均为建议
++Next review date: 2026-10-10
++
++## 本轮支持的决策
++
++为 Product Lead 筛选单店会员小程序／网页的功能和界面参考。目标用户为本店会员，优先解决出发前判断忙闲、查看瑜伽课表和使用会员服务；参考英语市场产品及 Apple、Google、字节／抖音、小红书赛事。研究截至2026-09-10，赛事样本覆盖2024–2026，公开产品页按访问日核查。本轮不做市场规模、价格、正式选型或上线承诺。
++
++搜索路径为：直接健身房产品→训练工具及官方界面→赛事主办方或可信报道→开源README、许可与维护信号→公开评论反例。共整理11个相关产品／项目，另保留1个非健身黑客松交互案例、20个唯一来源URL。覆盖这些证据线、完成去留矩阵后停止，不为凑数量继续扩张名单。
++
++## 推荐结论
++
++1. **【推断】用 PureGym／The Gym Group 确定信息内容，用 Strong 确定简洁基调，用 Gentler Streak 学状态解释，用 PeakWatch 学卡片层级。** 这几者解决的是不同设计问题，不必整套复制任一产品。
++2. **【事实】人数、课程和会员服务已经在直接竞品中共存。** PureGym列出实时人数、课约、入馆、会员管理；The Gym Group列出人数及容量百分比、二维码入馆、课程和会员管理。[PureGym](https://www.puregym.com/app/)／[The Gym Group](https://play.google.com/store/apps/details?id=com.netpulse.mobile.thegymgroup&hl=en_GB&gl=US)。这证明功能样板存在，不证明本店数据可用或会员会持续使用。
++3. **【假设】最值得增加的轻功能是“本店器械目录／扫码说明”，其次是报修。** 它能直接对应“不知道器械在哪、叫什么、怎么用、坏了找谁”。一条The Gym Group评论提出器械贴二维码以减少查找；仅为孤立线索，不能当普遍需求。[评论所在页](https://play.google.com/store/apps/details?id=com.netpulse.mobile.thegymgroup&hl=en_GB&gl=US)，2026-06-18。
++4. **【推断】课表应进入第一版讨论，预约系统需看馆方现有流程。** Gymdesk有清楚的会员与约课流程，但公开课表、预约名额、实际出席是三种不同数据；本店目前只确认“有课表”。[Gymdesk指南](https://docs.gymdesk.com/en/help/docs/member-portal-guide)／[本店来源](../../raw/SRC-20260910-gym-yoga-schedule-01.md)。
++5. **【推断】全套训练记录、AI教练、恢复评分、社交与商城暂缓。** Strong、Hevy、Gentler、PeakWatch各自围绕这些能力形成完整产品；移入单店首页会增加输入、解释和维护负担，尚无本店需求证据支持。
++6. **【事实】Gentler Streak、AlphaFit、Peak Watch分别有设计奖获奖、竞赛特别提及、应用大赛获奖记录。** 具体身份和来源限制见下表及E-001、E-002、E-006；AlphaFit未看UI，字节／抖音保留检索缺口。本文对这些产品的设计推荐属于第1条及UI表中的推断，获奖本身不证明适配本项目。
++
++## 产品功能对照
++
++以下“功能”是官方公开声明，“借鉴”是本次设计判断。没有登录会员账号或安装这些原生App；不能据此承诺实时精度、性能或所有地区均可用。
++
++| 产品／定位 | 已核查的主要功能 | 对本店最有用的参考 | 本轮界面观察程度 |
++| --- | --- | --- | --- |
++| [PureGym](https://www.puregym.com/app/) · 连锁健身房会员端 | 人数、分时图展示、非接触入馆、课约、训练计划／点播、会员管理 | 当前状态与时间选择放一起；人数直接服务“什么时候去” | 已看官网人数界面图；保存一张官方示意图，版本未标明 |
++| [The Gym Group](https://play.google.com/store/apps/details?id=com.netpulse.mobile.thegymgroup&hl=en_GB&gl=US) · 健身房会员端 | QR入馆、人数／容量百分比、约课、训练库、会员管理 | 会员场馆服务的功能组织；人数与课程是明确任务 | 已核查商店详情及评论；不评UI美观 |
++| [Strong](https://www.strong.app/) · 训练记录 | 次数／组数／重量、自定义动作、超级组、休息计时、RPE、进步图、导出、Watch | 白底、轻列表、数字对齐、单一清楚主操作；建议作为整体视觉基调 | 已观察官网训练界面演示，未实机操作 |
++| [Hevy](https://www.hevyapp.com/) · 训练日志＋社交 | 计划、组数、计时、笔记、动作视频、历史／PR、关注／评论、手表训练 | 完成状态、数据表格与历史页；不引入社交流 | 已看官方截图 |
++| [Gentler Streak](https://gentlerstories.com/gentlerstreak) · 温和训练／恢复建议 | Activity Path、每日建议、休息／生病／受伤状态、睡眠健康、周月年总结 | 先解释“当前是什么情况”，再给图；不催促打卡 | 已看官方手机图；保存一张 |
++| [PeakWatch](https://www.peakwatch.co/) · 训练与健康数据 | 训练负荷／恢复、身体电量、压力、睡眠、训练、饮食、生活日志与小组件 | 每张卡一个主题，数字＋状态词＋小趋势图 | 已看官网手机及功能展示；保存一张 |
++| [Gymdesk](https://docs.gymdesk.com/en/help/docs/member-portal-guide) · 馆务会员门户 | 会员资料／条码、课表／预约、签到、到店图、会员套餐、付款、联系馆方 | 会员状态和课程流程；复用馆方现有系统优先 | 文档流程核查；未实测会员门户，不列UI优胜 |
++| [Workout.lol](https://workout.lol/) · 按器械／肌肉找动作 | Equipment→Muscles→Exercises，依可用器械筛动作 | “先选本店器械，再看能做什么”的少步骤流程 | 实际完成器械选择并进入肌肉页；未完成生成全流程 |
++| [wger](https://github.com/wger-project/wger) · 自托管健身系统 | 训练计划／进阶、动作Wiki、饮食／体重／围度、照片、基本馆务、多用户、REST API | 动作及计划的数据组织、后台能力清单 | README核查；不评价运行UI |
++| [LiftShift](https://github.com/aree6/LiftShift) · 训练数据分析 | 导入Strong／Hevy等记录，肌肉热图、PR、平台期、日期与一致性分析、分享卡 | 未来“我的到店记录”可参考日历热图表达 | 看README截图；官网未成功访问，未运行仓库 |
++| [AlphaFit](https://developers.googleblog.com/celebrating-innovation-gemini-api-developer-competition/) · AI训练比赛作品 | 新手个性化计划、难度调整、动作提示、休息时文字游戏 | 仅借鉴按当前任务给提示的想法 | 只有Google文字介绍；UI及当前可用性未核验 |
++
++## 科技公司赛事检索结果
++
++| 公司／赛事 | 产品与核验身份 | 可借鉴点 | 来源与限制 |
++| --- | --- | --- | --- |
++| Apple · 2024 Apple Design Awards | **Gentler Streak，Social Impact类别获奖者** | 温和表达、清楚组织健康数据、重视进步的月总结；本店可借鉴语气与层级 | [Apple官方名单](https://developer.apple.com/design/awards/2024/)。设计奖，非黑客松；奖项评价不验证健康模型效果 |
++| Google · 2024 Gemini API Developer Competition | **AlphaFit，Honorable Mentions（特别提及）** | 新手提示与按进度调整；当前首店无需加入AI教练 | [Google官方2024-12-19博文](https://developers.googleblog.com/celebrating-innovation-gemini-api-developer-competition/)。不是总冠军；未看演示UI，不列视觉推荐 |
++| 小红书 · 2025首届独立开发大赛 | **Peak Watch，“宝藏APP”奖** | 指标卡片和状态解释；深色只是可选风格 | [央视网2025-04-16报道](https://jingji.cctv.com/2025/04/16/ARTIr4i1g313IU5WEySTYyMe250416.shtml)＋[产品官网](https://www.peakwatch.co/)。未取得主办方完整名单，获奖身份依媒体报道 |
++| 小红书 · 2026黑客松 | **Attune，报道推荐的参赛项目** | 随当前注意力呈现操作、隐藏干扰，可启发渐进呈现 | [品玩现场评审报道](https://www.pingwest.com/a/312851)。非健身案例；作者推荐不等于获奖，未实测Demo |
++| 字节／抖音 · 2026 AI创变者计划 | 本轮未找到足够相关且可核验的健身产品 | 暂无进入本店UI短名单的作品 | [赛事官网](https://aiia.douyin.com/)列互动空间、内容重构、个性化、视觉搜索等；页面与有限搜索覆盖不代表历届全部作品 |
++
++## UI：具体学什么
++
++[三款真实官方界面并排图](../../outputs/gym-ui-references-2026-09-10/contact-sheet.png) · [界面图片、原网页与素材来源](../../outputs/gym-ui-references-2026-09-10/README.md)。图片均来自产品官网展示，未改动其中数字，不是本店运行数据。
++
++| 参考 | 借鉴规则 | 应用到本店 | 需要克制的地方 |
++| --- | --- | --- | --- |
++| Strong | 内容对齐比装饰重要；主要操作明确 | 中文标签、预计人数大数字、课表用轻列表；次要信息降强调 | 不把整页变成训练记录表 |
++| PureGym | 当前位置与时间维度同屏 | 首屏回答“现在如何”，历史同星期时段作为次级入口 | 官网图含营销内容和较多导航；仅取人数模块。没有容量口径时不显示百分比 |
++| Gentler Streak | 状态先有一句人能懂的解释 | “当前较宽松”“数据更新于…”，异常时直说“暂不可用” | 大插画和长段落占首屏；不照搬。预测未经校准时不写“放心来” |
++| PeakWatch | 一个卡片一个主题，数值旁有状态词 | 人数主卡、瑜伽排课摘要、必要营业／维护提示 | 六种健康指标与多色同时出现会分散注意力；本店保留一主两次层级 |
++| Workout.lol | 按任务逐步筛选，减少一次性选择 | 本店器械→部位／用途→说明；支持搜索／文字列表 | 人体图不可作为唯一输入途径；不宣称已通过无障碍评估 |
++
++【建议】会员端继续用“场馆／我的”两个入口。场馆：首页人数、更新时间、排课摘要、器械目录入口；我的：会员绑定状态、可取得的会员权益／有效期、反馈。会员入口必需不等于重新实现门禁：目前刷脸入场，只有馆方明确支持时才考虑二维码开门。
++
++## 功能去留与成本
++
++“优先”表示建议进入第一版范围讨论，除用户已确定的会员入口外，不是已批准的开发清单。
++
++| 建议顺序 | 功能 | 用户价值 | 必要数据／运营成本 | 参考与边界 |
++| --- | --- | --- | --- | --- |
++| 核心 | 人数／估计区间＋忙闲状态＋更新时间 | 出发前判断是否值得现在去 | **高依赖**：可靠在场或估计数据、校准与异常处理 | PureGym／The Gym Group；无出场记录不能仅靠入场累计叫实时在场 |
++| 已确定 | 会员登录与绑定、会员状态 | 有明确的本店会员身份和服务入口 | **中依赖**：馆方会员字段、绑定证明与失效更新 | Gymdesk；微信登录本身不等于会员认证，不靠姓名自行绑定 |
++| 优先 | 今日／本周瑜伽课表、改期／取消提示 | 安排训练时间、避免白跑 | **低至中运营**：课表来源、更新人及时间；先复用已有系统 | Gymdesk；“按课表有课／无排课”，不声称实际空闲 |
++| 优先轻量项 | 器械目录、位置、型号／说明 | 找到目标器械、减少名称混淆 | **一次性整理＋维护**：核对约41＋21件是否重复、照片与说明 | Workout.lol流程＋Gym Group孤立评论；先做目录，扫码只是便捷入口 |
++| 条件式 | 扫码报修／查看维修状态 | 避免反复尝试故障器械 | **持续运营**：馆方有人接收、去重、更新处理结果 | 从本店服务场景推导的假设；有人处理才上线 |
++| 条件式 | 个人到店历史 | 回看近期到店节奏 | **中依赖**：会员绑定、可信入场日志、去重 | Gymdesk；只入场可记到店，不凭此算准确训练时长 |
++| 条件式 | 历史忙闲时段 | 找较合适的可选时段 | **高数据依赖**：可比星期／时段样本、缺失标记 | PureGym；历史典型值与今天实际分开，暂不预测精确到店人数 |
++| 后续 | 课表收藏／日历提醒、预约／候补 | 记住课程、避免错过 | 收藏较轻；提醒需授权，改期要同步；预约需要容量、取消、冲突处理 | Gymdesk；先保留现有预约渠道，不建第二套名额账本 |
++| 后续待验证 | 按部位找本店可用替代器械 | 目标器械排队时继续训练 | 教练核对动作／器械映射，不能把相似器械视为适合所有人 | Workout.lol；推荐候选不声称当前空闲 |
++| 暂缓 | 实时器械占用、排队倒计时 | 理论上最贴近等待问题 | **很高依赖**：每器械状态、传感器或可靠交互闭环 | 入馆、定位、扫说明码均不足以证明器械被占用／已释放 |
++| 暂缓 | 全量训练日志、AI教练、饮食／恢复评分 | 属于训练和健康管理 | 动作库、长期记录、多设备数据及模型验证 | Strong／Hevy／Gentler／PeakWatch／AlphaFit；与首店忙闲目标距离大 |
++| 暂缓 | 社交动态、排行榜、商城、整套计费 | 商业与社群扩展 | 内容、激励、支付和运营负担 | Hevy／Gymdesk；没有本店使用或付款证据支撑 |
++
++## GitHub：参考与复用边界
++
++没有clone、执行、安装或安全审计这些仓库。下面是公开维护与许可文本的核查，不是生产选型或法律意见。
++
++| 仓库 | 本轮维护信号 | 已核对代码许可 | 数据／素材 | 推荐用途 |
++| --- | --- | --- | --- | --- |
++| [wger-project/wger](https://github.com/wger-project/wger) | [master提交页](https://github.com/wger-project/wger/commits/master/)顶部2026-09-06，83005f7… | README为AGPL-3.0-or-later；[LICENSE.txt](https://github.com/wger-project/wger/blob/master/LICENSE.txt)为AGPL v3正文 | README区分动作／食材逐条CC许可；文档CC-BY-SA-4.0 | 看能力和数据结构；体量超出首版，不直接作为本店底座 |
++| [workout-lol/workout-lol](https://github.com/workout-lol/workout-lol) | 仓库页面显示2024-09-27；未核验近期维护 | [MIT](https://github.com/workout-lol/workout-lol/blob/main/LICENSE)，版权2023 Vincent Will | 外部动作数据与视频许可未核验；MIT标签不能代替素材核查 | 最值得参考交互与局部代码思路；复用前再查依赖和数据来源 |
++| [aree6/LiftShift](https://github.com/aree6/LiftShift) | 最近提交2026-09-08；页面release v1.5.0标2026-09-05 | [LICENSE](https://github.com/aree6/LiftShift/blob/main/LICENSE)显式AGPL-3.0-only并链接全文；README另有归属要求表述 | 不假设截图、图像和导入平台数据自动由代码许可覆盖 | 适合统计图参考，当前不接入训练分析；真正复用时核对文件与归属要求 |
++
++## 反证、选项与证据缺口
++
++- The Gym Group的2026-06-18评论同时说查人数／课程还好、训练记录查找繁琐，提示“功能变多”可能损害少数高频任务。2022-10-03评论提到开门和人数更新异常，是历史反例，不能指称当前版本仍坏；样本各一条，不估算普遍比例。
++- 全馆人数未必对应目标器械排队：本店瑜伽课、多人龙门架、自由重量集中使用会改变关系。面积1,000平方米和约62件设备不构成舒适人数或安全容量标准。
++- 出口有效计数、门禁供应商接口、馆方公开人数意愿未知。小程序关闭后定位未知不能视为离场；本轮未重新验证微信定位技术文档。
++- 海外功能样板和获奖作品不能验证本店会员复访、馆方愿意付费、人数准确性或界面无障碍。
++- 产品证据以B类为主，独立用户声音仅一类平台上的两个评论；没有完成多渠道用户痛点研究。小红书获奖身份来自央视报道，不伪称主办方完整名单；字节检索不穷尽。AlphaFit当前UI／维护未知。
++- Firecrawl曾返回402且本地CLI缺失；GitHub连接器未连接；本轮用公开浏览器读取。GitHub一度限流后恢复可读，未绕过登录或访问限制。
++
++| 选项 | 收益 | 代价／适用条件 | 判断 |
++| --- | --- | --- | --- |
++| 保持现有课表＋前台询问 | 无新增系统；可作为实验对照 | 不能随时自助查看，但若已足够就无需重建 | 先确认原系统是否已有入口 |
++| 单店忙闲＋会员＋课表 | 对齐明确任务，首页保持简洁 | 数据可靠性与课表维护仍需解决 | 推荐的研究方向，尚未证明需求 |
++| 加少量器械现场服务 | 更贴近器械使用困难 | 初始整理、报修处理有成本 | 目录可先访谈；报修须馆方愿意处理 |
++| 综合训练与健康平台 | 功能覆盖面广 | 与成熟产品竞争，输入和维护负担大 | 暂缓 |
++
++## 下一轮验证与评估
++
++建议先取得门禁后台字段说明或脱敏样例、实际课表及维护负责人；再访谈5–8名不同训练时段的会员，复盘最近一次排队／找器械／查课程经历。用静态研究材料比较“只显示人数”与“人数＋状态解释＋排课摘要”的理解差异，观察是否误把估计值当准确值；这不能代替人数可靠性校验或真实到店行为验证。器械目录可先用静态图片／纸面说明研究“找到指定器械并看懂说明”；报修先问馆方由谁处理。人数、人数解释和课表都是独立待验证项。以上样本数为实验设计假设，尚未执行。
++
++Research Quality: 89/100 · pass（review_eval_agent完成文档与登记证据映射复核；未独立重开网页）
++Validation Level: V0（本店）；不因竞品或奖项提升
++评分：决策对齐15/15；来源质量16/20；引用支持18/20；事实分离15/15；反证8/10；决策价值9/10；可维护性8/10。
++Confidence: Medium；公开功能事实与本店价值假设分开。
++Next evidence: 门禁在场／离场字段、课表更新方式、会员最近一次器械等待行为。
++Allowed next investment: 本轮限于公开调研、访谈设计、静态界面研究材料与数据可行性核查；不因本次研究自动启动编码、可交互产品原型或生产接入。此前用户已认可的设计方向继续保留。
++Pause/Kill condition: 原系统已足够；馆方不开放可信数据；人数不能帮助训练决策；持续维护成本不被接受。
++
++本轮按工作区授权串行本地归档，保留旧研究和来源失败记录；更新INDEX／LOG及idea-brief的研究入口。没有改变WIP、roadmap、定价或上线承诺，没有对外联络。标准全库Lint脚本缺失，采用新增文件元数据、日期枚举、内部链接、来源去重、历史前缀与局部diff检查；不声称全库自动校验通过。
++
++
++## 质量复核记录
++
++```yaml
++eval_status: pass
++research_quality: 89
++validation_level: V0
++critical_failures: []
++weak_claims: ["设计优劣为观察判断", "器械扫码价值仅有孤立评论线索"]
++missing_sources: ["本店进出接口", "本店会员行为", "馆方合作与付款承诺", "字节相关健身作品", "AlphaFit实际UI"]
++recommended_repairs: ["取得门禁字段与现有课表", "进行本店会员访谈"]
++next_evidence: "门禁在场／离场字段、课表维护和最近一次器械等待经历"
++allowed_next_investment: "公开调研、访谈设计、静态研究材料及数据可行性核查"
++pause_or_kill_condition: "数据不可用、原系统已足够或信息不能帮助训练决策"
++reviewer: review_eval_agent
++reviewed_at: 2026-09-10
++```
++
++初稿自评87；首次只读复核83/fail，发现Attune产品形态未进入登记证据、获奖事实与设计判断混写、V0投入文字不够明确。三项已在本轮报告修正，复核89/pass。复核范围是文档与登记证据映射，不是独立网页再检索或真实产品测试。
++
++[局部确定性检查结果](../../outputs/gym-ui-references-2026-09-10/validation.json) · [本轮知识文件完整文本差异](../../outputs/gym-ui-references-2026-09-10/knowledge-changes.patch)。旧来源与旧决定未覆盖，Git未提交。
+--- /dev/null
++++ product-knowledge-base/ideas/gym-occupancy/evidence-cards-2026-09-10.md
+@@ -0,0 +1,547 @@
++# 健身房产品参考：来源与证据卡
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: 下列原始网页与对应SRC登记；非模型输出证据
++Confidence: Medium
++Related decisions: [单店研究建议](product-feature-ui-research-2026-09-10.md)；新增功能待验证
++Next review date: 2026-10-10
++
++Research Quality: 89/100（文档与登记证据映射复核；详见报告）
++Validation Level: V0（本店）
++
++所有网页于2026-09-10打开核查。官网功能属于厂商声明；界面取舍是本轮推断。来源只保留元数据、最小摘要及引用位置；同一产品官网与仓库不算独立需求证据。
++
++## E-001 · 2024 winners and finalists — Apple Design Awards
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-01.md)
++
++```yaml
++evidence_id: "E-001"
++source_id: "SRC-20260910-gym-reference-01"
++claim: "Gentler Streak为2024 Apple Design Awards Social Impact类获奖应用；Apple评价其健康数据组织、温和设计及月度总结。"
++label: "Fact"
++source_title: "2024 winners and finalists — Apple Design Awards"
++source_url: "https://developer.apple.com/design/awards/2024/"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "2024官方获奖身份及评审描述；非黑客松、非当前版本实测"
++support: "full"
++independence_group: "apple-awards"
++limitations: "2024官方获奖身份及评审描述；非黑客松、非当前版本实测"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：官方奖项文字核验；产品官网截图另见gentler来源。
++
++## E-002 · Celebrating innovation: Gemini API Developer Competition
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-02.md)
++
++```yaml
++evidence_id: "E-002"
++source_id: "SRC-20260910-gym-reference-02"
++claim: "AlphaFit被列入2024 Gemini API竞赛Honorable Mentions；Google描述其新手个性化训练、随进度调整难度、动作提示及休息时文字游戏。"
++label: "Fact"
++source_title: "Celebrating innovation: Gemini API Developer Competition"
++source_url: "https://developers.googleblog.com/celebrating-innovation-gemini-api-developer-competition/"
++source_class: "B"
++published_or_event_date: "2024-12-19"
++accessed_date: "2026-09-10"
++scope: "官方特别提及，不是总冠军；未验证当前维护或训练建议效果"
++support: "full"
++independence_group: "google-competition"
++limitations: "官方特别提及，不是总冠军；未验证当前维护或训练建议效果"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：未核验应用UI；只有文字描述。
++
++## E-003 · 抖音AI创变者计划
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-03.md)
++
++```yaml
++evidence_id: "E-003"
++source_id: "SRC-20260910-gym-reference-03"
++claim: "2026赛事官网列出互动空间、内容重构、个性化瞬间和视觉搜索等赛道；历史项目展示Root Journey等，本轮页面未发现可直接核验的健身房UI作品。"
++label: "Fact"
++source_title: "抖音AI创变者计划"
++source_url: "https://aiia.douyin.com/"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "赛事存在与本轮公开页面覆盖；不表示全部赛事没有健身作品"
++support: "full"
++independence_group: "douyin-aiia"
++limitations: "赛事存在与本轮公开页面覆盖；不表示全部赛事没有健身作品"
++decision_relevance: "说明本轮检索覆盖与缺口，不推断全部作品"
++confidence: "High"
++```
++
++界面观察：赛事官网，非产品UI。
++
++## E-004 · 看完小红书黑客松的59个热血团队，我们想推荐这6个
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-04.md)
++
++```yaml
++evidence_id: "E-004"
++source_id: "SRC-20260910-gym-reference-04"
++claim: "作者介绍2026小红书黑客松参赛项目Attune等，明确其推荐项目并非全部获奖；Attune尝试按注意力呈现操作并隐藏干扰。"
++label: "Fact"
++source_title: "看完小红书黑客松的59个热血团队，我们想推荐这6个"
++source_url: "https://www.pingwest.com/a/312851"
++source_class: "C"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "现场评审报道；非官方获奖名单，非健身产品；未核验可用演示"
++support: "full"
++independence_group: "pingwest-red-hackathon"
++limitations: "现场评审报道；非官方获奖名单，非健身产品；未核验可用演示"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "Medium"
++```
++
++界面观察：交互想法参考，不做UI质量排名。
++
++## E-005 · wger-project/wger
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-05.md)
++
++```yaml
++evidence_id: "E-005"
++source_id: "SRC-20260910-gym-reference-05"
++claim: "README列出训练计划、进阶规则、饮食体重跟踪、动作Wiki、跨端、多用户基本馆务与REST API；代码AGPL-3.0-or-later，动作／食材条目各自CC许可，文档CC-BY-SA-4.0。"
++label: "Fact"
++source_title: "wger-project/wger"
++source_url: "https://github.com/wger-project/wger"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "README声明；未运行／安全审计；代码与数据许可分开"
++support: "full"
++independence_group: "wger"
++limitations: "README声明；未运行／安全审计；代码与数据许可分开"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：未查看运行界面；不评UI。
++
++## E-006 · “开发者是AI时代的创作者”，小红书上独立开发者超5万
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-06.md)
++
++```yaml
++evidence_id: "E-006"
++source_id: "SRC-20260910-gym-reference-06"
++claim: "报道明确Peak Watch获2025小红书首届独立开发大赛宝藏APP奖项，并介绍其与Stress Watch团队关系。"
++label: "Fact"
++source_title: "“开发者是AI时代的创作者”，小红书上独立开发者超5万"
++source_url: "https://jingji.cctv.com/2025/04/16/ARTIr4i1g313IU5WEySTYyMe250416.shtml"
++source_class: "C"
++published_or_event_date: "2025-04-16"
++accessed_date: "2026-09-10"
++scope: "媒体获奖报道，未取得主办方完整原始名单；不引用报道用户规模做需求证明"
++support: "full"
++independence_group: "red-contest-report"
++limitations: "媒体获奖报道，未取得主办方完整原始名单；不引用报道用户规模做需求证明"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "Medium"
++```
++
++界面观察：不适用。
++
++## E-007 · PeakWatch — Train Smarter, Recover Faster
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-07.md)
++
++```yaml
++evidence_id: "E-007"
++source_id: "SRC-20260910-gym-reference-07"
++claim: "官网列出恢复与训练负荷、压力与身体电量、睡眠、自定义训练、饮食记录、生活日志、Apple Watch与iOS小组件。"
++label: "Fact"
++source_title: "PeakWatch — Train Smarter, Recover Faster"
++source_url: "https://www.peakwatch.co/"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "官网功能声明；恢复与营养效果未核验，不建议迁移健康判断到本项目"
++support: "full"
++independence_group: "peakwatch"
++limitations: "官网功能声明；恢复与营养效果未核验，不建议迁移健康判断到本项目"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：已查看官网手机展示；深色数字、状态词和迷你图表卡片。
++
++## E-008 · Gentler Streak: Workout Tracker That Puts Well-being First
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-08.md)
++
++```yaml
++evidence_id: "E-008"
++source_id: "SRC-20260910-gym-reference-08"
++claim: "官网展示Activity Path、每日训练／休息建议、Apple Watch记录、健康与睡眠数据、周月年总结；可切换休息、生病、受伤状态。"
++label: "Fact"
++source_title: "Gentler Streak: Workout Tracker That Puts Well-being First"
++source_url: "https://gentlerstories.com/gentlerstreak"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "官网描述及截图，不验证健康效果；部分图片alt疑似混入The Outsiders，视觉判断以实际图像为准"
++support: "full"
++independence_group: "gentler"
++limitations: "官网描述及截图，不验证健康效果；部分图片alt疑似混入The Outsiders，视觉判断以实际图像为准"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：已看首屏手机界面：先给一句状态解释，后给路径图和活动列表；橙绿点缀白底。
++
++## E-009 · The Gym Group — Google Play
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-09.md)
++
++```yaml
++evidence_id: "E-009"
++source_id: "SRC-20260910-gym-reference-09"
++claim: "官方详情列出二维码入馆、实时人数及容量百分比、课程预约管理、训练库与动作视频、会员管理和可选Health Connect。"
++label: "Fact"
++source_title: "The Gym Group — Google Play"
++source_url: "https://play.google.com/store/apps/details?id=com.netpulse.mobile.thegymgroup&hl=en_GB&gl=US"
++source_class: "B"
++published_or_event_date: "2026-09-07"
++accessed_date: "2026-09-10"
++scope: "官方功能与用户评论必须分开：官方B类；评论D类、两个自选择样本，2022旧评论不说明当前缺陷。Android英文页，更新2026-09-07，版本7.8.1；未登录实测。"
++support: "full"
++independence_group: "gymgroup-official"
++limitations: "官方功能与用户评论必须分开：官方B类；评论D类、两个自选择样本，2022旧评论不说明当前缺陷。Android英文页，更新2026-09-07，版本7.8.1；未登录实测。"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：仅文字核验，不做截图UI排名。
++
++## E-010 · Download the free PureGym App
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-10.md)
++
++```yaml
++evidence_id: "E-010"
++source_id: "SRC-20260910-gym-reference-10"
++claim: "官方页面列出非接触入馆、课程预约、点播训练、实时到场人数、个性化训练计划与会员管理；官方展示人数加分时柱图。"
++label: "Fact"
++source_title: "Download the free PureGym App"
++source_url: "https://www.puregym.com/app/"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "英国官网公开功能与截图；未登录会员端，精度未知"
++support: "full"
++independence_group: "puregym"
++limitations: "英国官网公开功能与截图；未登录会员端，精度未知"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：2026-09-09已查看人数卡片；本轮重新核查官方页面。
++
++## E-011 · Strong — Workout Tracker & Gym Log
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-11.md)
++
++```yaml
++evidence_id: "E-011"
++source_id: "SRC-20260910-gym-reference-11"
++claim: "官方列出训练记录、自定义动作、超级组、休息计时、RPE、进步图、CSV导出、Apple Health及Apple Watch。"
++label: "Fact"
++source_title: "Strong — Workout Tracker & Gym Log"
++source_url: "https://www.strong.app/"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "官网功能声明；观察官方演示，不是安装实测，不引用注册量或评分证明需求。"
++support: "full"
++independence_group: "strong"
++limitations: "官网功能声明；观察官方演示，不是安装实测，不引用注册量或评分证明需求。"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：已观察官网训练记录演示；白底、对齐数字、蓝色主操作与轻列表。
++
++## E-012 · Hevy — Workout Tracker & Planner Gym App
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-12.md)
++
++```yaml
++evidence_id: "E-012"
++source_id: "SRC-20260910-gym-reference-12"
++claim: "官网列出训练日志、计划、计时、笔记、进步图、动作视频、PR和历史，以及关注、点赞、评论与保存他人训练；支持Watch/WearOS。"
++label: "Fact"
++source_title: "Hevy — Workout Tracker & Planner Gym App"
++source_url: "https://www.hevyapp.com/"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "公开功能与界面展示；未登录实测；功能齐全不代表适合本项目。"
++support: "full"
++independence_group: "hevy"
++limitations: "公开功能与界面展示；未登录实测；功能齐全不代表适合本项目。"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：已观察官方截图；蓝色操作、绿色完成标记、表格数字对齐。
++
++## E-013 · Member Portal Guide
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-13.md)
++
++```yaml
++evidence_id: "E-013"
++source_id: "SRC-20260910-gym-reference-13"
++claim: "官方会员门户指南涵盖会员资料／条码、预约、签到、30天到店图、会员套餐、付款、按教练与项目筛课、历史和联系馆方。"
++label: "Fact"
++source_title: "Member Portal Guide"
++source_url: "https://docs.gymdesk.com/en/help/docs/member-portal-guide"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "不同馆方配置可不同；未进入真实会员账号，不评UI优劣。"
++support: "full"
++independence_group: "gymdesk"
++limitations: "不同馆方配置可不同；未进入真实会员账号，不评UI优劣。"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：仅核查文档流程；不列为已实测优秀UI。
++
++## E-014 · Workout.lol
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-14.md)
++
++```yaml
++evidence_id: "E-014"
++source_id: "SRC-20260910-gym-reference-14"
++claim: "公开网页提供Equipment→Muscles→Exercises三步流程，本轮实际选择Dumbbell并进入肌肉选择页面。"
++label: "Fact"
++source_title: "Workout.lol"
++source_url: "https://workout.lol/"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "仅操作前两步；没有完成动作生成、账户、持久化或移动端测试。"
++support: "full"
++independence_group: "workout-lol"
++limitations: "仅操作前两步；没有完成动作生成、账户、持久化或移动端测试。"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：实际网页操作；分步任务、留白、人体图；肌肉图仍需文字选项辅助。
++
++## E-015 · workout-lol/workout-lol
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-15.md)
++
++```yaml
++evidence_id: "E-015"
++source_id: "SRC-20260910-gym-reference-15"
++claim: "README描述依可用器械与目标肌肉生成训练，支持自托管；仓库页面显示最近提交2024-09-27。"
++label: "Fact"
++source_title: "workout-lol/workout-lol"
++source_url: "https://github.com/workout-lol/workout-lol"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "从Vincenius/workout-lol自动跳转规范仓库；时区tooltip显示次日，不评价活跃维护；未运行或审计。"
++support: "full"
++independence_group: "workout-lol"
++limitations: "从Vincenius/workout-lol自动跳转规范仓库；时区tooltip显示次日，不评价活跃维护；未运行或审计。"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：界面体验见官网来源。
++
++## E-016 · aree6/LiftShift
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-16.md)
++
++```yaml
++evidence_id: "E-016"
++source_id: "SRC-20260910-gym-reference-16"
++claim: "README描述浏览器内导入Hevy／Strong等训练数据进行热图、PR、平台期、日期与一致性分析；页面最新提交2026-09-08，release v1.5.0日期2026-09-05。"
++label: "Fact"
++source_title: "aree6/LiftShift"
++source_url: "https://github.com/aree6/LiftShift"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "README为作者能力声明，未验证浏览器本地处理及安全性；官网未成功访问。README另有归属要求表述，完整复用条件需结合文件复核。"
++support: "full"
++independence_group: "liftshift"
++limitations: "README为作者能力声明，未验证浏览器本地处理及安全性；官网未成功访问。README另有归属要求表述，完整复用条件需结合文件复核。"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：已看README截图；深色多图表，统计页参考。
++
++## E-017 · Commits · wger-project/wger · master
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-17.md)
++
++```yaml
++evidence_id: "E-017"
++source_id: "SRC-20260910-gym-reference-17"
++claim: "截至访问日提交列表顶部为2026-09-06，提交83005f7d487c814833f3943784370bb0149fbaa8。"
++label: "Fact"
++source_title: "Commits · wger-project/wger · master"
++source_url: "https://github.com/wger-project/wger/commits/master/"
++source_class: "B"
++published_or_event_date: "2026-09-06"
++accessed_date: "2026-09-10"
++scope: "提交日期仅为维护信号，不证明稳定、已发布或适合本项目。"
++support: "full"
++independence_group: "wger"
++limitations: "提交日期仅为维护信号，不证明稳定、已发布或适合本项目。"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：不适用。
++
++## E-018 · wger LICENSE.txt
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-18.md)
++
++```yaml
++evidence_id: "E-018"
++source_id: "SRC-20260910-gym-reference-18"
++claim: "许可证文件是GNU Affero General Public License Version 3；项目README声明AGPL-3.0-or-later。"
++label: "Fact"
++source_title: "wger LICENSE.txt"
++source_url: "https://github.com/wger-project/wger/blob/master/LICENSE.txt"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "仅登记可见许可文本与项目声明，不对商业使用作法律裁定；数据及文档许可单独列于README。"
++support: "full"
++independence_group: "wger"
++limitations: "仅登记可见许可文本与项目声明，不对商业使用作法律裁定；数据及文档许可单独列于README。"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：不适用。
++
++## E-019 · Workout.lol LICENSE
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-19.md)
++
++```yaml
++evidence_id: "E-019"
++source_id: "SRC-20260910-gym-reference-19"
++claim: "LICENSE为MIT，Copyright (c) 2023 Vincent Will，并要求保留版权与许可声明。"
++label: "Fact"
++source_title: "Workout.lol LICENSE"
++source_url: "https://github.com/workout-lol/workout-lol/blob/main/LICENSE"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "仅针对此代码许可文件；未核验动作数据、视频及第三方素材的许可。"
++support: "full"
++independence_group: "workout-lol"
++limitations: "仅针对此代码许可文件；未核验动作数据、视频及第三方素材的许可。"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：不适用。
++
++## E-020 · LiftShift LICENSE
++
++[SRC登记](../../raw/SRC-20260910-gym-reference-20.md)
++
++```yaml
++evidence_id: "E-020"
++source_id: "SRC-20260910-gym-reference-20"
++claim: "LICENSE显式SPDX-License-Identifier: AGPL-3.0-only，并链接AGPL全文、说明修改后网络交互的对应源码要求。"
++label: "Fact"
++source_title: "LiftShift LICENSE"
++source_url: "https://github.com/aree6/LiftShift/blob/main/LICENSE"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "LICENSE为12行声明而非完整AGPL全文；README归属表述需一并复核；不推断可以直接闭源商用。"
++support: "full"
++independence_group: "liftshift"
++limitations: "LICENSE为12行声明而非完整AGPL全文；README归属表述需一并复核；不推断可以直接闭源商用。"
++decision_relevance: "能力／设计参考；不证明本店需求"
++confidence: "High"
++```
++
++界面观察：不适用。
++
++## E-021 · 用户评论 2026-06-18
++
++[共用页面SRC登记](../../raw/SRC-20260910-gym-reference-09.md)
++
++```yaml
++evidence_id: "E-021"
++source_id: "SRC-20260910-gym-reference-09"
++claim: "一条评论认为查人数与课程还好，但查找训练器械记录繁琐，并建议在器械上贴二维码。"
++label: "Fact"
++source_title: "The Gym Group Google Play用户评论"
++source_url: "https://play.google.com/store/apps/details?id=com.netpulse.mobile.thegymgroup&hl=en_GB&gl=US"
++source_class: "D"
++published_or_event_date: "2026-06-18"
++accessed_date: "2026-09-10"
++scope: "一条公开自选择评论，账号身份与使用情况未独立验证"
++support: "full"
++independence_group: "gymgroup-public-users"
++limitations: "每项n=1，无代表性，不估算问题频率；历史评论不代表当前版本"
++decision_relevance: "形成器械目录／扫码说明的访谈假设"
++confidence: "Medium"
++```
++
++## E-022 · 用户评论 2022-10-03
++
++[共用页面SRC登记](../../raw/SRC-20260910-gym-reference-09.md)
++
++```yaml
++evidence_id: "E-022"
++source_id: "SRC-20260910-gym-reference-09"
++claim: "一条历史评论报告二维码开门偶发失效、人数更新异常。"
++label: "Fact"
++source_title: "The Gym Group Google Play用户评论"
++source_url: "https://play.google.com/store/apps/details?id=com.netpulse.mobile.thegymgroup&hl=en_GB&gl=US"
++source_class: "D"
++published_or_event_date: "2022-10-03"
++accessed_date: "2026-09-10"
++scope: "一条公开自选择评论，账号身份与使用情况未独立验证"
++support: "full"
++independence_group: "gymgroup-public-users"
++limitations: "每项n=1，无代表性，不估算问题频率；历史评论不代表当前版本"
++decision_relevance: "提示可靠性优先；不能指称当前版本仍有相同故障"
++confidence: "Medium"
++```
++
++## 推断与假设对应关系
++
++| 判断 | 标签 | 对应证据 | 待验证跳跃 |
++| --- | --- | --- | --- |
++| 人数＋会员＋课表是首店较小且完整的组合 | Inference | E-009、E-010、E-013、已确认需求 | 海外功能样板能否帮助本店会员 |
++| 器械目录／扫码说明值得追加 | Assumption | E-014、E-021 | 查训练记录的抱怨能否迁移到本店找器械场景 |
++| 扫码报修有价值 | Assumption | 本店器械场景＋E-021作背景 | 评论未直接要求报修；馆方接收处理意愿未知 |
++| 简洁列表＋状态解释适合首页 | Inference | E-008、E-010、E-011、E-014 | 无可用性任务数据；图片观察不能证明完成率 |
++| 增加卡片可改善信息层级 | Inference | E-007 | 需控制卡片数量并测试中文理解度 |
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-01.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-01"
++title: "2024 winners and finalists — Apple Design Awards"
++source_url_or_path: "https://developer.apple.com/design/awards/2024/"
++publisher_or_author: "Apple"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "official"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "Gentler Streak为2024 Apple Design Awards Social Impact类获奖应用；Apple评价其健康数据组织、温和设计及月度总结。"
++quoted_or_referenced_location: "2024官方获奖身份及评审描述；非黑客松、非当前版本实测"
++supersedes: null
++---
++
++# 2024 winners and finalists — Apple Design Awards
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://developer.apple.com/design/awards/2024/
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++Gentler Streak为2024 Apple Design Awards Social Impact类获奖应用；Apple评价其健康数据组织、温和设计及月度总结。
++
++引用位置：2024官方获奖身份及评审描述；非黑客松、非当前版本实测。
++
++## 适用范围与限制
++
++2024官方获奖身份及评审描述；非黑客松、非当前版本实测
++
++界面观察：官方奖项文字核验；产品官网截图另见gentler来源。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-02.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-02"
++title: "Celebrating innovation: Gemini API Developer Competition"
++source_url_or_path: "https://developers.googleblog.com/celebrating-innovation-gemini-api-developer-competition/"
++publisher_or_author: "Google"
++published_or_event_date: "2024-12-19"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "official"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "AlphaFit被列入2024 Gemini API竞赛Honorable Mentions；Google描述其新手个性化训练、随进度调整难度、动作提示及休息时文字游戏。"
++quoted_or_referenced_location: "官方特别提及，不是总冠军；未验证当前维护或训练建议效果"
++supersedes: null
++---
++
++# Celebrating innovation: Gemini API Developer Competition
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://developers.googleblog.com/celebrating-innovation-gemini-api-developer-competition/
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++AlphaFit被列入2024 Gemini API竞赛Honorable Mentions；Google描述其新手个性化训练、随进度调整难度、动作提示及休息时文字游戏。
++
++引用位置：官方特别提及，不是总冠军；未验证当前维护或训练建议效果。
++
++## 适用范围与限制
++
++官方特别提及，不是总冠军；未验证当前维护或训练建议效果
++
++界面观察：未核验应用UI；只有文字描述。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-03.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-03"
++title: "抖音AI创变者计划"
++source_url_or_path: "https://aiia.douyin.com/"
++publisher_or_author: "抖音"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "official"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "2026赛事官网列出互动空间、内容重构、个性化瞬间和视觉搜索等赛道；历史项目展示Root Journey等，本轮页面未发现可直接核验的健身房UI作品。"
++quoted_or_referenced_location: "赛事存在与本轮公开页面覆盖；不表示全部赛事没有健身作品"
++supersedes: null
++---
++
++# 抖音AI创变者计划
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://aiia.douyin.com/
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++2026赛事官网列出互动空间、内容重构、个性化瞬间和视觉搜索等赛道；历史项目展示Root Journey等，本轮页面未发现可直接核验的健身房UI作品。
++
++引用位置：赛事存在与本轮公开页面覆盖；不表示全部赛事没有健身作品。
++
++## 适用范围与限制
++
++赛事存在与本轮公开页面覆盖；不表示全部赛事没有健身作品
++
++界面观察：赛事官网，非产品UI。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-04.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-04"
++title: "看完小红书黑客松的59个热血团队，我们想推荐这6个"
++source_url_or_path: "https://www.pingwest.com/a/312851"
++publisher_or_author: "品玩／王兆洋（现场评审自述）"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "C"
++source_type: "independent"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "作者介绍2026小红书黑客松参赛项目Attune等，明确其推荐项目并非全部获奖；Attune尝试按注意力呈现操作并隐藏干扰。"
++quoted_or_referenced_location: "现场评审报道；非官方获奖名单，非健身产品；未核验可用演示"
++supersedes: null
++---
++
++# 看完小红书黑客松的59个热血团队，我们想推荐这6个
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://www.pingwest.com/a/312851
++Confidence: Medium
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++作者介绍2026小红书黑客松参赛项目Attune等，明确其推荐项目并非全部获奖；Attune尝试按注意力呈现操作并隐藏干扰。
++
++引用位置：现场评审报道；非官方获奖名单，非健身产品；未核验可用演示。
++
++## 适用范围与限制
++
++现场评审报道；非官方获奖名单，非健身产品；未核验可用演示
++
++界面观察：交互想法参考，不做UI质量排名。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-05.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-05"
++title: "wger-project/wger"
++source_url_or_path: "https://github.com/wger-project/wger"
++publisher_or_author: "wger-project"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "repository"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "README列出训练计划、进阶规则、饮食体重跟踪、动作Wiki、跨端、多用户基本馆务与REST API；代码AGPL-3.0-or-later，动作／食材条目各自CC许可，文档CC-BY-SA-4.0。"
++quoted_or_referenced_location: "README声明；未运行／安全审计；代码与数据许可分开"
++supersedes: null
++---
++
++# wger-project/wger
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://github.com/wger-project/wger
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++README列出训练计划、进阶规则、饮食体重跟踪、动作Wiki、跨端、多用户基本馆务与REST API；代码AGPL-3.0-or-later，动作／食材条目各自CC许可，文档CC-BY-SA-4.0。
++
++引用位置：README声明；未运行／安全审计；代码与数据许可分开。
++
++## 适用范围与限制
++
++README声明；未运行／安全审计；代码与数据许可分开
++
++界面观察：未查看运行界面；不评UI。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-06.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-06"
++title: "“开发者是AI时代的创作者”，小红书上独立开发者超5万"
++source_url_or_path: "https://jingji.cctv.com/2025/04/16/ARTIr4i1g313IU5WEySTYyMe250416.shtml"
++publisher_or_author: "央视网"
++published_or_event_date: "2025-04-16"
++accessed_date: "2026-09-10"
++source_class: "C"
++source_type: "independent"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "报道明确Peak Watch获2025小红书首届独立开发大赛宝藏APP奖项，并介绍其与Stress Watch团队关系。"
++quoted_or_referenced_location: "媒体获奖报道，未取得主办方完整原始名单；不引用报道用户规模做需求证明"
++supersedes: null
++---
++
++# “开发者是AI时代的创作者”，小红书上独立开发者超5万
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://jingji.cctv.com/2025/04/16/ARTIr4i1g313IU5WEySTYyMe250416.shtml
++Confidence: Medium
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++报道明确Peak Watch获2025小红书首届独立开发大赛宝藏APP奖项，并介绍其与Stress Watch团队关系。
++
++引用位置：媒体获奖报道，未取得主办方完整原始名单；不引用报道用户规模做需求证明。
++
++## 适用范围与限制
++
++媒体获奖报道，未取得主办方完整原始名单；不引用报道用户规模做需求证明
++
++界面观察：不适用。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-07.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-07"
++title: "PeakWatch — Train Smarter, Recover Faster"
++source_url_or_path: "https://www.peakwatch.co/"
++publisher_or_author: "PeakWatch"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "product"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "官网列出恢复与训练负荷、压力与身体电量、睡眠、自定义训练、饮食记录、生活日志、Apple Watch与iOS小组件。"
++quoted_or_referenced_location: "官网功能声明；恢复与营养效果未核验，不建议迁移健康判断到本项目"
++supersedes: null
++---
++
++# PeakWatch — Train Smarter, Recover Faster
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://www.peakwatch.co/
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++官网列出恢复与训练负荷、压力与身体电量、睡眠、自定义训练、饮食记录、生活日志、Apple Watch与iOS小组件。
++
++引用位置：官网功能声明；恢复与营养效果未核验，不建议迁移健康判断到本项目。
++
++## 适用范围与限制
++
++官网功能声明；恢复与营养效果未核验，不建议迁移健康判断到本项目
++
++界面观察：已查看官网手机展示；深色数字、状态词和迷你图表卡片。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-08.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-08"
++title: "Gentler Streak: Workout Tracker That Puts Well-being First"
++source_url_or_path: "https://gentlerstories.com/gentlerstreak"
++publisher_or_author: "Gentler Stories"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "product"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "官网展示Activity Path、每日训练／休息建议、Apple Watch记录、健康与睡眠数据、周月年总结；可切换休息、生病、受伤状态。"
++quoted_or_referenced_location: "官网描述及截图，不验证健康效果；部分图片alt疑似混入The Outsiders，视觉判断以实际图像为准"
++supersedes: null
++---
++
++# Gentler Streak: Workout Tracker That Puts Well-being First
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://gentlerstories.com/gentlerstreak
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++官网展示Activity Path、每日训练／休息建议、Apple Watch记录、健康与睡眠数据、周月年总结；可切换休息、生病、受伤状态。
++
++引用位置：官网描述及截图，不验证健康效果；部分图片alt疑似混入The Outsiders，视觉判断以实际图像为准。
++
++## 适用范围与限制
++
++官网描述及截图，不验证健康效果；部分图片alt疑似混入The Outsiders，视觉判断以实际图像为准
++
++界面观察：已看首屏手机界面：先给一句状态解释，后给路径图和活动列表；橙绿点缀白底。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-09.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-09"
++title: "The Gym Group — Google Play"
++source_url_or_path: "https://play.google.com/store/apps/details?id=com.netpulse.mobile.thegymgroup&hl=en_GB&gl=US"
++publisher_or_author: "The Gym Limited／Google Play"
++published_or_event_date: "2026-09-07"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "product"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "官方详情列出二维码入馆、实时人数及容量百分比、课程预约管理、训练库与动作视频、会员管理和可选Health Connect。页面另有两条用户评论：2026-06-18描述查人数与课程有用但找器械记录繁琐，建议器械二维码；2022-10-03报告开门与人数更新异常。"
++quoted_or_referenced_location: "About this app展开详情；用户评论2026-06-18、2022-10-03"
++supersedes: null
++---
++
++# The Gym Group — Google Play
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://play.google.com/store/apps/details?id=com.netpulse.mobile.thegymgroup&hl=en_GB&gl=US
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++官方详情列出二维码入馆、实时人数及容量百分比、课程预约管理、训练库与动作视频、会员管理和可选Health Connect。页面另有两条用户评论：2026-06-18描述查人数与课程有用但找器械记录繁琐，建议器械二维码；2022-10-03报告开门与人数更新异常。
++
++引用位置：About this app展开详情；用户评论2026-06-18、2022-10-03。
++
++## 适用范围与限制
++
++官方功能与用户评论必须分开：官方B类；评论D类、两个自选择样本，2022旧评论不说明当前缺陷。Android英文页，更新2026-09-07，版本7.8.1；未登录实测。
++
++界面观察：仅文字核验，不做截图UI排名。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-10.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-10"
++title: "Download the free PureGym App"
++source_url_or_path: "https://www.puregym.com/app/"
++publisher_or_author: "PureGym"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "product"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "官方页面列出非接触入馆、课程预约、点播训练、实时到场人数、个性化训练计划与会员管理；官方展示人数加分时柱图。"
++quoted_or_referenced_location: "英国官网公开功能与截图；未登录会员端，精度未知"
++supersedes: null
++---
++
++# Download the free PureGym App
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://www.puregym.com/app/
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++官方页面列出非接触入馆、课程预约、点播训练、实时到场人数、个性化训练计划与会员管理；官方展示人数加分时柱图。
++
++引用位置：英国官网公开功能与截图；未登录会员端，精度未知。
++
++## 适用范围与限制
++
++英国官网公开功能与截图；未登录会员端，精度未知
++
++界面观察：2026-09-09已查看人数卡片；本轮重新核查官方页面。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-11.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-11"
++title: "Strong — Workout Tracker & Gym Log"
++source_url_or_path: "https://www.strong.app/"
++publisher_or_author: "Strong"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "product"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "官方列出训练记录、自定义动作、超级组、休息计时、RPE、进步图、CSV导出、Apple Health及Apple Watch。"
++quoted_or_referenced_location: "Everything you need；Workout. Notebook. Reinvented."
++supersedes: null
++---
++
++# Strong — Workout Tracker & Gym Log
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://www.strong.app/
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++官方列出训练记录、自定义动作、超级组、休息计时、RPE、进步图、CSV导出、Apple Health及Apple Watch。
++
++引用位置：Everything you need；Workout. Notebook. Reinvented.。
++
++## 适用范围与限制
++
++官网功能声明；观察官方演示，不是安装实测，不引用注册量或评分证明需求。
++
++界面观察：已观察官网训练记录演示；白底、对齐数字、蓝色主操作与轻列表。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-12.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-12"
++title: "Hevy — Workout Tracker & Planner Gym App"
++source_url_or_path: "https://www.hevyapp.com/"
++publisher_or_author: "Hevy"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "product"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "官网列出训练日志、计划、计时、笔记、进步图、动作视频、PR和历史，以及关注、点赞、评论与保存他人训练；支持Watch/WearOS。"
++quoted_or_referenced_location: "功能介绍及产品截图"
++supersedes: null
++---
++
++# Hevy — Workout Tracker & Planner Gym App
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://www.hevyapp.com/
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++官网列出训练日志、计划、计时、笔记、进步图、动作视频、PR和历史，以及关注、点赞、评论与保存他人训练；支持Watch/WearOS。
++
++引用位置：功能介绍及产品截图。
++
++## 适用范围与限制
++
++公开功能与界面展示；未登录实测；功能齐全不代表适合本项目。
++
++界面观察：已观察官方截图；蓝色操作、绿色完成标记、表格数字对齐。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-13.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-13"
++title: "Member Portal Guide"
++source_url_or_path: "https://docs.gymdesk.com/en/help/docs/member-portal-guide"
++publisher_or_author: "Gymdesk"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "product"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "官方会员门户指南涵盖会员资料／条码、预约、签到、30天到店图、会员套餐、付款、按教练与项目筛课、历史和联系馆方。"
++quoted_or_referenced_location: "Profile、Schedule、Bookings等章节"
++supersedes: null
++---
++
++# Member Portal Guide
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://docs.gymdesk.com/en/help/docs/member-portal-guide
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++官方会员门户指南涵盖会员资料／条码、预约、签到、30天到店图、会员套餐、付款、按教练与项目筛课、历史和联系馆方。
++
++引用位置：Profile、Schedule、Bookings等章节。
++
++## 适用范围与限制
++
++不同馆方配置可不同；未进入真实会员账号，不评UI优劣。
++
++界面观察：仅核查文档流程；不列为已实测优秀UI。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-14.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-14"
++title: "Workout.lol"
++source_url_or_path: "https://workout.lol/"
++publisher_or_author: "Workout.lol"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "product"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "公开网页提供Equipment→Muscles→Exercises三步流程，本轮实际选择Dumbbell并进入肌肉选择页面。"
++quoted_or_referenced_location: "首页器械选择与Continue后肌肉页"
++supersedes: null
++---
++
++# Workout.lol
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://workout.lol/
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++公开网页提供Equipment→Muscles→Exercises三步流程，本轮实际选择Dumbbell并进入肌肉选择页面。
++
++引用位置：首页器械选择与Continue后肌肉页。
++
++## 适用范围与限制
++
++仅操作前两步；没有完成动作生成、账户、持久化或移动端测试。
++
++界面观察：实际网页操作；分步任务、留白、人体图；肌肉图仍需文字选项辅助。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-15.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-15"
++title: "workout-lol/workout-lol"
++source_url_or_path: "https://github.com/workout-lol/workout-lol"
++publisher_or_author: "workout-lol"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "repository"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "README描述依可用器械与目标肌肉生成训练，支持自托管；仓库页面显示最近提交2024-09-27。"
++quoted_or_referenced_location: "README；Latest commit日期；MIT标签"
++supersedes: null
++---
++
++# workout-lol/workout-lol
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://github.com/workout-lol/workout-lol
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++README描述依可用器械与目标肌肉生成训练，支持自托管；仓库页面显示最近提交2024-09-27。
++
++引用位置：README；Latest commit日期；MIT标签。
++
++## 适用范围与限制
++
++从Vincenius/workout-lol自动跳转规范仓库；时区tooltip显示次日，不评价活跃维护；未运行或审计。
++
++界面观察：界面体验见官网来源。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-16.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-16"
++title: "aree6/LiftShift"
++source_url_or_path: "https://github.com/aree6/LiftShift"
++publisher_or_author: "aree6"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "repository"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "README描述浏览器内导入Hevy／Strong等训练数据进行热图、PR、平台期、日期与一致性分析；页面最新提交2026-09-08，release v1.5.0日期2026-09-05。"
++quoted_or_referenced_location: "README特性、截图与Releases侧栏"
++supersedes: null
++---
++
++# aree6/LiftShift
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://github.com/aree6/LiftShift
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++README描述浏览器内导入Hevy／Strong等训练数据进行热图、PR、平台期、日期与一致性分析；页面最新提交2026-09-08，release v1.5.0日期2026-09-05。
++
++引用位置：README特性、截图与Releases侧栏。
++
++## 适用范围与限制
++
++README为作者能力声明，未验证浏览器本地处理及安全性；官网未成功访问。README另有归属要求表述，完整复用条件需结合文件复核。
++
++界面观察：已看README截图；深色多图表，统计页参考。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-17.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-17"
++title: "Commits · wger-project/wger · master"
++source_url_or_path: "https://github.com/wger-project/wger/commits/master/"
++publisher_or_author: "wger-project"
++published_or_event_date: "2026-09-06"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "repository"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "截至访问日提交列表顶部为2026-09-06，提交83005f7d487c814833f3943784370bb0149fbaa8。"
++quoted_or_referenced_location: "顶部commit：Mark labels further fields as explicitly nullable"
++supersedes: null
++---
++
++# Commits · wger-project/wger · master
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://github.com/wger-project/wger/commits/master/
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++截至访问日提交列表顶部为2026-09-06，提交83005f7d487c814833f3943784370bb0149fbaa8。
++
++引用位置：顶部commit：Mark labels further fields as explicitly nullable。
++
++## 适用范围与限制
++
++提交日期仅为维护信号，不证明稳定、已发布或适合本项目。
++
++界面观察：不适用。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-18.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-18"
++title: "wger LICENSE.txt"
++source_url_or_path: "https://github.com/wger-project/wger/blob/master/LICENSE.txt"
++publisher_or_author: "wger-project"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "repository"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "许可证文件是GNU Affero General Public License Version 3；项目README声明AGPL-3.0-or-later。"
++quoted_or_referenced_location: "LICENSE.txt全文标题及第13条；项目README见wger来源"
++supersedes: null
++---
++
++# wger LICENSE.txt
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://github.com/wger-project/wger/blob/master/LICENSE.txt
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++许可证文件是GNU Affero General Public License Version 3；项目README声明AGPL-3.0-or-later。
++
++引用位置：LICENSE.txt全文标题及第13条；项目README见wger来源。
++
++## 适用范围与限制
++
++仅登记可见许可文本与项目声明，不对商业使用作法律裁定；数据及文档许可单独列于README。
++
++界面观察：不适用。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-19.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-19"
++title: "Workout.lol LICENSE"
++source_url_or_path: "https://github.com/workout-lol/workout-lol/blob/main/LICENSE"
++publisher_or_author: "Vincent Will"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "repository"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "LICENSE为MIT，Copyright (c) 2023 Vincent Will，并要求保留版权与许可声明。"
++quoted_or_referenced_location: "LICENSE 21行"
++supersedes: null
++---
++
++# Workout.lol LICENSE
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://github.com/workout-lol/workout-lol/blob/main/LICENSE
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++LICENSE为MIT，Copyright (c) 2023 Vincent Will，并要求保留版权与许可声明。
++
++引用位置：LICENSE 21行。
++
++## 适用范围与限制
++
++仅针对此代码许可文件；未核验动作数据、视频及第三方素材的许可。
++
++界面观察：不适用。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260910-gym-reference-20.md
+@@ -0,0 +1,37 @@
++---
++source_id: "SRC-20260910-gym-reference-20"
++title: "LiftShift LICENSE"
++source_url_or_path: "https://github.com/aree6/LiftShift/blob/main/LICENSE"
++publisher_or_author: "aree6"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++source_class: "B"
++source_type: "repository"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "LICENSE显式SPDX-License-Identifier: AGPL-3.0-only，并链接AGPL全文、说明修改后网络交互的对应源码要求。"
++quoted_or_referenced_location: "LICENSE 12行"
++supersedes: null
++---
++
++# LiftShift LICENSE
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: https://github.com/aree6/LiftShift/blob/main/LICENSE
++Confidence: High（仅限可见声明）
++Related decisions: [单店研究建议](../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++## 最小来源摘要
++
++LICENSE显式SPDX-License-Identifier: AGPL-3.0-only，并链接AGPL全文、说明修改后网络交互的对应源码要求。
++
++引用位置：LICENSE 12行。
++
++## 适用范围与限制
++
++LICENSE为12行声明而非完整AGPL全文；README归属表述需一并复核；不推断可以直接闭源商用。
++
++界面观察：不适用。
+--- /dev/null
++++ product-knowledge-base/outputs/gym-ui-references-2026-09-10/README.md
+@@ -0,0 +1,31 @@
++# 健身房产品UI参考图册
++
++Owner: Product Lead
++Last updated: 2026-09-10
++Source: 以下三个产品官网；原始素材URL见manifest.json
++Confidence: High（图片来自公开官网）；Medium（设计判断）
++Related decisions: [功能与UI研究](../../ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)
++Next review date: 2026-10-10
++
++这些是官网展示的真实产品界面素材，并非本店原型、实测画面或实时数据。版权归原权利人，保存用于本次内部评论与比较，未取得再利用为产品素材的授权。并排图只等比缩小并加标签，没有重绘界面；原始URL与处理方式见[素材清单](manifest.json)。
++
++![三款官方界面对照](contact-sheet.png)
++
++| 产品 | 观察位置 | 借鉴与取舍 |
++| --- | --- | --- |
++| [PureGym官网](https://www.puregym.com/app/) | 页面人数展示图 | 当前人数＋分时柱图；仅取这个任务模块，不搬整页营销与导航 |
++| [Gentler Streak官网](https://gentlerstories.com/gentlerstreak) | 首屏手机展示 | 先说明状态、再给活动路径；我们的首屏不需同等面积插画与长段落 |
++| [PeakWatch官网](https://www.peakwatch.co/) | 首屏手机展示 | 数值、状态词、趋势同卡；我们的首页减少指标与颜色数量 |
++
++## 查看单张原图
++
++- [PureGym人数界面](puregym.png)
++- [Gentler Streak状态界面](gentler-streak.png)
++- [PeakWatch卡片界面](peakwatch.png)
++
++## 其他值得直接打开的参考
++
++- [Strong](https://www.strong.app/)：官网训练界面演示；整体视觉基调的首选参考，白底、轻列表、数字对齐。本轮未另下载视频。
++- [Hevy](https://www.hevyapp.com/)：官网训练记录与统计截图；看操作按钮和完成状态。
++- [Workout.lol](https://workout.lol/)：可直接操作器械选择；本轮体验前两步。
++- [Gymdesk会员指南](https://docs.gymdesk.com/en/help/docs/member-portal-guide)：看会员状态和课表流程，非已实测的优秀UI结论。
+--- /dev/null
++++ product-knowledge-base/outputs/gym-ui-references-2026-09-10/manifest.json
+@@ -0,0 +1,28 @@
++{
++  "accessed_date": "2026-09-10",
++  "purpose": "带来源的内部界面研究参考；未作为本产品素材，未取得复用授权",
++  "transformations": "原图转PNG；并排图等比缩小与添加独立标题，界面数字与内容未重绘",
++  "assets": [
++    {
++      "product": "PureGym",
++      "local_file": "puregym.png",
++      "source_page": "https://www.puregym.com/app/",
++      "asset_url": "https://www.puregym.com/media/edqjrh5n/attendance-app-image.jpg?quality=80",
++      "source_id": "SRC-20260910-gym-reference-10"
++    },
++    {
++      "product": "Gentler Streak",
++      "local_file": "gentler-streak.png",
++      "source_page": "https://gentlerstories.com/gentlerstreak",
++      "asset_url": "https://framerusercontent.com/images/xVnJpLiKDtoqOZuuczWVnTtBHOM.png?scale-down-to=2048&width=1206&height=2622",
++      "source_id": "SRC-20260910-gym-reference-08"
++    },
++    {
++      "product": "PeakWatch",
++      "local_file": "peakwatch.png",
++      "source_page": "https://www.peakwatch.co/",
++      "asset_url": "https://www.peakwatch.co/_next/image?url=%2Fimages%2Fphone.webp&w=750&q=75",
++      "source_id": "SRC-20260910-gym-reference-07"
++    }
++  ]
++}--- /dev/null
++++ product-knowledge-base/outputs/gym-ui-references-2026-09-10/validation.json
+@@ -0,0 +1,9 @@
++{
++  "scoped_markdown_files": 25,
++  "evidence_cards": 22,
++  "new_source_records": 20,
++  "errors": [],
++  "checks": "required metadata, JSON-valued YAML fields, dates/enums, added local links, source URL uniqueness, old document prefix preservation",
++  "full_library_lint": "unavailable: script missing",
++  "source_duplicate_check": "Exact source_url_or_path equality; repository root and LICENSE/commits are distinct sources"
++}--- before/INDEX.md
++++ product-knowledge-base/INDEX.md
+@@ -1,7 +1,7 @@
+ # 产品知识地图
+ 
+ Owner: Product Lead
+-Last updated: 2026-09-06
++Last updated: 2026-09-10
+ Source: 本工作区长期知识、项目文件与来源登记
+ Confidence: High
+ Related decisions: `decisions/one-person-pm-knowledge-loop-2026-08-23.md`
+@@ -158,6 +158,7 @@
+ ### 其他产品想法
+ 
+ - [健身房实时人数与拥挤度查询](ideas/gym-occupancy/idea-brief.md)：单店实验、必需会员入口、简洁首页与场地配置；V0，数据接入和拥挤阈值待核查
++- [健身房产品功能与UI研究（2026-09-10）](ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)：11个相关产品／项目、科技公司赛事与开源许可；[来源证据卡](ideas/gym-occupancy/evidence-cards-2026-09-10.md)，新功能为建议、V0不变
+ 
+ - [AI 护理交班草稿器](ideas/ai-nursing-handoff-draft/idea-brief.md)
+ - [CTP 古籍阅读体验现代化](ideas/chinese-text-project-reading-experience/idea-brief.md)
+--- before/LOG.md
++++ product-knowledge-base/LOG.md
+@@ -254,3 +254,26 @@
+ | 2026-09-09 | Ingest + Scoped Lint | SRC-20260909-gym-design-direction-01 | complete / partial lint | 保存用户简洁首页方向确认，局部追加idea-brief设计基准；中文优先，模拟数字和历史时段不视为已验证。V0不变。INDEX已有入口无需变更；元数据与相对链接通过、检查局部diff，标准lint脚本仍缺失，未执行全库Lint、未提交 |
+ | 2026-09-09 | Ingest + Scoped Lint | SRC-20260909-gym-single-store-01 | complete / partial lint | 保存单店实验、会员入口与器械配置，追加idea-brief并更新INDEX摘要。区分用户方向与馆方承诺；62台为分类不重叠条件下推算，非容量；会员绑定和分区方案为提案。V0不变，字段/链接/算术检查通过，复核局部diff；标准lint脚本缺失，无全库Lint、生产接入、外部消息或提交 |
+ | 2026-09-10 | Ingest + Scoped Lint | SRC-20260910-gym-yoga-schedule-01 | complete / partial lint | 追加用户确认课表来源及idea-brief；首页排课摘要为建议，排课不等于实际空闲或出席。V0与研究分数沿用；内部链接检查及局部diff复核，标准lint脚本缺失，无全库Lint。INDEX已有项目入口无需变更，未提交 |
++
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-01 | complete | apple-2024：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-02 | complete | google-alphafit：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-03 | complete | douyin-contest：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-04 | complete | red-hackathon：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-05 | complete | wger：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-06 | complete | red-peak-award：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-07 | complete | peakwatch：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-08 | complete | gentler：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-09 | complete | gymgroup：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-10 | complete | puregym：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-11 | complete | strong：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-12 | complete | hevy：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-13 | complete | gymdesk：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-14 | complete | workout-app：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-15 | complete | workout-repo：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-16 | complete | liftshift：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-17 | complete | wger-commits：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-18 | complete | wger-license：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-19 | complete | workout-license：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Ingest | SRC-20260910-gym-reference-20 | complete | liftshift-license：登记原始公开页面元数据、最小摘要与限制；用途为健身房功能／UI参考，不证明本店需求 |
++| 2026-09-10 | Research writeback | gym-occupancy product-feature-ui-research | complete | 新增报告与22张证据卡、20个唯一来源，更新idea-brief和INDEX；新增功能为建议，V0不变；保存3张官方UI参考图，不改WIP或旧来源，不提交 |
++| 2026-09-10 | Research review + Scoped Lint | gym-occupancy product reference | pass / partial lint | review_eval_agent初审83/fail，修正Attune形态证据、获奖事实与设计判断分离、V0投入表述后89/pass；仅文档证据映射，非独立网页重开。25份Markdown局部元数据、新增链接、20来源URL精确去重、22卡片、历史前缀与diff通过；标准全库lint脚本缺失，未声称全库通过；保留旧raw与其他项目，不提交 |
+--- before/ideas/gym-occupancy/idea-brief.md
++++ product-knowledge-base/ideas/gym-occupancy/idea-brief.md
+@@ -148,3 +148,13 @@
+ Validation Level：V0不变。
+ Confidence：High（用户确认有课表）；Hypothesis（课表模块价值与维护方案）。
+ Next evidence：现有课表形式、更新负责人和非上课时段开放规则。
++
++## 2026-09-10：竞品功能与UI研究补充
++
++本轮已补齐前述公开来源缺口，详见[功能与界面研究](product-feature-ui-research-2026-09-10.md)及[证据卡](evidence-cards-2026-09-10.md)。20个唯一公开页面涵盖11个相关产品／项目，另保留1个通用黑客松交互案例；历史Firecrawl失败与暂评分保留为当时状态。
++
++【建议】以PureGym／The Gym Group参考场馆服务，Strong参考简洁列表，Gentler Streak参考状态解释，PeakWatch参考卡片层级。器械目录／扫码说明、报修和到店历史分别进入条件式验证；不表示已经加入确定开发范围。
++
++Research Quality: 89/100（本轮公开功能与UI研究通过文档与登记证据映射复核；完整分项与局限见报告）。
++Validation Level: V0（本店）不变；获奖、竞品功能和截图不能替代真实使用或付款。
++Next evidence: 门禁离场／在场字段、课表维护机制和本店会员最近一次器械等待行为。
