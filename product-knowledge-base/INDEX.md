@@ -9,6 +9,8 @@ Next review date: 2026-09-30
 
 ## 当前入口
 
+- [thinkV2换机恢复与最新状态](ideas/think-v2/migration-handoff-2026-09-17.md)：三份正式原文、许可来源映射、校验清单和新机任务重绑；产品缺口不因迁移消失。
+
 - [BOARD.md](BOARD.md)：活跃 Build、Discovery、Parking Lot、阻塞与待决策。
 - [LOG.md](LOG.md)：Ingest、Query、Lint 和人工决策操作记录。
 - [运行规则](agents/operating-rules.md) 与 [agent roster](agents/agent-roster.yaml)。
