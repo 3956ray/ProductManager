@@ -1,0 +1,22 @@
+[
+  {
+    "path": "/Users/orderly_ray/Leader/projects/gym-miniapp/orchestration/current-task.json",
+    "sha256": "7f69d2076006713831369b0dd485ee70728af26bb2b478e83dcc6771f5664d5b"
+  },
+  {
+    "path": "/Users/orderly_ray/Leader/projects/gym-miniapp/orchestration/reviews/mvp-scope-decision-2026-09-16.md",
+    "sha256": "8f239753a601c178769cdebf5efeb1fd3a9f2ca80517897c3bc499dcbdb28453"
+  },
+  {
+    "path": "/Users/orderly_ray/Leader/projects/gym-miniapp/orchestration/reviews/research-draft-review-2026-09-16.md",
+    "sha256": "5309cd9a36311fd6593aec02aba472bb3a16cd4e05e4dabf2a0272c8b17dde68"
+  },
+  {
+    "path": "/Users/orderly_ray/Leader/projects/gym-miniapp/prd-draft.md",
+    "sha256": "c5e903ce03e5aa2cd5a535ddbe7af84ad82864f8e97870e859a50682153e8875"
+  },
+  {
+    "path": "/Users/orderly_ray/Leader/projects/gym-miniapp/checkpoints-draft.md",
+    "sha256": "3d3cbebd42cd02a448f534bc0196a913d7f32c6c33e8c9b969d540f2a9e77a02"
+  }
+]

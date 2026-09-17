@@ -1,15 +1,13 @@
 # 产品知识地图
 
 Owner: Product Lead
-Last updated: 2026-09-10
+Last updated: 2026-09-16
 Source: 本工作区长期知识、项目文件与来源登记
 Confidence: High
 Related decisions: `decisions/one-person-pm-knowledge-loop-2026-08-23.md`
 Next review date: 2026-09-30
 
 ## 当前入口
-
-- [thinkV2换机恢复与最新状态](ideas/think-v2/migration-handoff-2026-09-17.md)：三份正式原文、许可来源映射、校验清单和新机任务重绑；产品缺口不因迁移消失。
 
 - [BOARD.md](BOARD.md)：活跃 Build、Discovery、Parking Lot、阻塞与待决策。
 - [LOG.md](LOG.md)：Ingest、Query、Lint 和人工决策操作记录。
@@ -48,7 +46,14 @@ Next review date: 2026-09-30
 
 ## Parking Lot 与其他想法
 
-### 思（think）Android App
+### 思（thinkV2）从零家庭交付
+
+- [V2独立产品基线：记录、重复提醒、找回与备份恢复](ideas/think-v2/product-baseline-decision-2026-09-16.md)
+- [当前顺序补充：模拟器先行与完整功能合同级验收](ideas/think-v2/emulator-first-full-engineering-addendum-2026-09-16.md)
+- [SenseVoice int8准入：合成隔离评估APPROVED，最终私人嵌入PAUSE](ideas/think-v2/sensevoice-int8-product-admission-decision-2026-09-16.md)：后续状态据指挥官报告已到V2-OFFLINE-VOICE-002 CP2；本决定仅产品许可风险边界，不放行取得/安全加载，不降低质量与隐私要求；下行工程摘要保留为此前顺序记录。
+- 2026-09-16 APPROVED补充：据指挥官报告，CP3文字核心e2f6f4a与分类/回收站e363ea9已验收，唯一CP7提醒单继续；随后CP8备份、CP2语音（语音控制独立CP2子单）、CP4日历、CP5可配置AI建议、CP3显式关系及CP8新增数据备份兼容，逐单模拟器工程验收。完整开发后由用户小米15与家庭验证，备份后不强制停等父亲试用。旧实现/制品许可不继承；真实运行条件缺口与模拟器/真机/家庭证据分列，不删保留需求、不新增账号同步发布承诺。
+
+### 思（think）旧项目历史
 
 - [PRD v0.1：产品、页面、技术架构与开发 Checkpoint](ideas/personal-thought-archive/prd-v0.1-2026-09-04.md)
 - [正式命名决策：「思」／「think」](ideas/personal-thought-archive/naming-decision-2026-09-04.md)
@@ -165,6 +170,9 @@ Next review date: 2026-09-30
 
 - [健身房实时人数与拥挤度查询](ideas/gym-occupancy/idea-brief.md)：单店实验、必需会员入口、简洁首页与场地配置；V0，数据接入和拥挤阈值待核查
 - [健身房产品功能与UI研究（2026-09-10）](ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)：11个相关产品／项目、科技公司赛事与开源许可；[来源证据卡](ideas/gym-occupancy/evidence-cards-2026-09-10.md)，新功能为建议、V0不变
+- [健身房MVP开发准备（2026-09-16）](ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md)：研究已验收、人工忙闲/会员核验/课表P0范围APPROVED；[平台证据](ideas/gym-occupancy/mvp-readiness-evidence-2026-09-16.md)
+- [健身房正式PRD v1.0](ideas/gym-occupancy/prd-mvp-v1.0-2026-09-16.md)：已由指挥者ACCEPTED，三份文件保持冻结；[30条验收矩阵](ideas/gym-occupancy/acceptance-mvp-v1.0-2026-09-16.md)／[串行CP0–CP7](ideas/gym-occupancy/checkpoints-mvp-v1.0-2026-09-16.md)，源码`/Users/orderly_ray/Projects/gym-miniapp`
+- [健身房自有动态演示后端决定 v1.1](ideas/gym-occupancy/decision-mock-backend-v1.1-2026-09-16.md)：用户已批准方向，补充包FINAL_FOR_REVIEW；[PRD增量](ideas/gym-occupancy/prd-mock-backend-v1.1-2026-09-16.md)／[12项AC增量](ideas/gym-occupancy/acceptance-mock-backend-v1.1-2026-09-16.md)／[CP5-D1–D3与唯一首任务](ideas/gym-occupancy/checkpoints-mock-backend-v1.1-2026-09-16.md)。馆方后端不再是演示前置；本机工具网络例外须明确确认；V0不变。
 
 - [AI 护理交班草稿器](ideas/ai-nursing-handoff-draft/idea-brief.md)
 - [CTP 古籍阅读体验现代化](ideas/chinese-text-project-reading-experience/idea-brief.md)
@@ -192,12 +200,3 @@ Next review date: 2026-09-30
 - `$knowledge-loop ingest`：来源登记与长期写回。
 - `$knowledge-loop query`：可追溯回答。
 - `$knowledge-loop lint`：确定性与语义质量检查。
-
-
-## 健身房迁移补充索引
-
-- [健身房MVP开发准备（2026-09-16）](ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md)：研究已验收、人工忙闲/会员核验/课表P0范围APPROVED；[平台证据](ideas/gym-occupancy/mvp-readiness-evidence-2026-09-16.md)
-- [健身房正式PRD v1.0](ideas/gym-occupancy/prd-mvp-v1.0-2026-09-16.md)：已由指挥者ACCEPTED，三份文件保持冻结；[30条验收矩阵](ideas/gym-occupancy/acceptance-mvp-v1.0-2026-09-16.md)／[串行CP0–CP7](ideas/gym-occupancy/checkpoints-mvp-v1.0-2026-09-16.md)，源码`/Users/orderly_ray/Projects/gym-miniapp`
-- [健身房自有动态演示后端决定 v1.1](ideas/gym-occupancy/decision-mock-backend-v1.1-2026-09-16.md)：用户已批准方向，补充包FINAL_FOR_REVIEW；[PRD增量](ideas/gym-occupancy/prd-mock-backend-v1.1-2026-09-16.md)／[12项AC增量](ideas/gym-occupancy/acceptance-mock-backend-v1.1-2026-09-16.md)／[CP5-D1–D3与唯一首任务](ideas/gym-occupancy/checkpoints-mock-backend-v1.1-2026-09-16.md)。馆方后端不再是演示前置；本机工具网络例外须明确确认；V0不变。
-- [D2外部键回收正式澄清](ideas/gym-occupancy/clarification-external-key-v1.1-2026-09-17.md)：APPROVED解释；稳定映射、不推断不可观测回收，明确证据时暂停受影响导入并升级Leader；不扩范围。
-- [D2失效候选显式重plan增量](ideas/gym-occupancy/clarification-explicit-replan-v1.1-2026-09-17.md)：APPROVED；普通plan保持复用，仅显式替换因本地版本失效的未应用候选，重新审阅后独立apply；含5项最小验收。

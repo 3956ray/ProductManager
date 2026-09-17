@@ -1,0 +1,11 @@
+{
+  "RESULT": "COMPLETE",
+  "decision": "APPROVED explicit replan exception",
+  "path": "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/ideas/gym-occupancy/clarification-explicit-replan-v1.1-2026-09-17.md",
+  "sha256": "dce434a06635ed83866fa3a701e1b2c90f1a869c22fd3e471ee5a93341fa77c3",
+  "frozen_four_hashes_unchanged": true,
+  "checks": "PASS",
+  "errors": [],
+  "product_tests": "NOT_RUN",
+  "full_library_lint": "unavailable: required script missing; scoped checks only"
+}

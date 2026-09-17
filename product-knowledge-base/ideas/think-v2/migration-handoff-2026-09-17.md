@@ -11,9 +11,11 @@ Validation Level: V0（家庭需求行为验证未升级，迁移不是产品验
 
 ## 迁移边界与当前状态
 
-迁移发布状态：LOCAL_ONLY / PUBLIC_PUSH_PAUSED。Leader转交其公开推送被自动审批拒绝，原因是内部历史证据、绝对路径和任务元数据公开风险；PM没有发生推送或另路重试。用户统一确认公开/私有后才处理远端写入。本地包保留原文及历史路径/thread身份以支持审查，不能将常见密钥模式未命中视为公开安全认证。
+迁移发布权限状态：PUBLIC_PUSH_AUTHORIZED。此前Leader转交公开推送因内部历史、绝对路径和任务元数据风险被自动审批拒绝，PM暂停且未绕过。2026-09-17用户在收到风险说明后明确回复“我批准你可以push上去”，Leader据此恢复本包公开迁移授权。仅发布已准备且排除真实私人数据/凭据的交接文档；不发布受限模型。常见密钥模式未命中不构成全历史公开安全认证。
 
 本次目标仅PM交接。基于远端main `6f294a57c0bd620ee2c7644a59d84fc7b08e3adf`独立克隆并建立`codex/thinkv2-pm-migration-20260917`分支，保留远端已有内容；不复制本地所有未提交项目，不force push，不替Leader/Developer推送。
+
+恢复推送时远端main已更新到`cb561ef70b4922bf7711f807f24fa92fb2345cba`，本分支合并其已有健身房交接及来源，README/LOG保留双方内容。新机检出本迁移分支即可读取合并后的入口；远端main不由本单改写。
 
 Leader在2026-09-17转交：notesUI `8a98e09`已接受，提醒UI `88d3861`审查中未接受；Voice002 partial，embedding PAUSE，AI provider=false；小米15/家庭/自然提醒/TalkBack缺口保留。本次不读取实时Leader仓库或重新测试，恢复时须获取Leader最新验收原文，不能仅凭此快照接受88d3861。
 

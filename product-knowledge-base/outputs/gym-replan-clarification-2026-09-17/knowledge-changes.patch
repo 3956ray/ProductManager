@@ -1,0 +1,88 @@
+--- before/clarification-explicit-replan-v1.1-2026-09-17.md
++++ product-knowledge-base/ideas/gym-occupancy/clarification-explicit-replan-v1.1-2026-09-17.md
+@@ -0,0 +1,36 @@
++# D2失效候选显式重plan增量 v1.1
++
++Owner: Product Lead；指挥者批准，PM记录，指定dev实施
++Last updated: 2026-09-17
++Source: [Leader明确裁定](../../raw/SRC-20260917-gym-replan-approval-01.md)；[PRD P5第3、5条](prd-mock-backend-v1.1-2026-09-16.md)；[AC-DM09](acceptance-mock-backend-v1.1-2026-09-16.md)
++Confidence: High（已批准规则）；实现与测试待dev交付
++Related decisions: GYM-DEMO-SCENARIOS-001；GYM-MOCK-BACKEND-DECISION-001
++Next review date: 2026-09-30
++
++Decision: **APPROVED（最小显式重plan例外）**。本增量优先解释P5.3与P5.5的冲突，四份冻结v1.1文档不改hash。不新增外部schema字段或通用候选管理系统，不自动增加sourceRevision。正式记录交付dev后在既有D2内实施；其他已授权D2不等待本项。
++
++Research Quality: 90/100（沿用v1.1内部决策证据质量，不新增研究评分）
++Validation Level: V0
++
++## 生效规则
++
++1. **普通plan保持原规则**：未过期、同来源revision/hash返回原候选，即使它绑定的本地版本已失效，也不静默替换或重设版本。已过期候选仍走P5.5原有到期重plan规则。
++2. **显式例外**：维护者明确要求替换指定旧batch，且其尚未applied、未被替换，绑定的draft或publication revision至少一个已不同于当前本地版本时，才允许按相同来源revision/hash重新plan。未失效的候选不能借此刷新期限；未知batch或不匹配输入拒绝。无需等待24小时或要求来源方仅为本地冲突提高sourceRevision。
++3. **优先校验不变**：先鉴权、核对source/scope和原输入，再执行来源已应用高水位及异hash保护。低于已应用revision或同一已知revision异hash仍409；同当前已应用revision/hash返回原已应用结果，不能重做草稿写入。因此“并发先applied返回结果”不绕过更高已应用版本的拒绝规则。
++4. **原子替换**：核对旧batchId、来源revision/hash及本次明确操作所依据的当前draft/publication版本；事务提交前重检。重新按同一输入与当前草稿生成完整差异并校验，事务内使旧batch不可apply、新batch绑定所核对的当前版本。期间本地再变则409、保留原候选、不自动追逐最新版本；校验/存储失败整体回滚，不留下只废弃旧批次的半结果。复用现有候选与版本机制，具体CLI命名由dev确定。
++5. **替换不是应用**：仅更新候选生命周期与新候选内容，不改草稿、公开课表、持久课程映射或来源已应用游标；不自动apply/publish。新候选重新展示差异，维护者重新审阅确认；之后apply仍核对绑定版本，若本地再次变化则409。旧batch永久不可再次apply，不因新候选到期恢复。
++6. **竞争与未知结果**：旧batch若在替换前已成功applied，按第3条返回已应用结果，不废弃、不新建；并发替换不能生成两个可应用的后继候选，败方查询现有状态，不自动再替换。替换响应丢失先查候选状态，不把未知结果当失败再次创建。已应用后的业务纠正不在本例外内。
++
++## AC-DM09最小补充验收
++
++所有新增场景当前 **NOT_RUN**，沿用D2工程证据层及交付格式。
++
++| 编号 | 场景 | 必须结果 |
++| --- | --- | --- |
++| DM09-RP1 | 原候选未过期；人工改草稿或发布使绑定版本失效；显式指定原batch与同输入重plan | 新候选绑定本次核对的当前版本并产生新差异；旧候选失效；草稿/公开/映射/来源游标不变，sourceRevision不增；必须重新审阅、另行apply |
++| DM09-RP2 | 替换成功后用旧batch执行apply；对未失效候选要求替换 | 旧batch拒绝且无业务写入；未失效候选的显式替换拒绝、不刷新期限；不得自动复活旧batch |
++| DM09-RP3 | 旧batch的apply先提交再到显式替换；两个显式替换竞争 | 前者返回已应用结果且不再建候选；若来源高水位已更高仍按优先规则409。后者至多一个可应用后继，不能双重替换 |
++| DM09-RP4 | 显式操作读取本地版本后、替换提交前本地再变；或新候选生成后、apply前本地再变 | 前者409且替换无部分提交；后者apply409保留他人修改。故障回滚不留下旧批次被废弃但新候选不存在的半状态 |
++| DM09-RP5 | 同输入普通plan，原候选未过期但本地已变；以及低来源版本/同版本异hash的显式请求 | 普通plan仍返原候选，不自动替换；显式请求不能绕过原高水位/异hash拒绝规则 |
++
++证据至少包含实际调用、批次/版本状态及替换前后业务数据对照、并发/回滚结果；不得仅据函数存在宣告通过。本次仅批准规则，不宣告D2验收通过，不派D3或其他新任务。
+--- before/SRC-20260917-gym-replan-approval-01.md
++++ product-knowledge-base/raw/SRC-20260917-gym-replan-approval-01.md
+@@ -0,0 +1,29 @@
++---
++source_id: "SRC-20260917-gym-replan-approval-01"
++title: "Leader批准D2最小显式重plan例外"
++source_url_or_path: "codex://threads/01a0a64a-8f38-7503-a202-29ed08322b14"
++publisher_or_author: "指定指挥者"
++published_or_event_date: "2026-09-17"
++accessed_date: "2026-09-17"
++source_class: "D"
++source_type: "internal"
++projects: ["gym-occupancy"]
++storage_permission: "user-owned"
++access_status: "verified"
++summary: "Leader明确批准因本地版本失效的未应用候选可显式替换，解决P5.3/P5.5冲突；普通plan、来源版本保护和冻结原文保持不变。"
++quoted_or_referenced_location: "本任务2026-09-17收到的Leader裁定codex_delegation，以‘裁定：APPROVED’开头"
++supersedes: null
++---
++
++# 显式重plan批准来源
++
++Owner: Product Lead
++Last updated: 2026-09-17
++Source: 指挥者在本任务提供的明确裁定原文
++Confidence: High（批准及边界）；非工程通过证据
++Related decisions: GYM-DEMO-SCENARIOS-001；GYM-MOCK-BACKEND-DECISION-001
++Next review date: 2026-09-30
++
++原文摘录：“APPROVED，批准你提出的最小显式重plan例外，解决P5.3与P5.5冲突”“仅未applied且绑定本地draft/publication版本已失效的旧候选可显式替换”“重新审阅确认，不改草稿/公开/来源游标，不自动升sourceRevision”“无需新字段/通用系统，冻结原文不改，增量说明优先”。
++
++指挥者同时要求正式文档完成并通知dev路径/hash后才实施该例外；其他已授权D2继续。本来源与旧批准记录共用指挥者任务链接，但记录的是2026-09-17独立裁定，不覆盖历史来源。
+--- before/INDEX.md
++++ product-knowledge-base/INDEX.md
+@@ -174,6 +174,7 @@
+ - [健身房正式PRD v1.0](ideas/gym-occupancy/prd-mvp-v1.0-2026-09-16.md)：已由指挥者ACCEPTED，三份文件保持冻结；[30条验收矩阵](ideas/gym-occupancy/acceptance-mvp-v1.0-2026-09-16.md)／[串行CP0–CP7](ideas/gym-occupancy/checkpoints-mvp-v1.0-2026-09-16.md)，源码`/Users/orderly_ray/Projects/gym-miniapp`
+ - [健身房自有动态演示后端决定 v1.1](ideas/gym-occupancy/decision-mock-backend-v1.1-2026-09-16.md)：用户已批准方向，补充包FINAL_FOR_REVIEW；[PRD增量](ideas/gym-occupancy/prd-mock-backend-v1.1-2026-09-16.md)／[12项AC增量](ideas/gym-occupancy/acceptance-mock-backend-v1.1-2026-09-16.md)／[CP5-D1–D3与唯一首任务](ideas/gym-occupancy/checkpoints-mock-backend-v1.1-2026-09-16.md)。馆方后端不再是演示前置；本机工具网络例外须明确确认；V0不变。
+ - [D2外部键回收正式澄清](ideas/gym-occupancy/clarification-external-key-v1.1-2026-09-17.md)：APPROVED解释；稳定映射、不推断不可观测回收，明确证据时暂停受影响导入并升级Leader；不扩范围。
++- [D2失效候选显式重plan增量](ideas/gym-occupancy/clarification-explicit-replan-v1.1-2026-09-17.md)：APPROVED；普通plan保持复用，仅显式替换因本地版本失效的未应用候选，重新审阅后独立apply；含5项最小验收。
+ 
+ - [AI 护理交班草稿器](ideas/ai-nursing-handoff-draft/idea-brief.md)
+ - [CTP 古籍阅读体验现代化](ideas/chinese-text-project-reading-experience/idea-brief.md)
+--- before/LOG.md
++++ product-knowledge-base/LOG.md
+@@ -307,3 +307,4 @@
+ | 2026-09-16 | Decision/PRD increment | GYM-MOCK-BACKEND-DECISION-001；gym-occupancy v1.1四份增量 | complete | 方向APPROVED，补充包FINAL_FOR_REVIEW；12项新AC、CP5-D1–D3和唯一首dev建议；更新INDEX/BOARD，冻结v1.0三文件不变。未修改源码、工具开关、部署或派dev |
+ | 2026-09-16 | Review + scoped validation | GYM-MOCK-BACKEND-DECISION-001 | complete | gym_mock_review最终PASS；修正遗漏课显式取消、草稿/快照来源、时间对象、凭证消费点、候选过期优先序及恢复鉴权/CP6数据隔离。4文档/12AC/3CP、链接/元数据/来源/历史和diff通过，原三份hash及f22664d源码不变；标准lint脚本缺失仅局部校验，产品测试NOT_RUN；等待指挥者验收 |
+ | 2026-09-17 | Ingest / approved clarification | SRC-20260917-gym-key-clarification-01；D2外部键回收 | complete | 指挥者批准解释；新增短篇正式记录并更新INDEX，稳定映射/不可观测限制/明确证据时暂停受影响导入并升级Leader；不新增字段/系统，不阻塞其他D2，冻结v1.1四hash不变；局部元数据/链接/diff校验，标准全库lint脚本缺失，未执行产品测试 |
++| 2026-09-17 | Ingest / approved increment | SRC-20260917-gym-replan-approval-01；D2显式重plan | complete | Leader批准最小例外；正式增量解决P5.3/P5.5冲突，保留普通plan/高水位/异hash规则，原子替换失效候选并重新审阅，附5项DM09-RP验收；四份冻结hash不变，无关D2继续；来源同Leader任务链接但为独立日期裁定，局部文档/diff校验，产品测试NOT_RUN |

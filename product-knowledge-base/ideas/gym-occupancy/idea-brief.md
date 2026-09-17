@@ -1,7 +1,7 @@
 # 健身房拥挤度查询：初步可行性与验证方案
 
 Owner: Product Lead
-Last updated: 2026-09-10
+Last updated: 2026-09-16
 Source: [用户需求](../../raw/SRC-20260908-gym-occupancy-01.md)；[首页方向确认](../../raw/SRC-20260909-gym-design-direction-01.md)；[单店范围与场地配置](../../raw/SRC-20260909-gym-single-store-01.md)
 Confidence: Hypothesis
 Related decisions: 本文2026-09-09首页方向确认、单店实验与会员入口范围确认；未形成价格或发布承诺
@@ -158,3 +158,27 @@ Next evidence：现有课表形式、更新负责人和非上课时段开放规�
 Research Quality: 89/100（本轮公开功能与UI研究通过文档与登记证据映射复核；完整分项与局限见报告）。
 Validation Level: V0（本店）不变；获奖、竞品功能和截图不能替代真实使用或付款。
 Next evidence: 门禁离场／在场字段、课表维护机制和本店会员最近一次器械等待行为。
+
+## 2026-09-16：MVP开发准备研究
+
+依据：[GYM-MVP-RESEARCH-001](../../raw/SRC-20260916-gym-mvp-task-01.md)及[开发准备报告](mvp-readiness-research-2026-09-16.md)、[平台与业务证据](mvp-readiness-evidence-2026-09-16.md)。
+
+【PM建议，待指挥者评审】APPROVED进入正式PRD／Checkpoint：首版采用馆方人工现场观察忙闲状态、真实微信登录＋前台核验会员绑定、可发布／改期／取消的课表，并包含服务端持久化、操作员权限和维护端。人工模式用大状态词替代无来源的人数数字；15分钟过期、10分钟建议观察频率属于待试点校准的设计参数。自动人数／门禁、模型估计、历史预测、器械目录与报修等延后。
+
+【口径】没有馆方资料可以先开发完整人工业务闭环及测试环境；纯模拟首页不等于可用MVP完成。工程、微信开发工具、真机、真实门店试点、公开发布分别验收。会员绑定不因wx.login成功自动成立；无发布覆盖的课表不等于无排课。详见报告21条候选验收场景。
+
+【授权与历史】本轮由用户指定的指挥者传达后续MVP研究、范围取舍和PRD／Checkpoint及开发推进授权；后续授权优先，不重复申请常规产品方案许可。旧V0仅作为本店真实使用未验证的证据标签保留，不否定新授权，也不自动变更其他项目WIP。当前任务仅研究交付与回报，没有签发dev任务、接入生产或发布。
+
+Research Quality: 90/100 · pass（本轮独立只读质量复核，范围与局限见开发准备报告）。
+Validation Level: V0（本店）。
+Next evidence: 指挥者接受范围与唯一工程路径；AppID／账号能力、馆方观察与核验负责人、实际课表分别在对应阶段核实。
+
+## 2026-09-16：范围批准与正式PRD交付
+
+指挥者已验收GYM-MVP-RESEARCH-001并批准人工忙闲状态替代无可靠来源人数、前台真实会员核验、课表及完整维护/持久化/权限P0。源码目标确定为`/Users/orderly_ray/Projects/gym-miniapp`；首次建项核查归属，不能使用thinkV2。[批准与草案来源](../../raw/SRC-20260916-gym-prd-baseline-01.md)。此前“待采纳/路径null”为历史状态。
+
+GYM-MVP-PRD-001已形成[正式PRD](prd-mvp-v1.0-2026-09-16.md)、[30条完整验收矩阵](acceptance-mvp-v1.0-2026-09-16.md)和[CP0–CP7串行计划](checkpoints-mvp-v1.0-2026-09-16.md)，状态FINAL_FOR_REVIEW，等待指挥者接受后再派CP0。保留研究21条完整场景，新增9条仅细化同一P0的会话、限流、并发、清理与工具证据。
+
+Research Quality: 90/100（沿用已验收研究，PRD定稿不增加用户证据）。
+Validation Level: V0（本店）。
+Next evidence: 指挥者接受正式文档包并下发唯一CP0；真实账号/设备与门店资料仍按后续阶段验收。

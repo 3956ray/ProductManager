@@ -1,0 +1,56 @@
+{
+  "task_id": "GYM-MVP-PRD-001",
+  "RESULT": "COMPLETE",
+  "formal_documents": [
+    {
+      "path": "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/ideas/gym-occupancy/prd-mvp-v1.0-2026-09-16.md",
+      "sha256": "7d9948f302f13119120c03043902fba7455437764eb57d4923efebda4254e1bd"
+    },
+    {
+      "path": "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/ideas/gym-occupancy/acceptance-mvp-v1.0-2026-09-16.md",
+      "sha256": "89cded4a468deaa20e6090d19b35dc31c77b6a01e3e45081d3d996484188ae71"
+    },
+    {
+      "path": "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/ideas/gym-occupancy/checkpoints-mvp-v1.0-2026-09-16.md",
+      "sha256": "13060548afb17731e033364817f0e7ee6b0569c334bbfc4138e308ee64678882"
+    }
+  ],
+  "new_knowledge_files": [
+    "product-knowledge-base/ideas/gym-occupancy/prd-mvp-v1.0-2026-09-16.md",
+    "product-knowledge-base/ideas/gym-occupancy/acceptance-mvp-v1.0-2026-09-16.md",
+    "product-knowledge-base/ideas/gym-occupancy/checkpoints-mvp-v1.0-2026-09-16.md",
+    "product-knowledge-base/raw/SRC-20260916-gym-prd-baseline-01.md"
+  ],
+  "updated_knowledge_files": [
+    "product-knowledge-base/INDEX.md",
+    "product-knowledge-base/LOG.md",
+    "product-knowledge-base/ideas/gym-occupancy/idea-brief.md",
+    "product-knowledge-base/ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md"
+  ],
+  "output_files": [
+    "input-snapshot.json",
+    "scope-reconciliation.md",
+    "review-record.json",
+    "validation.json",
+    "knowledge-changes.patch",
+    "delivery-manifest.json"
+  ],
+  "unchanged": [
+    "all previously existing raw sources",
+    "Leader configuration and drafts",
+    "product source directory and code",
+    "other projects"
+  ],
+  "unresolved": [
+    "CP0 bounded language/database/runtime/crypto/cleanup selection",
+    "first project directory ownership check",
+    "CP6 AppID/account/network/dual device and applicable privacy configuration",
+    "CP7 venue participation/timezone/member verification/timetable",
+    "separate preview-upload/deployment/public release authorization"
+  ],
+  "supplemental_input": {
+    "path": "/Users/orderly_ray/Leader/projects/gym-miniapp/orchestration/reviews/local-environment-preflight.md",
+    "sha256": "8d0cadcbd4ddefc0ec6c9bad23e0ece9889959cf21a7853ebcd8334f002beec2",
+    "use": "CP0 input only, not product-test evidence"
+  }
+}

@@ -283,8 +283,11 @@ Next review date: 2026-09-30
 | 2026-09-10 | Notes home scope | NOTES-HOME-SCOPE-001 | complete | attempt5100c42f-d414-44c1-9c56-2ddc040790ba，合同SHA匹配/四身份ACK；两Leader报告摘要固定，不读截图私人内容。APPROVED真实本地文字/自动手动标题、默认笔记首页真实搜索和显式关系图谱三阶段，用户方向不重复审批，产品尚未实现 |
 | 2026-09-10 | CP3 limited exception | NOTES-L1/NOTES-L2/NOTES-L3 | approved_scope | 后续checkpoint=CP3，三stage串行各最多8小时；L1下一NOTES-TEXT-FOUNDATION-001同单四文档同步和真实持久化/标题实现，不另开准备链。CP1延期/CP2未过不阻塞窄文字例外，非例外扩展及CP3整体/Alpha仍须原门槛；ASR/语音隐私不放行，假录音/保存/搜索退出产品路径 |
 | 2026-09-10 | Notes scope validation | 新决定及PRD/INDEX/LOG | partial | 对齐标题AUTO/MANUAL所有权、事务成功才报保存、真实搜索与显式无向关系、图谱无障碍回退/规模界限，六元数据/本地链接/LOG前缀及局部diff检查。全库lint缺失，不声称自动通过；保留gym等变更。零产品源码/下载/设备/ASR/派dev/回调，安装APK身份与真实效果未核 |
-| 2026-09-17 | thinkV2 PM migration | ProductManager / codex/thinkv2-pm-migration-20260917 | prepared | 用户明确授权换机推送；基于远端main 6f294a57独立克隆，确认public。三份正式原文及五份公开许可快照SHA一致，新增README/来源映射/恢复指南/校验清单及karpathy技能，保留既有PM技能和规则。原私人实验/笔记/日历/音频/凭据/聊天数据库/模型/APK不迁移。88d3861审查中、8a98e09已接受、Voice002 partial且embedding PAUSE、AI provider=false及真机家庭缺口依Leader报告保留；不派dev/不改门槛 |
-
+| 2026-09-16 | thinkV2 product baseline | 从零家庭交付 | complete | APPROVED新V2独立基线，仅读指定父亲笔记App交付验证文档，不跟私人日志链接。当前V2-NOTES-CORE-001继续，不继承旧实现/验收，随后串行提醒/备份/家庭闭环；旧CP阻塞不适用于已直接授权本地开发，语音隐私与真实证据要求保留 |
+| 2026-09-16 | thinkV2 requirements | 新基线及INDEX/LOG | complete | A1-A6文字分类；B1-B10每日/每周同记录提醒、重启时区/权限电量与错过处理；C1-C10本地版本备份/SHA/预览/冲突映射/事务回滚/默认关闭提醒；F1-F5家庭交付判据。语音/日历/AI/图谱后续未删除，不新增账号同步发布；家庭实际结果Unknown，RQ85/V0不代表市场验证 |
+| 2026-09-16 | thinkV2 scoped validation | 三知识文件 | partial | 元数据/链接/LOG前缀与局部diff核对；全库lint脚本缺失，不宣称全库通过。未改thinkV2或Leader、无网络/设备/安装/派dev；当前用户授权向新指挥官汇报，仅最小产品摘要，不重试旧被拒回调 |
+| 2026-09-16 | thinkV2 emulator-first addendum | 完整工程顺序及最小合同 | approved_scope | 依据当前指挥官转交用户“先模拟器、完整开发后小米15”指令，APPROVED补充替代备份后先等家庭交付的顺序；CP7在途不变，CP8后串行CP2语音/独立语音控制、CP4日历、CP5 AI、CP3关系、CP8兼容，最终按Checkpoint补真机再CP1家庭。V/D/I/R/X验收及真实运行条件明确，旧制品权限不继承，RQ85/V0保持 |
+| 2026-09-16 | thinkV2 emulator-first scope | 补充及最小INDEX/LOG | partial | 本轮仅知识库写回；工程进度e2f6f4a/e363ea9为指挥官报告，PM不复测。核对元数据、相对链接、单Checkpoint边界和局部差异；全库lint脚本缺失。无网络/制品/产品或Leader修改/派dev/设备操作，真机自然提醒及家庭证据均未通过 |
 | 2026-09-16 | Ingest | SRC-20260916-gym-wechat-01 | complete | GYM-MVP-RESEARCH-001；登记官方平台规则或任务范围的最小来源摘要，旧raw不覆盖；不证明本店实际使用或平台账号已可用 |
 | 2026-09-16 | Ingest | SRC-20260916-gym-wechat-02 | complete | GYM-MVP-RESEARCH-001；登记官方平台规则或任务范围的最小来源摘要，旧raw不覆盖；不证明本店实际使用或平台账号已可用 |
 | 2026-09-16 | Ingest | SRC-20260916-gym-wechat-03 | complete | GYM-MVP-RESEARCH-001；登记官方平台规则或任务范围的最小来源摘要，旧raw不覆盖；不证明本店实际使用或平台账号已可用 |
@@ -298,9 +301,4 @@ Next review date: 2026-09-30
 | 2026-09-16 | Ingest | SRC-20260916-gym-prd-baseline-01 | complete | 登记Leader范围APPROVED、选定源码目录和GYM-MVP-PRD-001草案/合同5份输入SHA；仅内部决定与文档来源，不作为用户效果证据，旧raw保留 |
 | 2026-09-16 | Formal PRD package | GYM-MVP-PRD-001 | COMPLETE / awaiting Leader acceptance | 新增PRD v1.0、完整验收矩阵、CP0–CP7；21原AC完整复制，9细化共30；冻结会话/operator/限流/配对/恢复/删除/时区/发布/保留清理；只更新idea-brief、研究后续基线、INDEX/LOG，源码路径已定未建项 |
 | 2026-09-16 | Document review + scoped validation | GYM-MVP-PRD-001 | PASS / partial lint | gym_prd_review初审REVISE，修复600秒/60秒窗口及撤销Binding原子恢复语义，矩阵/CP3同步后复核PASS；顶层RESULT按Leader要求仅COMPLETE/BLOCKED/PRODUCT_DECISION_REQUIRED，测试状态单列。检查元数据/链接/21原场景完整性/30唯一AC/8CP结构/来源与历史/diff；标准lint脚本仍缺失，不声称全库通过。无源码/Leader配置/旧raw编辑、建项、发布、外联、派dev或提交 |
-| 2026-09-16 | Ingest | SRC-20260916-gym-mock-decision-01；SRC-20260916-gym-backend-code-01 | complete | 用户最新自有动态mock决定与f22664d源码/原生网络错误证据；raw只追加，未重复市场搜索，未把演示/代理报告当真实门店证据 |
-| 2026-09-16 | Decision/PRD increment | GYM-MOCK-BACKEND-DECISION-001；gym-occupancy v1.1四份增量 | complete | 方向APPROVED，补充包FINAL_FOR_REVIEW；12项新AC、CP5-D1–D3和唯一首dev建议；更新INDEX/BOARD，冻结v1.0三文件不变。未修改源码、工具开关、部署或派dev |
-| 2026-09-16 | Review + scoped validation | GYM-MOCK-BACKEND-DECISION-001 | complete | gym_mock_review最终PASS；修正遗漏课显式取消、草稿/快照来源、时间对象、凭证消费点、候选过期优先序及恢复鉴权/CP6数据隔离。4文档/12AC/3CP、链接/元数据/来源/历史和diff通过，原三份hash及f22664d源码不变；标准lint脚本缺失仅局部校验，产品测试NOT_RUN；等待指挥者验收 |
-| 2026-09-17 | Ingest / approved clarification | SRC-20260917-gym-key-clarification-01；D2外部键回收 | complete | 指挥者批准解释；新增短篇正式记录并更新INDEX，稳定映射/不可观测限制/明确证据时暂停受影响导入并升级Leader；不新增字段/系统，不阻塞其他D2，冻结v1.1四hash不变；局部元数据/链接/diff校验，标准全库lint脚本缺失，未执行产品测试 |
-| 2026-09-17 | Ingest / approved increment | SRC-20260917-gym-replan-approval-01；D2显式重plan | complete | Leader批准最小例外；正式增量解决P5.3/P5.5冲突，保留普通plan/高水位/异hash规则，原子替换失效候选并重新审阅，附5项DM09-RP验收；四份冻结hash不变，无关D2继续；来源同Leader任务链接但为独立日期裁定，局部文档/diff校验，产品测试NOT_RUN |
-| 2026-09-17 | thinkV2 public migration authorization resumed | PM migration branch | authorized | Leader已告知用户公开内部交接材料风险，用户明确“我批准你可以push上去”；仅发布已准备且排除真实私人数据/凭据/受限模型的包。保留远端main cb561ef已有健身房迁移，正常分支推送不force；三份正式文件及五份来源SHA不变，不调整产品门槛 |
+| 2026-09-16 | thinkV2 SenseVoice product admission | V2-OFFLINE-VOICE-002 / cb6a5460-1655-4778-9d85-6095d87906e4 | APPROVED evaluation / PAUSE embedding | 仅读合同及五份本地许可并固定SHA；§2.1与§3用途歧义、§4.2行为/终止、§6自动修订和转换来源缺口分列。仅合成隔离参考评估可接受，最终私人App嵌入/家庭交付暂停；非法律意见或取得/安全加载许可，不继承代码MIT覆盖权重，不降90%与27/30/隐私门槛，不选第二路线或循环研究 |

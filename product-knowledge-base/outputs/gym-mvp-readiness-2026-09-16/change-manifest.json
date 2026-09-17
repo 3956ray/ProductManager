@@ -1,0 +1,34 @@
+{
+  "task_id": "GYM-MVP-RESEARCH-001",
+  "new_sources": [
+    "SRC-20260916-gym-wechat-01",
+    "SRC-20260916-gym-wechat-02",
+    "SRC-20260916-gym-wechat-03",
+    "SRC-20260916-gym-wechat-04",
+    "SRC-20260916-gym-wechat-05",
+    "SRC-20260916-gym-wechat-06",
+    "SRC-20260916-gym-wechat-07",
+    "SRC-20260916-gym-mvp-task-01"
+  ],
+  "new_documents": [
+    "ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md",
+    "ideas/gym-occupancy/mvp-readiness-evidence-2026-09-16.md"
+  ],
+  "unchanged": [
+    "old raw sources",
+    "old research report",
+    "product source code",
+    "Leader configuration"
+  ],
+  "review": "90/pass",
+  "output_files": [
+    "change-manifest.json",
+    "validation.json",
+    "knowledge-changes.patch"
+  ],
+  "actual_existing_updates": [
+    "ideas/gym-occupancy/idea-brief.md",
+    "INDEX.md",
+    "LOG.md"
+  ]
+}

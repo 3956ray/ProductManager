@@ -1,0 +1,20 @@
+{
+  "task_id": "GYM-MOCK-BACKEND-DECISION-001",
+  "RESULT": "COMPLETE",
+  "document_checks": "PASS",
+  "formal_documents": 4,
+  "new_sources": 2,
+  "incremental_ac": 12,
+  "sequential_checkpoints": 3,
+  "frozen_v1_0_hashes_unchanged": true,
+  "source_head": "f22664d5f5b2320966df53c874eaaf120297be6b",
+  "source_worktree_unchanged": true,
+  "log_append_only": true,
+  "diff_check": "PASS",
+  "full_library_lint": "UNAVAILABLE: required lint_knowledge.py missing; scoped checks only",
+  "product_tests": "NOT_RUN",
+  "tool_settings_changed": false,
+  "dev_dispatch": false,
+  "Leader_acceptance": "PENDING",
+  "errors": []
+}

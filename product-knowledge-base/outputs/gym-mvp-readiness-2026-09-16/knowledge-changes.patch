@@ -1,0 +1,946 @@
+--- /dev/null
++++ product-knowledge-base/ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md
+@@ -0,0 +1,277 @@
++# 单店健身房小程序：MVP 开发准备研究
++
++Owner: Product Lead；产品交付由 PM 负责，MVP 取舍由已获授权的指挥者评审
++Last updated: 2026-09-16
++Source: [本轮证据卡](mvp-readiness-evidence-2026-09-16.md)；[用户确认方向](idea-brief.md)；[GYM-MVP-RESEARCH-001合同](../../raw/SRC-20260916-gym-mvp-task-01.md)
++Confidence: Medium（平台规则有官方依据；人工方案效果、馆方执行与本店使用未验证）
++Related decisions: GYM-MVP-RESEARCH-001；本文为 PM 的 APPROVED 建议，指挥者最终采纳状态尚未返回
++Next review date: 2026-09-30
++
++## 结论与任务边界
++
++**PM 建议：APPROVED——可以进入正式 PRD / Checkpoint 编制，并在指挥者接受基线、确定唯一工程路径后开发“人工维护的忙闲信息＋真实会员绑定＋可维护课表”MVP。门店试点与公开发布尚未就绪，不计为通过。**
++
++关键变化是：首版不依赖可靠出场事件。由获授权馆方人员现场观察并发布忙闲等级，会员看到来源和观察时间；超过有效期即降级。首页人工模式以状态词为主，不显示捏造的在场数字。自动门禁统计、人数估算和历史预测延后，明确的数据模型保留未来接入空间，但首版不建设通用数据平台。
++
++这是一条完整可开发的业务路径，不是只有模拟首页：真实持久化、服务端角色权限、人工发布、会员核验、课表维护、失败反馈、记录撤销和审计均属于 P0。缺少门店资料不妨碍开发这些能力；缺少真实馆方更新、真实会员核验与正式课表，则不能称为真实门店 MVP 已投入使用。
++
++本轮具体支持四项决策：无出场数据如何提供可信忙闲信息；会员入口何时算真正可用；课表展示与维护最小闭环；工程、开发工具、真机、试点分别怎样验收。只补充这些证据，不重复竞品/UI盘点、不修改源码、不外联馆方、不发布。完成报告和证据并回报指挥者后停止，不自行派单。
++
++【授权口径】9月10日研究只允许研究投入属于当时状态；本轮合同明确用户授权指挥者推进 MVP 取舍、PRD / Checkpoint 和后续开发。这一后续授权支持常规方案继续推进，不需要重复询问。V0保留为“本店需求尚未通过真实使用验证”的证据标签，不作为否定最新授权的理由。本报告不自动更改其他产品WIP或把其他项目配置带入本项目。
++
++## 证据结论及独立性
++
++| 类型 | 已核查事实 | 对方案的影响 |
++| --- | --- | --- |
++| 微信官方技术线 A | `wx.login` 的 code 交给开发者服务端换取 OpenID 等，再建立业务登录态；code一次使用，session_key不应下发。code2Session须服务端调用。[M-01、M-02](mvp-readiness-evidence-2026-09-16.md) | 微信身份与馆方会员资格分层；AppSecret / session_key不进客户端 |
++| 微信官方隐私与手机号线 A（与上行同源，不能算独立第二条） | 手机号快速验证要求用户同意、存在账号主体资格和收费规则，且不保证实时验证；隐私接口必须先声明、同步用户同意。[M-03～M-05](mvp-readiness-evidence-2026-09-16.md) | 首版不用手机号接口作为必要依赖；不把隐私弹窗当作所有业务身份验证 |
++| 独立馆务产品线 B | Gymdesk会员门户提供会员资料、会员套餐、课表／预约、到店记录等。已于9月10日核查，沿用该次来源，不宣称今天重测。[原来源](../../raw/SRC-20260910-gym-reference-13.md) | 会员状态和课表有可参考的服务用途，但不必复制付款／训练系统 |
++| 独立公开用户线 D | The Gym Group 2026-06-18评论认为人数／课程功能还好；2022-10-03评论报告人数更新／开门异常。[原来源](../../raw/SRC-20260910-gym-reference-09.md) | 可信度和失败降级应优先；每条n=1，历史问题不等于当前仍存在 |
++| 本店用户线 D | 单店先行、会员入口必需、有课表；进门刷脸，出门有效计数未知。[方向记录](idea-brief.md) | 需要人工方案与真实会员核验；课程与人数不能混算 |
++
++【推断】人工观察可以不依赖出场事件，公开“谁观察、何时观察、观察结论”有助于避免伪精确。【假设】这能帮助会员决定是否现在出发，且馆方能够持续更新；目前没有本店运行结果证明。官方资料支持的是平台能力，不支持15分钟阈值、人工方案准确率或本店付费意愿。
++
++## 1. 忙闲信息：选择人工主方案
++
++| 方案 | 真正需要什么 | 能诚实展示什么 | 优点／成本 | 本轮取舍 |
++| --- | --- | --- | --- | --- |
++| 馆方人工现场观察 | 有观察权限的当班人员、覆盖观察的约定、可操作维护端 | “馆方现场观察：较空／适中／较忙；观察于 HH:mm” | 不接门禁也能用；持续人工成本，忙时可能最容易漏更 | **P0主方案**，有过期降级和审计 |
++| 门禁已有在场人数API | 经现场校验的接口、覆盖通道、初始人数和漏报修正 | 有来源／时间的在场人数；映射拥挤等级仍须本店校准 | 自动化低日常人工；接入、准确性与供应商依赖未知 | 后续；不是本轮开发前置 |
++| 自行统计进出事件 | 有效入场及出场事件、去重、乱序和修正 | 校验后的在场人数 | 维护复杂；仅“开门感应”不等于有效出场人数 | 后续；缺出场则不采用 |
++| 仅入场＋停留时长模型 | 足够代表本店的停留分布、误差验证 | “估计在场约X～Y人”，附方法／时间／局限 | 可估计但目前无本店样本，固定两小时扣减无依据 | 暂缓，不用模拟模型补数 |
++| 保持现状／前台询问 | 原有课表和前台 | 联系方式及前台口头答复 | 没有新维护系统成本；不便随时自助 | 对照及数据失效后的明确备用路径 |
++
++### 人工发布闭环（产品方案）
++
++1. 当班人员用本人业务账号进入维护端；服务端检查该门店的 operator 权限。不能靠隐藏按钮保护写入。
++2. 现场观察力量区、有氧区及常排队器械的实际等待。首店试点前确定至少3个观察点和一页判断说明；不存在分区实时数据，因此会员端只呈现全馆人工结论。
++3. 选择较空／适中／较忙，并确认“刚完成现场观察”。服务端记录 observation ID、门店、操作者、等级、`observedAt`、`publishedAt`、`validUntil`、revision。首版只允许当下提交，不提供任意回填旧观察时间的入口。
++4. 写入事务提交成功后才显示发布成功；请求有幂等键、并发版本检查，失败不能将未提交值显示给会员。修正／撤销保留旧记录，操作者不能靠重新打开旧记录来刷新观察时间。
++5. 会员请求最新有效观察；服务端按观察时间判定状态。修改课表、改文案、轮询、读缓存、应用重启都不能重置观察年龄。
++
++建议观察标准：较空＝观察点基本无需等待；适中＝部分点需要轮换或短等；较忙＝多处持续等待、训练明显受影响。这是**本店待校准的操作定义**，不是行业容量或安全标准。课程中人数增多但力量器械不忙时，不自动判“较忙”；不同区域分歧明显、工作人员未巡视或无法判断时，选择“暂无法判断”，不能凭想象选较空。人工等级仅代表观察时刻，不保证会员到达时仍相同。
++
++**默认有效期15分钟，`serverNow >= validUntil`即过期；建议10分钟一轮观察，变化明显时补更。** 两个数均为试点假设，不是来源事实。10分钟频率意味着每小时约6次操作，需实测观察加录入时间；值班时段无人承担更新时不承诺持续覆盖。维护端提示剩余有效时间，可主动标记“暂停更新”；不依赖后台定位或自动通知。
++
++### 数据状态与文案：质量、来源、联网状态分开
++
++| 情况 | 会员端必须表达 | 禁止行为 |
++| --- | --- | --- |
++| 人工观察仍在有效期 | “馆方现场观察 · 较空／适中／较忙 · HH:mm观察”；提示仅供到店安排参考 | 叫“准确实时人数”、无依据展示大数字或容量百分比 |
++| 后续人工点数／模型估计 | 显式“人工点数”或“估计”及区间／方法／时间；仅已校验后启用 | 把区间中点变成确定人数；本轮默认不启用这两种数值模式 |
++| 过期 | 主位置“忙闲信息已过期”；次级可显示“上次观察 HH:mm：较空（已过期）”，去掉新鲜状态强调 | 主卡继续绿灯“较空”；延长TTL掩盖缺乏更新 |
++| 无记录、记录撤销、暂停更新、无效或未来时间戳 | “暂无法提供忙闲信息”，按原因显示未更新／暂停；提供已核实的联系入口（未配置则不编造号码） | 将空值、报错、未知当作0人或较空 |
++| 网络失败／离线 | 明确连接失败；缓存值仅列作“上次获取的记录”，保留原观察时间并按可知年龄降级 | `wx.request success`就认定业务成功；把本机缓存当新数据 |
++| 模拟 | 开发／演示环境醒目标“模拟数据”，与门店环境隔离 | 生产／试点数据写入接口接受simulation记录或fallback到fixtures |
++| 闭馆 | 独立展示已配置的营业状态；忙闲可显示不适用 | 将闭馆等同“0人”，或未经核实默认零点清空 |
++
++客户端首次打开／回到前台取新快照，前台默认60秒刷新并可手动刷新，离开前台停止轮询；状态在15分钟边界由本地计时及时降级，即使尚未到下一轮轮询。以服务端返回的`serverNow`与`validUntil`为准，持续会话用单调经过时间推进；应用重启离线／无法建立可信时间时不显示新鲜状态。本机改时钟不能延长有效期。后台网络不能假设持续可用，微信官方对后台请求有限制。[网络文档](https://developers.weixin.qq.com/miniprogram/dev/framework/ability/network.html)
++
++### 人数需求与本轮取舍的关系
++
++此前用户认可“预计人数大数字”的方向；当前可靠人数源缺失。本次提出的**变更建议**是人工模式用大状态词替代大数字，保留来源和时间。指挥者可按本轮授权采纳；若坚持首版必须有自动在场数字，则应对该数字子范围给REVISE／PAUSE，不能把累计入场或随机值包装为完成。忙闲方案本身无需等门禁自动化。
++
++## 2. 必需会员入口：从入口到可用服务
++
++仅有“我的／登录”按钮、假会员卡、客户端切换“已绑定”不满足完整MVP。最小有用服务为：**微信业务登录→馆方核验绑定→查看本店会员状态、核验时间及确有来源的有效期→遇到信息不符可请求前台处理→本人解除关联／删除小程序账户。** 不做二维码开门、续费收款或访问原始人脸库。
++
++### 三种身份必须区分
++
++| 层次 | 如何建立 | 能证明什么 |
++| --- | --- | --- |
++| 微信小程序用户 | 用户选择登录，`wx.login`→本应用服务端→code2Session，服务端签发可撤销业务会话 | 该AppID下的微信身份，不证明姓名、手机号或健身房会员资格 |
++| 本店会员 | 馆方人员在原系统核对现有会员凭据，再把会员内部引用绑定到当前已登录用户 | 馆方在核验时确认的会员关系；后续有效／到期／撤销需维护 |
++| 馆方操作员 | 系统负责人按独立名单配置服务端角色及门店范围 | 能维护指定门店；普通会员不能自授角色，会员绑定不会自动授予operator |
++
++官方依据：[登录流程](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html)、[code2Session](https://developers.weixin.qq.com/miniprogram/dev/server/API/user-login/api_code2session)。**OpenID不是匿名数据，也不是自然人实名证明；UnionID不作为首版必要条件。** 不从客户端接收任意openid当作登录成功，不将AppSecret、session_key或微信access_token发给客户端，不在日志保存临时code或业务令牌。网络/限流/无效code时清楚报错，重新登录获取新code，不能重放旧code或回退假登录。
++
++**operator初始化与撤销的候选规则**：工程环境由维护者在服务端预配置独立测试operator；真实环境由项目负责人确认馆方授权人员后，将其已核验业务userId加入单店服务端角色名单。首版不开发通用角色管理后台，也不提供客户端自助升级。授予／撤销记录执行人、对象、门店、时间和原因，日志不带完整令牌。每次管理请求重检当前服务端角色；移除角色后旧会话立即不能写入，不缓存旧operator权限继续放行。测试与真实角色名单隔离；CP4须有真实负责人确认名单的记录。
++
++### 推荐绑定：前台核验当前用户的待绑定请求
++
++【设计建议】不依赖馆方API或微信手机号接口。用户登录后发起待绑定请求，显示短时配对码；前台当面核对其原会员卡／原系统允许的身份凭据，将本店内部会员引用和当前请求关联。**代码只是找到当前小程序账号的手段，实体会员资格由馆方核验，不能让任意持码者自动成为会员。**
++
++- 待绑定请求绑定服务器会话与门店；建议8位随机数字配对码，10分钟到期、一次使用；每账号最多1个活跃请求，重建使旧码失效。8位／10分钟为设计默认值，PRD可明确实现细节。
++- 只有operator能检索请求；前台与用户当面比对同一配对信息，确认正在处理的账号。按账号与操作者限制错误查询（建议每10分钟最多5次），不开放匿名枚举会员接口。
++- 同一门店一个会员引用默认绑定一个小程序账号；已绑定／并发绑定时拒绝自动覆盖，转人工解除后重核验。提交绑定、消耗请求和写审计在同一事务完成。
++- 馆方填写状态与原系统有效期；“无固定到期日”须显式确认，不能用空值表示无限有效。未取得有效期但原系统显示有效时，标“馆方已核验，具体有效期待确认”，不显示永久会员。核验记录显示`verifiedAt`；有效期未定的记录不授予未来会员专属权益。
++- 有确定到期时刻的资格由服务器自动过期；人工撤销立即改变服务端授权。已打开的客户端最迟下次刷新更新（默认60秒）；敏感操作每次服务器重检，不等页面刷新。换手机／清缓存后，重新微信登录仍得到同一已绑定关系。
++- 原系统没有API时，需要馆方在取消、续费、转卡时维护本系统；所以本系统显示“馆方核验记录”，不是替代门禁或原系统的实时权益账本。首版不据此自动开门、扣费或放行。
++- 本人解除绑定需有效会话和明确操作；立即终止本账号的会员关联，前台重新核验才能绑定；删除小程序账户同时撤销会话、清除个人业务缓存并按约定清理关联，不代表注销原健身房会员合同。保留审计的字段和期限在PRD说明，不保留凭证原图／人脸。
++
++这种方案需要**现场授权人员和一次真实会员核验**才能证明业务身份可用。没有馆方人员时可以在独立测试租户用测试operator和合成会员验证流程，但验收记“工程绑定流程通过”，不能记“真实会员核验通过”。
++
++### 会员有限状态与授权口径（候选基线）
++
++业务登录、绑定关系、会员资格分别存储；以下为服务端合成的页面状态，不能由客户端选择。公共信息对所有状态可读；已登录用户只读自己的最小状态，不因“有效”获得operator权限。首版会员服务是查看／维护自身关联，不以此自动开门或授予原馆权益。
++
++| 状态 | 触发与可操作项 | 授权限制 |
++| --- | --- | --- |
++| 未登录 | 无有效会话；可主动登录 | 不返回个人会员信息 |
++| 未绑定／已解绑 | 没有当前关联／本人已解除；可重新发起请求 | 不显示有效会员，不沿用旧会员资格 |
++| 待核验 | 请求有效但尚未完成馆方核验；可取消／到期后重建 | 配对码不授予会员权限 |
++| 已核验但有效期待确认 | 馆方确认关系但没有明确期限或无固定期限依据 | 显示核验时间与待确认；不授予未来会员专属权益 |
++| 有效 | 馆方确认有效，期限未到或明确无固定到期日 | 仅本人状态服务；所有后续权益若扩展须另写服务端规则 |
++| 过期 | 服务端当前时间达到确定到期时刻 | 不按有效会员授权；续费由馆方核验更新，不靠用户勾选 |
++| 已撤销 | 馆方撤销关系／资格 | 撤销优先于旧有效期；敏感接口立即失效，不能凭旧页面恢复 |
++| 已删除账户 | 本人删除业务账户 | 撤销业务会话与关联，客户端回公共未登录态；重新登录创建新业务账户时不自动恢复旧绑定 |
++
++撤销优先于旧资格，解绑／删除去掉当前关联；过期按服务器时间判定。历史状态只作受限审计，不作为恢复权限的依据。PRD保持这些可观察规则，字段命名可由dev实现设计确定。
++
++### 微信隐私与手机号边界
++
++【事实】[手机号快速验证官方页](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html)写明用户点击同意、主体资格要求，并且“快速验证”不保证实时验证；手机号code与登录code不同，不能混用。这是可选后续绑定途径，不解决手机号与本店会员记录匹配错误、号码变更或转卡问题。首版不调用该能力，也不以是否拥有此接口为开发门槛；不在此轮购买调用额度。
++
++【事实】[隐私协议开发指南](https://developers.weixin.qq.com/miniprogram/dev/framework/user-privacy/PrivacyAuthorize.html)要求先在后台声明所处理信息，已声明的隐私接口还需同步用户同意；`getPrivacySetting`、`openPrivacyContract`及相关同意流程存在基础库版本边界。未声明、拒绝和接口不支持必须处理；微信官方弹窗不替开发者决定业务用途、会员身份或所有后端数据处理规则。[填写说明](https://developers.weixin.qq.com/miniprogram/dev/framework/user-privacy/)
++
++【方案】公共忙闲和公共课表不强制登录；用户进入会员服务时说明处理OpenID关联、本店会员引用、核验状态／时间／有效期的用途。后端也属于数据处理范围，不能因为不用手机号／位置就勾选“未采集隐私”。首版不主动收集姓名、手机号、头像、定位、运动健康、人脸及原始会员凭证；必要的会员引用和微信身份只在服务端关联。用户拒绝登录／隐私相关操作后仍可看公共信息，不能反复弹窗。页面可查看隐私说明，存在相关接口时按官方授权流程调用；版本不支持则降级公共浏览并明确说明会员功能暂不可用，不默许绕过。
++
++首版无定位、推送、相机扫描需求，配对码可手工录入；这减少能力和权限依赖。需要后续扫码时再新增相应权限说明及验收。建议观察业务记录保留30天、操作审计90天，会员数据在有效关联期间保留并提供删除处理；这些是待PRD细化的工程默认假设，不是法定期限或已对外承诺。实际运营主体、隐私指引、联系渠道及平台类目资格须在真实用户阶段核实。
++
++## 3. 课表：能够维护，也能够诚实为空
++
++【推荐P0】“今日／本周”列表＋一行当前排课摘要；每节课至少有稳定ID、课程名、门店时区、开始／结束时间、状态（scheduled/cancelled）、修订号和更新时间。教练名、容量、剩余名额均非必填；没有这些数据不虚构。取消保留带取消标记的记录，改期更新同一课程并保留变更记录；跨日时段按时间区间重叠查询，不只按开始日期归组。
++
++维护端支持新建草稿、编辑、取消、批量确认某日期范围“课表已核对并发布”。发布对象是课程集合和覆盖日期范围的一个版本，空课表必须由operator明确确认后才表示该范围无排课；没有发布覆盖时显示“课表尚未发布”。保存草稿不会影响会员端，发布原子完成；两人编辑时发生版本冲突就要求刷新，不覆盖对方新数据。
++
++| 场景 | 展示与维护规则 |
++| --- | --- |
++| 未取得任何实际课表 | 开发维护能力及空态；真实环境没有预置课程。工程环境可用标记合成样本，不记作真实课表 |
++| 某天已确认发布、课程数为0 | “该日无排课”，并显示覆盖范围／更新时间；不称实际空闲或自由入场 |
++| 当前时段有scheduled课程 | “按课表：XX课 HH:mm–HH:mm”；结束不等于所有人离开；半开区间 start≤now<end |
++| 课程取消／改期 | 重新发布后读取新版本；取消有明确标记，改期显示现行时间和更新提示；本期不承诺自动通知 |
++| 跨午夜／跨周 | 按门店时区和区间查询，课程仍在进行时不因周一切换消失；夏令时地区需后续按真实地点确认 |
++| 发布范围已结束、当天不在覆盖范围或撤回发布 | “该日期课表尚未发布／已撤回”，不循环复用上周表；不能把数据库空结果自动当无课 |
++| 离线或刷新失败 | 显示缓存版本及“未能确认最新变更”；新请求成功后才清除提示，不说已同步 |
++
++按周课表在所声明的覆盖日期内有效，不套用忙闲15分钟有效期。维护人应在改期／取消时发布变更；客户端首次／回前台和前台60秒刷新。后台临时关闭排课展示时显示不可用。真实试点前至少取得一个完整周的馆方核定课表（也允许馆方明确核定全周无课）；每节课时间有效，冲突提示并由馆方确认，不能凭场馆约150平方米推算名额。
++
++## 4. 推荐完整 MVP 与数据边界
++
++会员端三步主路径：**打开场馆页→看来源／时间与忙闲、今日课程→需要个人服务时进入“我的”查看或绑定会员。** 中文、两个主入口、少量卡片，视觉沿用已认可的留白方向；具体颜色不阻塞PRD。
++
++| 优先级 | 必须交付的可用能力 | 明确完成边界 |
++| --- | --- | --- |
++| P0 | 场馆忙闲展示、自动过期／不可用／离线态、营业与联系信息 | 使用真实服务端数据，数据源可人工；没有数据时诚实为空 |
++| P0 | 微信业务登录、前台配对核验绑定、本人会员状态／有效期口径、撤销／解除／删除流程 | 服务器关联持久化，账号隔离；不是客户端假卡 |
++| P0 | 今日／本周课表、发布覆盖范围、取消改期及失败态 | 与维护端使用同一正式数据源，不独立维护一份示例JSON |
++| P0 | 馆方维护端：现场观察发布／撤销、课表草稿发布、会员核验／撤销、最近操作记录 | 经server-side operator鉴权；建议同一小程序内独立管理页面，角色不放入公共会员导航 |
++| P0 | 服务端持久化、租户／角色检查、时间口径、幂等／版本冲突、操作审计、环境隔离 | 重启和多客户端访问保持一致；合成测试数据不能进门店环境 |
++| P1后续 | 自动门禁／在场数字、模型估计、历史忙闲、器械目录与报修、个人到店历史 | 本轮不实现，补数据或需求后另派单 |
++| 暂缓 | 预约／候补／名额账本、支付续费、二维码开门、社交、AI教练、完整训练日志、营养／恢复、定位围栏、后台推送 | 不从竞品功能倒推首版必须有 |
++
++建议使用原生微信小程序作为会员端和轻量维护端，服务端提供最小HTTPS接口及数据库；不引入竞品源码。具体语言、数据库、云托管或自建由指挥者与dev在CP0按现有可用环境选定，不因未知供应商而强行采购。官方说明自建请求需合法域名及证书，微信云托管特定调用方式可免配置通讯域名；本报告不假设已有任何云资源。[网络官方文档](https://developers.weixin.qq.com/miniprogram/dev/framework/ability/network.html)
++
++### 候选业务契约（不是馆方已有API）
++
++| 领域 | 最小对象／行为 | 不可信输入处理 |
++| --- | --- | --- |
++| 场馆 | gymId、名称、timezone、营业信息、已核实联系渠道 | 单店仍由服务端固定作用域；客户端gymId不可扩大权限 |
++| 观察 | mode=manual_observation、level、observedAt、publishedAt、validUntil、revision、withdrawn、serverNow | 校验枚举、时间顺序、作者权限；GET不刷新TTL，未来／非法记录不可用 |
++| 账号 | 服务端微信身份映射→业务userId／session；operator角色独立配置 | 忽略客户端自报角色／openid；凭据与内部微信密钥不进入公开返回 |
++| 会员 | 配对请求、会员引用、binding状态、会员状态、verifiedAt、有效期模式／时间、revision | memberRef唯一性与一次请求原子绑定；撤销／过期按服务器判定；不能读取他人数据 |
++| 课表 | schedule publication ID、coverageStart／End、timezone、revision、publishedAt、courses | 无覆盖≠空课表；无效起止时间拒绝；取消和版本原子生效 |
++| 维护 | 鉴权后发布／修正／撤销；记录actor、reason、before／after revision、server时间 | 越权拒绝且不写入；幂等重试无重复；并发冲突返回可处理状态 |
++| 删除与审计 | 本人删除、解绑；必要审计单独访问，个人关联清理／去标识 | 删除不撤销原馆会员合同；数据副本／备份保留规则在PRD列明，不承诺未经实现的即时全备份擦除 |
++
++API行为由PRD冻结；本轮不指定虚构的供应商URL。自建服务必须能独立读写并跨重启保持数据。人工记录的创建和撤销、绑定、课程发布均需适当事务边界；测试可使用受控时钟验证过期，不调整真实操作系统时间。
++
++## 5. 候选 PRD 验收条目
++
++以下为可直接纳入PRD的候选条目；所有测试数字为本次方案默认值，指挥者可按授权收敛。尚无任何条目已执行通过。
++
++| ID | 场景／操作 | 可观察验收结果 | 层级 |
++| --- | --- | --- | --- |
++| AC-B01 | 新安装、未登录查看场馆和有发布覆盖的课表 | 可读公共信息；不强制手机号、定位、头像或会员绑定；首次无记录是未更新而非0人 | 工程／工具／真机 |
++| AC-O01 | operator现场发布一次人工“适中”；另一客户端刷新 | 持久化后显示馆方观察、适中、同一observedAt／revision，无捏造人数；正常网络下手动刷新立即取得，前台轮询至多60秒取得 | 工程／真机 |
++| AC-O02 | 记录年龄14:59→15:00，期间反复刷新或改课表 | 14:59可显示仍有效，15:00主位置变过期；GET／缓存／课表操作不改变observedAt／validUntil | 工程时钟测试／工具 |
++| AC-O03 | 无记录、撤销、暂停观察、未来／非法时间戳 | 显示相应不可用原因，不显示较空或0；撤销后不自动回退更旧观察为新鲜 | 工程／工具 |
++| AC-O04 | 写入超时、相同幂等键重试、两人并发修改 | 未确认事务前不报成功；最终最多一条该请求记录；冲突明确且不丢已提交修改；历史作者／时间可追溯 | 工程 |
++| AC-O05 | 断网、切后台再回前台、应用重启离线、本机时钟异常 | 连接状态与观察新鲜度分别表达；不凭本机时钟续期；回前台重取，未知时间缓存不标新鲜 | 工程／真机 |
++| AC-L01 | 真实微信登录成功／无效code／code重放／平台错误 | 成功只建立本应用身份，失败无伪登录；重试获取新code；客户端及日志无AppSecret／session_key／完整令牌 | 工程替身＋真机官方链路分别记账 |
++| AC-M01 | 登录未绑定→生成请求→operator核验并绑定→换客户端登录 | 显示未绑定、待核验、已核验各状态；同一微信账号恢复服务器关联；普通用户无法自己提交核验成功 | 工程／真机；实体核验另计试点 |
++| AC-M02 | 配对码到期／重放、超过错误次数、已绑定会员再次绑定、并发确认 | 到期10分钟及已使用请求拒绝；限流生效；冲突不抢占、不覆盖；一个会员引用最多一个有效关联 | 工程 |
++| AC-M03 | 会员到期、operator撤销、有效期待确认／明确无固定期限 | 状态和核验时间可解释；不将缺失有效期显示永久有效；到期服务器自动判定，撤销后接口立即不再按旧资格授权 | 工程／工具／真机 |
++| AC-M04 | 普通会员改userId/gymId/role或调用管理／他人会员API；operator角色被移除后用旧会话写入 | 服务端拒绝，不返回他人会员信息、不产生写入；operator也不能跨未授权门店；角色授予／撤销有审计，撤销后的旧会话不能继续管理 | 工程 |
++| AC-M05 | 本人解绑／删除账户、旧会话再访问 | 关联和会话按设计失效、缓存清理，不误称原馆会员合同取消；审计与删除范围说明一致 | 工程／真机 |
++| AC-P01 | 首次隐私说明、用户拒绝、再次主动使用、接口未声明／不支持 | 可查看说明与拒绝，公共浏览继续；没有拒绝后循环调用；需要的隐私API遵守声明与同意流程，不用“未采集隐私”隐藏后端关联数据 | 工具／真机／后台配置检查 |
++| AC-S01 | 创建课程草稿→发布含日期覆盖的课表→用户刷新 | 草稿不可见，发布后多客户端同版本；开始／结束及门店时区一致，显示按课表状态 | 工程／工具／真机 |
++| AC-S02 | 无发布→显式发布空日→覆盖期结束／撤回 | 分别显示尚未发布、该日无排课、覆盖失效；任何一种均不声称实时空闲 | 工程／工具 |
++| AC-S03 | 取消、改期、跨日跨周、两人编辑同一版本 | 取消仍有标记，改期不重复造课，跨日进行中不丢失；冲突不覆盖新版本；不自动推送或计入出席 | 工程／工具 |
++| AC-S04 | 课表请求超时、HTTP非2xx、业务错误、离线缓存 | 明确未取得最新变更；只收到网络success回调不视为业务成功；不回退上周样例充当今日课表 | 工程／真机 |
++| AC-D01 | 服务端重启、测试／门店环境切换、尝试写simulation到门店环境 | 正常数据持久化，测试与门店身份／数据隔离；门店拒绝模拟模式，无fixture自动回退 | 工程 |
++| AC-W01 | 合法域名和有效证书下，两种手机系统关闭调试模式访问 | 登录、读写、拒绝授权、前后台／弱网均有实际记录；开发工具跳过域名检查的成功不计作该项通过 | 真机 |
++| AC-T01 | 真实馆方operator→现场观察→真实会员查询；更新／过期／纠错复测 | 记录真实观察来源、时间与查询结果，能复现更新及失效，无合成值；核查信息是否帮助到店安排 | 门店试点 |
++| AC-T02 | 原系统核验至少一位真实会员，导入并发布至少一周真实核定课表 | 用户微信身份与原系统会员正确关联，撤销演练明确；课表由馆方确认，真实业务闭环成立 | 门店试点 |
++
++## 6. 分层门槛与候选 Checkpoint
++
++| 阶段 | 可以完成的内容 | 必要前置／交付证据 | 缺口如何处理 |
++| --- | --- | --- | --- |
++| CP0：工程基线 | PRD、范围、唯一repo、技术／数据契约与测试环境冻结 | 指挥者采纳此方案；确定独立工程绝对路径并核查现状；记录依赖用途／版本／来源／许可，按工作区要求检查 | `target_repo=null`是源码派单前要解决的具体项；由指挥者选定新隔离目录或核实已有目录，不使用thinkV2 |
++| CP1：工程闭环 | P0服务端和界面、测试operator、合成会员、可维护课表、持久化与权限／过期／失败测试 | AC-O/M/S/D等工程证据、重启后数据一致、访问控制测试；wx登录服务端交换可先用显式替身 | 不需要真实门禁API或原始课表；官方登录替身不能标真实登录已过 |
++| CP2：微信开发工具 | 导入／编译、页面路由、状态与交互、当前基础库兼容、测试后端通信 | 工具版本、基础库版本、AppID／测试身份情况、编译结果、关键流程图／日志；区分平台替身 | 没有可用AppID时能做的静态／合成验证如实记录；工具未实际运行则不得宣称小程序已编译 |
++| CP3：真机端到端 | 真实AppID、官方登录、真实服务端、operator与普通测试账号，iOS＋Android | AC-L01、P01、W01及前后台／断网／绑定／课表变更；记录机型、微信／基础库、版本与测试结果，调试模式关闭 | 账号主体、角色、HTTPS配置、隐私声明或设备缺失只限制对应真机验收，CP1/2有效结果不撤销、不伪造CP3 |
++| CP4：单店试点 | 真实观察、真实会员核验、真实课表、馆方运营与纠错 | 馆方同意及负责人／值班覆盖，少量获同意会员，CP3通过，真实数据源与联系渠道确认；AC-T01/T02和试点记录 | 馆方尚未参与时状态为未就绪，不将“纯模拟产品能点”宣布MVP使用完成 |
++| 公开发布（独立） | 平台审核后对外发布 | 实际账号所需类目／主体／备案等要求、隐私指引、域名或云托管配置、平台审核结果及发布授权 | 本任务不审核／上传／发布。官方预览也会上传代码到微信服务器，与本地编译分开记录 |
++
++微信官方将开发版、体验版、审核版、线上版区分，体验成员权限与项目成员不同；预览、上传、审核、发布也不同。[协同和发布文档](https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/release.html)。开发工具验证不替代真机验证；真机合成账户不替代真实馆方试点。此表是后续Checkpoint划分建议，不是已签发的dev任务。
++
++### 有限试点：不无限等待，也不跳过真实结果
++
++建议先安排一个7天、每天两个明确覆盖窗口（高峰与平峰）的试点；只承诺这些有值班人员的窗口。选5–8名自愿会员，现场观察人员按10分钟节奏更新，另一个人在窗口内随机抽查。门店正常营业但未覆盖时允许过期，不能假装全天实时。
++
++试点候选判据（设计假设，非市场或行业标准）：至少30次独立抽查；覆盖窗口中有效观察覆盖率≥80%；“显示较空但观察点已持续明显排队”的误导事件≤10%；至少3位会员在不同日期主动查阅两次以上，并能说明信息如何帮助其到店安排；记录每次观察＋更新耗时和馆方是否愿意继续承担。有效覆盖率＝约定营业观察窗口内有未撤销且未过期记录的时长／窗口总时长；缺更、暂停和断档计入分母。误导率＝新鲜“较空”但独立现场判断明显排队的次数／所有抽查新鲜“较空”的次数，同时报告该分母；分母为0或不足10次时只记“证据不足”，不记0%或通过。重复查阅使用自愿参与者的访谈／观察记录，首版不为了实验默认接入跨用户行为追踪SDK。
++
++小样本只用于决定下一轮，不证明普遍需求或付费。任何越权、真实会员错绑立即暂停相应功能并纠正；新鲜覆盖不足或误导超阈值时REVISE观察流程／状态解释，不直接延长TTL去凑分。馆方无法投入观察或无人愿意使用则PAUSE试点／重新判断产品价值。
++
++不取得馆方合作不能完成CP4，但可先开发CP1/2并验证已定义的完整闭环；在等待外部条件时停止于真实可记录的交付层级，不循环增加无关调研、不自动扩大开发范围。
++
++## 7. 未验证事项、裁定选项与下一结果
++
++| 缺口 | 当前状态 | 阻塞层级／解决方 |
++| --- | --- | --- |
++| 馆方合作、值班观察和会员核验负责人 | 未取得 | CP4；指挥者汇总给用户／馆方，PM本轮不外联 |
++| 唯一工程路径 | 项目配置仍为null；仅已知首页HTML示意 | CP0源码派单；指挥者按已获授权确定隔离目录，不要覆盖其他项目 |
++| AppID、主体、开发者／体验成员、后台权限 | 未核实 | CP2部分能力、CP3；用户或账号负责人提供／配置，不能把AppSecret写在报告或消息里 |
++| 后端／域名／证书或云托管环境 | 未选定 | CP0选型及CP3真实网络；常规选型由指挥者推进，付费或新增外部权限按实际授权处理 |
++| 真实课表、课程取消／改期负责人与无课开放规则 | 只知道有课表 | CP4课表，工程功能不阻塞；无课开放规则不纳入自动断言 |
++| 真实会员数据、过期／续费维护机制 | 原系统字段未知 | CP4真实核验；工程用合成记录，提供无API人工核验方案 |
++| 门禁出场与人数API | 未知 | 不阻塞人工方案；阻塞自动人数和相关准确性声明 |
++| 15分钟TTL、观察定义、10分钟频率和维护成本 | 设计假设 | 试点校准；上线前不声称已验证准确率 |
++| 官方能力具体账号可用性及平台审核要求 | 阅读官方公开文档，未登录本项目后台 | CP3／发布核对；不以文档可读代替账号资格确认 |
++
++**APPROVED建议**：采纳本报告的人工主方案与完整维护／会员／课表P0，下一唯一结果为正式PRD和串行Checkpoint；冻结后再交dev。**REVISE触发**：要求首版数字在场却无可靠计数、把会员入口降为假卡、没有维护端／持久化／权限，或遗漏本报告关键异常口径。**PAUSE仅用于对应外部门槛**：没有账号/设备则不能宣称真机通过，没有馆方则不能宣称门店可用，没有发布授权则不发布；不将这些局部缺口升级为整项研究无期限暂停。
++
++## 评估、写回与核验
++
++Research Quality: 90/100 · pass（gym_mvp_review独立只读复核；对照文档与已取得的官方原文，未独立联网或运行产品）
++Validation Level: V0（本店需求与运营效果仍未实证）
++评分：决策对齐15/15；来源质量17/20；引用支持18/20；事实分离15/15；反证8/10；决策价值10/10；可维护性7/10。
++Next evidence: 指挥者接受范围及唯一工程路径；真实AppID／账号能力和馆方试点负责人分别推进。
++Allowed next investment: 本轮聚焦研究交付；按最新用户授权在指挥者评审后编制PRD／Checkpoint并开展有界MVP开发，工程完成与真实业务验证分别记录。
++Pause/Kill condition: 见上方对应门槛和有限试点；不以研究得分代替真实使用／付款。
++
++本轮登记微信官方7个新页面与合同来源，复用Gymdesk／用户评论／既有用户事实；Firecrawl额度不足，浏览器访问超时后改为直接读取官方公开HTTPS文档，无登录绕过。原文仅临时读取，raw保存元数据、最小摘要和短摘录，不保存第三方全文。新建本报告及证据卡、更新idea-brief研究入口与INDEX／LOG；旧研究和raw不覆盖，未改源码／Leader配置。本次完成后向指挥者回报并停止。
++
++
++### 质量复核与完成记录
++
++复核者：`gym_mvp_review`，承担`review_eval_agent`职责。结论为90/100、pass，支持Leader进入正式PRD／CP0，不代表真机或试点通过。复核提出operator授予／撤销与会员有限状态必须明确；本轮已补入候选基线及AC-M04。没有因此扩建通用权限后台或新增会员权益。
++
++```yaml
++eval_status: pass
++research_quality: 90
++validation_level: V0
++critical_failures: []
++weak_claims: ["人工忙闲与维护成本尚未经过本店试点", "15分钟TTL及试点判据是设计假设"]
++missing_sources: ["真实AppID与账号能力", "馆方合作和核验人员", "实际会员及课表", "门禁接口与有效出场记录"]
++recommended_repairs: ["指挥者采纳P0并冻结PRD/Checkpoint", "CP0确认唯一工程路径", "外部资料分别在真机与试点阶段取得"]
++next_evidence: "指挥者对本研究建议的评审与PRD派单"
++allowed_next_investment: "依已传达的用户授权推进PRD和有界MVP开发；本研究任务完成后回报并停止"
++pause_or_kill_condition: "按阶段门槛隔离账号/真机/馆方缺口；试点出现错绑、越权或持续无用时暂停相应部分"
++reviewer: review_eval_agent
++reviewed_at: 2026-09-16
++```
++
++标准`lint_knowledge.py`仍缺失，本次调用返回文件不存在；局部检查覆盖六项元数据、来源日期/枚举、原始URL精确去重、11张证据卡字段、新增内部链接与21个唯一验收ID，以及历史保留／本轮diff。结果见[局部检查](../../outputs/gym-mvp-readiness-2026-09-16/validation.json)、[修改清单](../../outputs/gym-mvp-readiness-2026-09-16/change-manifest.json)、[本轮完整文本差异](../../outputs/gym-mvp-readiness-2026-09-16/knowledge-changes.patch)。未声称全库Lint通过，未提交Git。
+--- /dev/null
++++ product-knowledge-base/ideas/gym-occupancy/mvp-readiness-evidence-2026-09-16.md
+@@ -0,0 +1,273 @@
++# MVP开发准备：证据卡与假设清单
++
++Owner: Product Lead
++Last updated: 2026-09-16
++Source: 下列微信官方网页、已登记馆务产品与用户原始记录；[任务合同](../../raw/SRC-20260916-gym-mvp-task-01.md)
++Confidence: High（官方平台规则）；Medium（推断）；Hypothesis（本店效果）
++Related decisions: [MVP开发准备研究](mvp-readiness-research-2026-09-16.md)
++Next review date: 2026-09-30
++
++Research Quality: 90/100 · pass（独立只读文档与已取得官方原文复核；未联网重检或运行）
++Validation Level: V0（本店）
++
++微信7页属于同一官方证据线；Gymdesk、Gym Group用户评论、本店用户陈述分别独立。新官方网页直接取得，复用材料保留原访问日期，不将模型输出或搜索片段当原始证据。技术文档A类仅支持平台规则，不能验证MVP使用效果。任务范围来源与产品事实来源分开。
++
++## M-01 · 小程序登录
++
++[SRC记录](../../raw/SRC-20260916-gym-wechat-01.md)
++
++```yaml
++evidence_id: "M-01"
++source_id: "SRC-20260916-gym-wechat-01"
++claim: "wx.login取得临时code后由开发者服务端调用code2Session换身份，服务端据此生成业务登录态；code只能使用一次，session_key不应下发。"
++label: "Fact"
++source_title: "小程序登录"
++source_url: "https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html"
++source_class: "A"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-16"
++scope: "微信小程序官方公开文档；实际项目账号能力未测试"
++support: "full"
++independence_group: "wechat-official"
++limitations: "官方登录只能建立微信身份；不能由此证明本店会员资格。"
++decision_relevance: "决定登录/隐私/网络/开发与发布边界；不支持本店运营效果"
++confidence: "High"
++```
++
++## M-02 · 小程序登录凭证校验 code2Session
++
++[SRC记录](../../raw/SRC-20260916-gym-wechat-02.md)
++
++```yaml
++evidence_id: "M-02"
++source_id: "SRC-20260916-gym-wechat-02"
++claim: "code2Session须在服务端调用，使用appid、secret、js_code等参数；返回openid、session_key、条件式unionid及错误状态。"
++label: "Fact"
++source_title: "小程序登录凭证校验 code2Session"
++source_url: "https://developers.weixin.qq.com/miniprogram/dev/server/API/user-login/api_code2session"
++source_class: "A"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-16"
++scope: "微信小程序官方公开文档；实际项目账号能力未测试"
++support: "full"
++independence_group: "wechat-official"
++limitations: "接口支持事实不等于本项目已有AppID/AppSecret、服务器或账号能力。"
++decision_relevance: "决定登录/隐私/网络/开发与发布边界；不支持本店运营效果"
++confidence: "High"
++```
++
++## M-03 · 手机号快速验证组件
++
++[SRC记录](../../raw/SRC-20260916-gym-wechat-03.md)
++
++```yaml
++evidence_id: "M-03"
++source_id: "SRC-20260916-gym-wechat-03"
++claim: "手机号快速验证须用户同意，面向符合资格且完成认证的非个人主体；不保证实时验证。手机号code与wx.login code不同，用户点击授权后由后台换号。"
++label: "Fact"
++source_title: "手机号快速验证组件"
++source_url: "https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html"
++source_class: "A"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-16"
++scope: "微信小程序官方公开文档；实际项目账号能力未测试"
++support: "full"
++independence_group: "wechat-official"
++limitations: "文档还说明付费和境外主体限制；本轮不做费用预算或资格判断，不使用该能力作首版必要依赖。"
++decision_relevance: "决定登录/隐私/网络/开发与发布边界；不支持本店运营效果"
++confidence: "High"
++```
++
++## M-04 · 小程序隐私协议开发指南
++
++[SRC记录](../../raw/SRC-20260916-gym-wechat-04.md)
++
++```yaml
++evidence_id: "M-04"
++source_id: "SRC-20260916-gym-wechat-04"
++claim: "隐私指引中声明的信息才可使用对应隐私接口/组件，还需同步用户同意；提供getPrivacySetting、openPrivacyContract、同意按钮及拒绝处理，相关API有基础库版本条件。"
++label: "Fact"
++source_title: "小程序隐私协议开发指南"
++source_url: "https://developers.weixin.qq.com/miniprogram/dev/framework/user-privacy/PrivacyAuthorize.html"
++source_class: "A"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-16"
++scope: "微信小程序官方公开文档；实际项目账号能力未测试"
++support: "full"
++independence_group: "wechat-official"
++limitations: "同意隐私指引不证明会员身份；平台接口授权不覆盖全部后端业务身份或数据处理安排。页面保留2023历史更新，采用后续更新口径，不沿用早期过渡开关。"
++decision_relevance: "决定登录/隐私/网络/开发与发布边界；不支持本店运营效果"
++confidence: "High"
++```
++
++## M-05 · 用户隐私保护指引填写说明
++
++[SRC记录](../../raw/SRC-20260916-gym-wechat-05.md)
++
++```yaml
++evidence_id: "M-05"
++source_id: "SRC-20260916-gym-wechat-05"
++claim: "涉及处理用户个人信息的开发者需补充隐私保护指引；现网与提审版本的配置入口及生效规则有区别，审核/发布时需与实际接口使用一致。"
++label: "Fact"
++source_title: "用户隐私保护指引填写说明"
++source_url: "https://developers.weixin.qq.com/miniprogram/dev/framework/user-privacy/"
++source_class: "A"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-16"
++scope: "微信小程序官方公开文档；实际项目账号能力未测试"
++support: "full"
++independence_group: "wechat-official"
++limitations: "这是平台配置规则，不是对本项目作出法律合规或审核通过判断。"
++decision_relevance: "决定登录/隐私/网络/开发与发布边界；不支持本店运营效果"
++confidence: "High"
++```
++
++## M-06 · 网络
++
++[SRC记录](../../raw/SRC-20260916-gym-wechat-06.md)
++
++```yaml
++evidence_id: "M-06"
++source_id: "SRC-20260916-gym-wechat-06"
++claim: "自建网络请求需事先配置通讯域名及有效HTTPS/WSS，AppSecret留后台；微信云托管特定调用有域名配置例外。后台请求受限；网络success不代表HTTP业务成功；跳过域名校验的调试结果不能代替正常客户端测试。"
++label: "Fact"
++source_title: "网络"
++source_url: "https://developers.weixin.qq.com/miniprogram/dev/framework/ability/network.html"
++source_class: "A"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-16"
++scope: "微信小程序官方公开文档；实际项目账号能力未测试"
++support: "full"
++independence_group: "wechat-official"
++limitations: "仅引用与方案相关规则；未核查具体账号、域名备案、证书或云资源，未开展真机测试。"
++decision_relevance: "决定登录/隐私/网络/开发与发布边界；不支持本店运营效果"
++confidence: "High"
++```
++
++## M-07 · 小程序协同工作和发布
++
++[SRC记录](../../raw/SRC-20260916-gym-wechat-07.md)
++
++```yaml
++evidence_id: "M-07"
++source_id: "SRC-20260916-gym-wechat-07"
++claim: "微信区分项目成员与体验成员及开发/体验/审核/线上版本；预览会上传代码至微信服务器，审核通过后仍需发布操作。"
++label: "Fact"
++source_title: "小程序协同工作和发布"
++source_url: "https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/release.html"
++source_class: "A"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-16"
++scope: "微信小程序官方公开文档；实际项目账号能力未测试"
++support: "full"
++independence_group: "wechat-official"
++limitations: "本轮只读文档，未执行预览上传审核发布；项目本身的主体、类目和备案要求仍须按实际账号核查。"
++decision_relevance: "决定登录/隐私/网络/开发与发布边界；不支持本店运营效果"
++confidence: "High"
++```
++
++## M-08 · Gymdesk会员门户指南
++
++[原SRC记录](../../raw/SRC-20260910-gym-reference-13.md)
++
++```yaml
++evidence_id: "M-08"
++source_id: "SRC-20260910-gym-reference-13"
++claim: "Gymdesk公开会员门户包含会员资料、套餐、课表／预约、到店记录和联系馆方。"
++label: "Fact"
++source_title: "Gymdesk会员门户指南"
++source_url: "https://docs.gymdesk.com/en/help/docs/member-portal-guide"
++source_class: "B"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "复用已登记证据，本轮只核对本地原始记录"
++support: "full"
++independence_group: "gymdesk"
++limitations: "官方产品能力声明，访问日期为2026-09-10，本轮复用；不验证本店需求或门店数据。"
++decision_relevance: "确定会员/课表服务及可信度优先事项；不证明本店实际效果"
++confidence: "High"
++```
++
++## M-09 · The Gym Group公开用户评论
++
++[原SRC记录](../../raw/SRC-20260910-gym-reference-09.md)
++
++```yaml
++evidence_id: "M-09"
++source_id: "SRC-20260910-gym-reference-09"
++claim: "2026-06-18一条评论认为人数和课程还好，2022-10-03一条历史评论提到开门/人数更新异常。"
++label: "Fact"
++source_title: "The Gym Group公开用户评论"
++source_url: "https://play.google.com/store/apps/details?id=com.netpulse.mobile.thegymgroup&hl=en_GB&gl=US"
++source_class: "D"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-10"
++scope: "复用已登记证据，本轮只核对本地原始记录"
++support: "full"
++independence_group: "gymgroup-public-users"
++limitations: "两个自选择评论n=2，分别为孤立体验；旧评论不证明当前故障，不估算频率。本轮复用9月10日记录，不冒充9月16日重读。"
++decision_relevance: "确定会员/课表服务及可信度优先事项；不证明本店实际效果"
++confidence: "Medium"
++```
++
++## M-10 · 用户确认单店与会员入口
++
++[原SRC记录](../../raw/SRC-20260909-gym-single-store-01.md)
++
++```yaml
++evidence_id: "M-10"
++source_id: "SRC-20260909-gym-single-store-01"
++claim: "用户确定先做好单店、会员入口必需；只进门刷脸，出门有效计数未知。"
++label: "Fact"
++source_title: "用户确认单店与会员入口"
++source_url: "codex://threads/01a08198-b2ec-7b11-9bc3-89ed40433df5"
++source_class: "D"
++published_or_event_date: "2026-09-09"
++accessed_date: "2026-09-09"
++scope: "复用已登记证据，本轮只核对本地原始记录"
++support: "full"
++independence_group: "gym-user-owner"
++limitations: "用户方向不等于馆方承诺；V0未改变。"
++decision_relevance: "确定会员/课表服务及可信度优先事项；不证明本店实际效果"
++confidence: "Medium"
++```
++
++## M-11 · 用户确认有瑜伽课表
++
++[原SRC记录](../../raw/SRC-20260910-gym-yoga-schedule-01.md)
++
++```yaml
++evidence_id: "M-11"
++source_id: "SRC-20260910-gym-yoga-schedule-01"
++claim: "用户确认瑜伽室有课程表，未提供具体内容。"
++label: "Fact"
++source_title: "用户确认有瑜伽课表"
++source_url: "codex://threads/01a08198-b2ec-7b11-9bc3-89ed40433df5"
++source_class: "D"
++published_or_event_date: "2026-09-10"
++accessed_date: "2026-09-10"
++scope: "复用已登记证据，本轮只核对本地原始记录"
++support: "full"
++independence_group: "gym-user-owner"
++limitations: "无实际课表、更新人、取消规则或现场使用记录。"
++decision_relevance: "确定会员/课表服务及可信度优先事项；不证明本店实际效果"
++confidence: "Medium"
++```
++
++## 推断、假设与验证关系
++
++| ID | 陈述 | 标签 | 支持／局限 | 下一验证 |
++| --- | --- | --- | --- | --- |
++| H-01 | 无出场事件可先人工发布现场忙闲等级 | Inference | M-09/M-10说明可信度问题与数据缺口；人工观测可独立产生记录是设计推导，非竞品效果证明 | 真实值班更新和独立观察对照 |
++| H-02 | 15分钟TTL、10分钟更新、60秒前台刷新足够 | Assumption | 无来源规定这些数值；仅为可测试默认值 | 试点覆盖率、变化速度、误导和维护耗时 |
++| H-03 | 微信登录＋前台核验配对可建立会员关联 | Inference | M-01/M-02只证明微信登录能力；线下核验是本方案业务信任来源 | operator核验实际原系统会员，测试错绑/重放/撤销 |
++| H-04 | 8位码、10分钟有效、每10分钟5次错误查询为可实施起点 | Assumption | 本轮工程设计参数，非微信标准；仍需随机生成/碰撞检查、会话与操作员权限及限流 | 并发、过期、重放、枚举边界测试 |
++| H-05 | 公共课表和个人会员状态提供最小用户价值 | Inference | M-08/M-10/M-11；产品功能存在与需求表述不等于持续使用 | 真实会员查询状态与今日课表的任务观察 |
++| H-06 | 7天试点、30次抽查、80%有效覆盖、误导不超过10%可用于下一步判断 | Assumption | 本轮拟定的小样本探索判据，不是统计显著性或行业基准 | 记录分母、覆盖窗口与反例，不宣传普遍效果 |
++| H-07 | 观察30天、审计90天等默认保留期 | Assumption | 工程起点，非法律规定或对外承诺 | PRD细化必要字段、删除/备份周期，与实际用途一致 |
++
++## 已尝试渠道与缺口
++
++Firecrawl scrape登录官方页返回额度不足；浏览器首次导航超时；随后curl直读同一官方公开域名及页面所链接的6个官方文档，取得中文正文并核对。没有绕过登录、验证码或访问限制，没有使用或请求凭证。未开展额外泛竞品搜索。
++
++未取得：真实门禁/API、馆方操作员/合作、会员记录、实际课表、真实AppID主体及平台账号资格、服务器/域名/云资源、真机或试点结果。缺口按主报告分阶段限制，不用合成数据替代。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260916-gym-wechat-01.md
+@@ -0,0 +1,39 @@
++---
++source_id: "SRC-20260916-gym-wechat-01"
++title: "小程序登录"
++source_url_or_path: "https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html"
++publisher_or_author: "微信开放文档／腾讯"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-16"
++source_class: "A"
++source_type: "official"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "wx.login取得临时code后由开发者服务端调用code2Session换身份，服务端据此生成业务登录态；code只能使用一次，session_key不应下发。"
++quoted_or_referenced_location: "登录流程时序、说明、注意事项"
++supersedes: null
++---
++
++# 小程序登录（MVP平台证据）
++
++Owner: Product Lead
++Last updated: 2026-09-16
++Source: https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html
++Confidence: High（仅限官方文档规则）
++Related decisions: [MVP开发准备研究](../ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md)
++Next review date: 2026-09-30
++
++## 最小摘要
++
++wx.login取得临时code后由开发者服务端调用code2Session换身份，服务端据此生成业务登录态；code只能使用一次，session_key不应下发。
++
++原文短摘录：
++
++> 临时登录凭证 code 只能使用一次
++
++引用位置：登录流程时序、说明、注意事项。
++
++限制：官方登录只能建立微信身份；不能由此证明本店会员资格。
++
++取得方式：直接读取官方公开HTTPS页面；未登录，未使用任何AppSecret或用户资料。临时原始HTML SHA-256: `34be791e2c5cec8e4a89046b8646f346f3b7bf939d1bd924dfae5490b7a99d8c`。临时读取文件不作为长期来源，原始网页仍是证据出处。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260916-gym-wechat-02.md
+@@ -0,0 +1,39 @@
++---
++source_id: "SRC-20260916-gym-wechat-02"
++title: "小程序登录凭证校验 code2Session"
++source_url_or_path: "https://developers.weixin.qq.com/miniprogram/dev/server/API/user-login/api_code2session"
++publisher_or_author: "微信开放文档／腾讯"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-16"
++source_class: "A"
++source_type: "official"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "code2Session须在服务端调用，使用appid、secret、js_code等参数；返回openid、session_key、条件式unionid及错误状态。"
++quoted_or_referenced_location: "调用方式、请求/返回参数、错误码"
++supersedes: null
++---
++
++# 小程序登录凭证校验 code2Session（MVP平台证据）
++
++Owner: Product Lead
++Last updated: 2026-09-16
++Source: https://developers.weixin.qq.com/miniprogram/dev/server/API/user-login/api_code2session
++Confidence: High（仅限官方文档规则）
++Related decisions: [MVP开发准备研究](../ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md)
++Next review date: 2026-09-30
++
++## 最小摘要
++
++code2Session须在服务端调用，使用appid、secret、js_code等参数；返回openid、session_key、条件式unionid及错误状态。
++
++原文短摘录：
++
++> 接口应在服务器端调用，不可在前端（小程序、网页、APP等）直接调用
++
++引用位置：调用方式、请求/返回参数、错误码。
++
++限制：接口支持事实不等于本项目已有AppID/AppSecret、服务器或账号能力。
++
++取得方式：直接读取官方公开HTTPS页面；未登录，未使用任何AppSecret或用户资料。临时原始HTML SHA-256: `25a9f8cd440ac9e96dbcb8f639f6e77d8af9f4e8b274b8d9b9682ac552e93f9b`。临时读取文件不作为长期来源，原始网页仍是证据出处。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260916-gym-wechat-03.md
+@@ -0,0 +1,39 @@
++---
++source_id: "SRC-20260916-gym-wechat-03"
++title: "手机号快速验证组件"
++source_url_or_path: "https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html"
++publisher_or_author: "微信开放文档／腾讯"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-16"
++source_class: "A"
++source_type: "official"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "手机号快速验证须用户同意，面向符合资格且完成认证的非个人主体；不保证实时验证。手机号code与wx.login code不同，用户点击授权后由后台换号。"
++quoted_or_referenced_location: "能力介绍、请注意、使用方法"
++supersedes: null
++---
++
++# 手机号快速验证组件（MVP平台证据）
++
++Owner: Product Lead
++Last updated: 2026-09-16
++Source: https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html
++Confidence: High（仅限官方文档规则）
++Related decisions: [MVP开发准备研究](../ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md)
++Next review date: 2026-09-30
++
++## 最小摘要
++
++手机号快速验证须用户同意，面向符合资格且完成认证的非个人主体；不保证实时验证。手机号code与wx.login code不同，用户点击授权后由后台换号。
++
++原文短摘录：
++
++> 手机号快速验证组件，平台会对号码进行验证，但不保证是实时验证
++
++引用位置：能力介绍、请注意、使用方法。
++
++限制：文档还说明付费和境外主体限制；本轮不做费用预算或资格判断，不使用该能力作首版必要依赖。
++
++取得方式：直接读取官方公开HTTPS页面；未登录，未使用任何AppSecret或用户资料。临时原始HTML SHA-256: `76be517983f877bbb46cd054d39c6b058ecfaa3e71dda6f4358018e1efe852e8`。临时读取文件不作为长期来源，原始网页仍是证据出处。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260916-gym-wechat-04.md
+@@ -0,0 +1,39 @@
++---
++source_id: "SRC-20260916-gym-wechat-04"
++title: "小程序隐私协议开发指南"
++source_url_or_path: "https://developers.weixin.qq.com/miniprogram/dev/framework/user-privacy/PrivacyAuthorize.html"
++publisher_or_author: "微信开放文档／腾讯"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-16"
++source_class: "A"
++source_type: "official"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "隐私指引中声明的信息才可使用对应隐私接口/组件，还需同步用户同意；提供getPrivacySetting、openPrivacyContract、同意按钮及拒绝处理，相关API有基础库版本条件。"
++quoted_or_referenced_location: "接入流程1/2/3、常见错误、官方隐私弹窗功能说明"
++supersedes: null
++---
++
++# 小程序隐私协议开发指南（MVP平台证据）
++
++Owner: Product Lead
++Last updated: 2026-09-16
++Source: https://developers.weixin.qq.com/miniprogram/dev/framework/user-privacy/PrivacyAuthorize.html
++Confidence: High（仅限官方文档规则）
++Related decisions: [MVP开发准备研究](../ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md)
++Next review date: 2026-09-30
++
++## 最小摘要
++
++隐私指引中声明的信息才可使用对应隐私接口/组件，还需同步用户同意；提供getPrivacySetting、openPrivacyContract、同意按钮及拒绝处理，相关API有基础库版本条件。
++
++原文短摘录：
++
++> 若未声明，对应接口或组件将直接禁用。
++
++引用位置：接入流程1/2/3、常见错误、官方隐私弹窗功能说明。
++
++限制：同意隐私指引不证明会员身份；平台接口授权不覆盖全部后端业务身份或数据处理安排。页面保留2023历史更新，采用后续更新口径，不沿用早期过渡开关。
++
++取得方式：直接读取官方公开HTTPS页面；未登录，未使用任何AppSecret或用户资料。临时原始HTML SHA-256: `a8bba8b74940189125b1eda3f0325e117bf06e8beae97cc96a6dc6efce7e9363`。临时读取文件不作为长期来源，原始网页仍是证据出处。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260916-gym-wechat-05.md
+@@ -0,0 +1,39 @@
++---
++source_id: "SRC-20260916-gym-wechat-05"
++title: "用户隐私保护指引填写说明"
++source_url_or_path: "https://developers.weixin.qq.com/miniprogram/dev/framework/user-privacy/"
++publisher_or_author: "微信开放文档／腾讯"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-16"
++source_class: "A"
++source_type: "official"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "涉及处理用户个人信息的开发者需补充隐私保护指引；现网与提审版本的配置入口及生效规则有区别，审核/发布时需与实际接口使用一致。"
++quoted_or_referenced_location: "小程序用户隐私保护指引、现网/提审版本说明"
++supersedes: null
++---
++
++# 用户隐私保护指引填写说明（MVP平台证据）
++
++Owner: Product Lead
++Last updated: 2026-09-16
++Source: https://developers.weixin.qq.com/miniprogram/dev/framework/user-privacy/
++Confidence: High（仅限官方文档规则）
++Related decisions: [MVP开发准备研究](../ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md)
++Next review date: 2026-09-30
++
++## 最小摘要
++
++涉及处理用户个人信息的开发者需补充隐私保护指引；现网与提审版本的配置入口及生效规则有区别，审核/发布时需与实际接口使用一致。
++
++原文短摘录：
++
++> 小程序、插件中涉及处理用户个人信息的开发者，均需补充相应用户隐私保护指引。
++
++引用位置：小程序用户隐私保护指引、现网/提审版本说明。
++
++限制：这是平台配置规则，不是对本项目作出法律合规或审核通过判断。
++
++取得方式：直接读取官方公开HTTPS页面；未登录，未使用任何AppSecret或用户资料。临时原始HTML SHA-256: `eb86948fd624cb49e49d6d34ca68906d401ec307de8b2f85e1534af4cfebf1b7`。临时读取文件不作为长期来源，原始网页仍是证据出处。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260916-gym-wechat-06.md
+@@ -0,0 +1,39 @@
++---
++source_id: "SRC-20260916-gym-wechat-06"
++title: "网络"
++source_url_or_path: "https://developers.weixin.qq.com/miniprogram/dev/framework/ability/network.html"
++publisher_or_author: "微信开放文档／腾讯"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-16"
++source_class: "A"
++source_type: "official"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "自建网络请求需事先配置通讯域名及有效HTTPS/WSS，AppSecret留后台；微信云托管特定调用有域名配置例外。后台请求受限；网络success不代表HTTP业务成功；跳过域名校验的调试结果不能代替正常客户端测试。"
++quoted_or_referenced_location: "服务器域名配置、网络请求/使用限制/回调函数、跳过域名校验"
++supersedes: null
++---
++
++# 网络（MVP平台证据）
++
++Owner: Product Lead
++Last updated: 2026-09-16
++Source: https://developers.weixin.qq.com/miniprogram/dev/framework/ability/network.html
++Confidence: High（仅限官方文档规则）
++Related decisions: [MVP开发准备研究](../ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md)
++Next review date: 2026-09-30
++
++## 最小摘要
++
++自建网络请求需事先配置通讯域名及有效HTTPS/WSS，AppSecret留后台；微信云托管特定调用有域名配置例外。后台请求受限；网络success不代表HTTP业务成功；跳过域名校验的调试结果不能代替正常客户端测试。
++
++原文短摘录：
++
++> 只要成功接收到服务器返回，无论 statusCode 是多少，都会进入 success 回调。
++
++引用位置：服务器域名配置、网络请求/使用限制/回调函数、跳过域名校验。
++
++限制：仅引用与方案相关规则；未核查具体账号、域名备案、证书或云资源，未开展真机测试。
++
++取得方式：直接读取官方公开HTTPS页面；未登录，未使用任何AppSecret或用户资料。临时原始HTML SHA-256: `ec625026ea4737cfff2771769d443ae494dfedb32d1f49443b7f2a9540931a33`。临时读取文件不作为长期来源，原始网页仍是证据出处。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260916-gym-wechat-07.md
+@@ -0,0 +1,39 @@
++---
++source_id: "SRC-20260916-gym-wechat-07"
++title: "小程序协同工作和发布"
++source_url_or_path: "https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/release.html"
++publisher_or_author: "微信开放文档／腾讯"
++published_or_event_date: "unknown"
++accessed_date: "2026-09-16"
++source_class: "A"
++source_type: "official"
++projects: ["gym-occupancy"]
++storage_permission: "metadata-and-short-excerpt"
++access_status: "verified"
++summary: "微信区分项目成员与体验成员及开发/体验/审核/线上版本；预览会上传代码至微信服务器，审核通过后仍需发布操作。"
++quoted_or_referenced_location: "成员管理、小程序的版本、预览/上传代码/提交审核/发布"
++supersedes: null
++---
++
++# 小程序协同工作和发布（MVP平台证据）
++
++Owner: Product Lead
++Last updated: 2026-09-16
++Source: https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/release.html
++Confidence: High（仅限官方文档规则）
++Related decisions: [MVP开发准备研究](../ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md)
++Next review date: 2026-09-30
++
++## 最小摘要
++
++微信区分项目成员与体验成员及开发/体验/审核/线上版本；预览会上传代码至微信服务器，审核通过后仍需发布操作。
++
++原文短摘录：
++
++> 一个小程序从开发完到上线一般要经过 预览-> 上传代码 -> 提交审核 -> 发布等步骤。
++
++引用位置：成员管理、小程序的版本、预览/上传代码/提交审核/发布。
++
++限制：本轮只读文档，未执行预览上传审核发布；项目本身的主体、类目和备案要求仍须按实际账号核查。
++
++取得方式：直接读取官方公开HTTPS页面；未登录，未使用任何AppSecret或用户资料。临时原始HTML SHA-256: `8f430592b18b4cd8a0c3939c2637de3b124c86d3fa6ead0bf574251b5966e487`。临时读取文件不作为长期来源，原始网页仍是证据出处。
+--- /dev/null
++++ product-knowledge-base/raw/SRC-20260916-gym-mvp-task-01.md
+@@ -0,0 +1,38 @@
++---
++source_id: "SRC-20260916-gym-mvp-task-01"
++title: "GYM-MVP-RESEARCH-001：指挥者下发的MVP准备研究合同"
++source_url_or_path: "/Users/orderly_ray/Leader/projects/gym-miniapp/orchestration/current-task.json"
++publisher_or_author: "小程序指挥者；用户在本PM任务确认其路由及结果返回要求"
++published_or_event_date: "2026-09-16"
++accessed_date: "2026-09-16"
++source_class: "D"
++source_type: "internal"
++projects: ["gym-occupancy"]
++storage_permission: "user-owned"
++access_status: "verified"
++summary: "沿用现有研究补齐人工忙闲/会员/课表/微信平台证据，形成可开发MVP建议和验收；正式写回后回报指挥者并停止，不修改源码、发布或外联馆方。"
++quoted_or_referenced_location: "本任务codex_delegation；current-task.json的goal/scope/acceptance/stop_conditions"
++supersedes: null
++---
++
++# MVP准备研究任务依据
++
++Owner: Product Lead
++Last updated: 2026-09-16
++Source: /Users/orderly_ray/Leader/projects/gym-miniapp/orchestration/current-task.json；codex://threads/01a0a64a-8f38-7503-a202-29ed08322b14
++Confidence: High（任务存在与范围）；用户开发授权按指挥者传达记录
++Related decisions: [MVP准备研究](../ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md)
++Next review date: 2026-09-30
++
++沿用现有研究补齐人工忙闲/会员/课表/微信平台证据，形成可开发MVP建议和验收；正式写回后回报指挥者并停止，不修改源码、发布或外联馆方。
++
++本PM用户已直接指定开发者和指挥者并要求回报结果。指挥者本轮传达用户授权其做常规MVP取舍，不需重复批准；本记录不是新的馆方合作、生产数据接入或发布授权。
++
++合同读取时SHA-256: `63f34c7f797f644165b056c94d184c32c31543c56559ff37fa616dd739934820`。当前合同属于可变调度文件，本记录保留此次任务编号、摘要与摘要校验值，不跟随后续派单覆盖。
++
++合同状态：dispatched；目标：补齐微信小程序 MVP 的产品与平台证据，形成可开发范围建议和明确的未验证外部依赖，供指挥者评审。
++
++停止条件：
++
++- 完成本次有界调研后回报指挥者，不自行派单或扩大功能
++- 缺少馆方/API 不伪造证据，比较真实可用的人工方案与自动方案
+--- before/ideas/gym-occupancy/idea-brief.md
++++ product-knowledge-base/ideas/gym-occupancy/idea-brief.md
+@@ -1,7 +1,7 @@
+ # 健身房拥挤度查询：初步可行性与验证方案
+ 
+ Owner: Product Lead
+-Last updated: 2026-09-10
++Last updated: 2026-09-16
+ Source: [用户需求](../../raw/SRC-20260908-gym-occupancy-01.md)；[首页方向确认](../../raw/SRC-20260909-gym-design-direction-01.md)；[单店范围与场地配置](../../raw/SRC-20260909-gym-single-store-01.md)
+ Confidence: Hypothesis
+ Related decisions: 本文2026-09-09首页方向确认、单店实验与会员入口范围确认；未形成价格或发布承诺
+@@ -158,3 +158,17 @@
+ Research Quality: 89/100（本轮公开功能与UI研究通过文档与登记证据映射复核；完整分项与局限见报告）。
+ Validation Level: V0（本店）不变；获奖、竞品功能和截图不能替代真实使用或付款。
+ Next evidence: 门禁离场／在场字段、课表维护机制和本店会员最近一次器械等待行为。
++
++## 2026-09-16：MVP开发准备研究
++
++依据：[GYM-MVP-RESEARCH-001](../../raw/SRC-20260916-gym-mvp-task-01.md)及[开发准备报告](mvp-readiness-research-2026-09-16.md)、[平台与业务证据](mvp-readiness-evidence-2026-09-16.md)。
++
++【PM建议，待指挥者评审】APPROVED进入正式PRD／Checkpoint：首版采用馆方人工现场观察忙闲状态、真实微信登录＋前台核验会员绑定、可发布／改期／取消的课表，并包含服务端持久化、操作员权限和维护端。人工模式用大状态词替代无来源的人数数字；15分钟过期、10分钟建议观察频率属于待试点校准的设计参数。自动人数／门禁、模型估计、历史预测、器械目录与报修等延后。
++
++【口径】没有馆方资料可以先开发完整人工业务闭环及测试环境；纯模拟首页不等于可用MVP完成。工程、微信开发工具、真机、真实门店试点、公开发布分别验收。会员绑定不因wx.login成功自动成立；无发布覆盖的课表不等于无排课。详见报告21条候选验收场景。
++
++【授权与历史】本轮由用户指定的指挥者传达后续MVP研究、范围取舍和PRD／Checkpoint及开发推进授权；后续授权优先，不重复申请常规产品方案许可。旧V0仅作为本店真实使用未验证的证据标签保留，不否定新授权，也不自动变更其他项目WIP。当前任务仅研究交付与回报，没有签发dev任务、接入生产或发布。
++
++Research Quality: 90/100 · pass（本轮独立只读质量复核，范围与局限见开发准备报告）。
++Validation Level: V0（本店）。
++Next evidence: 指挥者接受范围与唯一工程路径；AppID／账号能力、馆方观察与核验负责人、实际课表分别在对应阶段核实。
+--- before/INDEX.md
++++ product-knowledge-base/INDEX.md
+@@ -169,6 +169,7 @@
+ 
+ - [健身房实时人数与拥挤度查询](ideas/gym-occupancy/idea-brief.md)：单店实验、必需会员入口、简洁首页与场地配置；V0，数据接入和拥挤阈值待核查
+ - [健身房产品功能与UI研究（2026-09-10）](ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)：11个相关产品／项目、科技公司赛事与开源许可；[来源证据卡](ideas/gym-occupancy/evidence-cards-2026-09-10.md)，新功能为建议、V0不变
++- [健身房MVP开发准备（2026-09-16）](ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md)：人工忙闲、真实会员核验、课表维护和21条候选验收；PM建议APPROVED，待指挥者采纳；[本轮证据](ideas/gym-occupancy/mvp-readiness-evidence-2026-09-16.md)
+ 
+ - [AI 护理交班草稿器](ideas/ai-nursing-handoff-draft/idea-brief.md)
+ - [CTP 古籍阅读体验现代化](ideas/chinese-text-project-reading-experience/idea-brief.md)
+--- before/LOG.md
++++ product-knowledge-base/LOG.md
+@@ -288,3 +288,13 @@
+ | 2026-09-16 | thinkV2 scoped validation | 三知识文件 | partial | 元数据/链接/LOG前缀与局部diff核对；全库lint脚本缺失，不宣称全库通过。未改thinkV2或Leader、无网络/设备/安装/派dev；当前用户授权向新指挥官汇报，仅最小产品摘要，不重试旧被拒回调 |
+ | 2026-09-16 | thinkV2 emulator-first addendum | 完整工程顺序及最小合同 | approved_scope | 依据当前指挥官转交用户“先模拟器、完整开发后小米15”指令，APPROVED补充替代备份后先等家庭交付的顺序；CP7在途不变，CP8后串行CP2语音/独立语音控制、CP4日历、CP5 AI、CP3关系、CP8兼容，最终按Checkpoint补真机再CP1家庭。V/D/I/R/X验收及真实运行条件明确，旧制品权限不继承，RQ85/V0保持 |
+ | 2026-09-16 | thinkV2 emulator-first scope | 补充及最小INDEX/LOG | partial | 本轮仅知识库写回；工程进度e2f6f4a/e363ea9为指挥官报告，PM不复测。核对元数据、相对链接、单Checkpoint边界和局部差异；全库lint脚本缺失。无网络/制品/产品或Leader修改/派dev/设备操作，真机自然提醒及家庭证据均未通过 |
++| 2026-09-16 | Ingest | SRC-20260916-gym-wechat-01 | complete | GYM-MVP-RESEARCH-001；登记官方平台规则或任务范围的最小来源摘要，旧raw不覆盖；不证明本店实际使用或平台账号已可用 |
++| 2026-09-16 | Ingest | SRC-20260916-gym-wechat-02 | complete | GYM-MVP-RESEARCH-001；登记官方平台规则或任务范围的最小来源摘要，旧raw不覆盖；不证明本店实际使用或平台账号已可用 |
++| 2026-09-16 | Ingest | SRC-20260916-gym-wechat-03 | complete | GYM-MVP-RESEARCH-001；登记官方平台规则或任务范围的最小来源摘要，旧raw不覆盖；不证明本店实际使用或平台账号已可用 |
++| 2026-09-16 | Ingest | SRC-20260916-gym-wechat-04 | complete | GYM-MVP-RESEARCH-001；登记官方平台规则或任务范围的最小来源摘要，旧raw不覆盖；不证明本店实际使用或平台账号已可用 |
++| 2026-09-16 | Ingest | SRC-20260916-gym-wechat-05 | complete | GYM-MVP-RESEARCH-001；登记官方平台规则或任务范围的最小来源摘要，旧raw不覆盖；不证明本店实际使用或平台账号已可用 |
++| 2026-09-16 | Ingest | SRC-20260916-gym-wechat-06 | complete | GYM-MVP-RESEARCH-001；登记官方平台规则或任务范围的最小来源摘要，旧raw不覆盖；不证明本店实际使用或平台账号已可用 |
++| 2026-09-16 | Ingest | SRC-20260916-gym-wechat-07 | complete | GYM-MVP-RESEARCH-001；登记官方平台规则或任务范围的最小来源摘要，旧raw不覆盖；不证明本店实际使用或平台账号已可用 |
++| 2026-09-16 | Ingest | SRC-20260916-gym-mvp-task-01 | complete | GYM-MVP-RESEARCH-001；登记官方平台规则或任务范围的最小来源摘要，旧raw不覆盖；不证明本店实际使用或平台账号已可用 |
++| 2026-09-16 | MVP readiness research | GYM-MVP-RESEARCH-001 | complete / recommendation APPROVED | 人工现场忙闲＋真实微信/前台会员核验＋课表维护/发布＋服务端持久化及权限闭环；21候选AC，工程/工具/真机/试点/发布分层；PM建议进入PRD/CP0，Leader采纳待回报。新授权优先，V0保留为证据状态；不自动派dev或改WIP |
++| 2026-09-16 | Review + scoped Lint | gym MVP readiness | pass / partial lint | gym_mvp_review独立对照文档与取得的官方原文，90/pass；补齐operator授予撤销和会员状态规则后复核通过，未独立联网或运行产品。六元数据、来源日期/枚举/URL去重、11卡片、21AC、链接、历史及diff检查；标准lint脚本缺失，不声称全库通过，无源码/Leader配置/旧raw修改、外联馆方、发布或Git提交 |
