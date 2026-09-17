@@ -135,13 +135,3 @@ Next review date: 2026-09-30
 | Research Agent | 家庭史市场已验证的是史料发现、低摩擦口述和实体成果，不是纯时间线订阅；第一验证产物应是一卷可浏览、可导出、可成册的真实家庭样本。 | 查看 `ideas/family-chronicle/idea-brief.md` |
 | Research Agent | 父母／祖辈回忆录已形成从低价自助成书到高价真人代写的完整价格带；最大未解问题是完成率，“一年 52 个问题”常把礼物变成作业。互动数字人格产品 HereAfter 已停止服务，原始素材导出与平台存续必须成为基础要求。 | 查看 `ideas/family-chronicle/elder-memoir-market-research-2026-08-17.md` |
 | Product Manager Agent | AI 无法直接补足护理人力；最小且相对低风险的切口是只整理护理师已口述事实的交班草稿。正式临床测试前必须经过院方风险、个资、资安与临床流程审批。 | 查看 `ideas/ai-nursing-handoff-draft/idea-brief.md` |
-
-## 健身房演示增量（2026-09-16）
-
-用户明确授权自有后端动态模拟；[v1.1决定与范围](ideas/gym-occupancy/decision-mock-backend-v1.1-2026-09-16.md)方向APPROVED，补充包待指挥者验收。现有Node/SQLite业务保留，新增演示身份、持久场景和课表JSON适配；不等待馆方真实后端。Research Quality 90/100（内部综合），Validation Level V0；获准投入为本地可逆演示增量，未改变其他项目WIP或对外承诺。
-
-- 当前PM任务：GYM-MOCK-BACKEND-DECISION-001，完成补充文档后交指挥者；不自行派dev。
-- 唯一首dev建议：GYM-DEMO-FOUNDATION-001，需指挥者验收后派发；[阶段与验收](ideas/gym-occupancy/checkpoints-mock-backend-v1.1-2026-09-16.md)。
-- 旧限制适用冲突：v1.0完整真实交付与CP5官方身份前置，演示层按v1.1显式替代，原冻结文件/历史证据不改。
-- 待确认：仅本项目官方开发工具临时跳过域名/TLS/证书等组合校验；由指挥者取得明确用户确认后才能执行，当前保持原设置。它只影响原生联网层，不阻塞后端工程。
-- Next evidence：新构建真实HTTP持久演示与原生wx.request；Pause condition：跨环境混用、绕鉴权或假成功；未来真机/真实门店独立验收，不提升V0。

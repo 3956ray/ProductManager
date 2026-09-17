@@ -79,3 +79,7 @@
 - Next review date
 
 证据弱时标为「假设」。文档冲突时保留双方来源，并创建待决策或待复核事项，不要静默覆盖。
+
+## 健身房换机入口
+
+先读 `GYM-HANDOFF.md` 与 Leader/MIGRATION.md；旧绝对路径按新电脑位置映射。已有模型配置原样保留，不自动启用 disabled 配置。D2 已交付待 Leader 独立验收，不得自行开始 D3。

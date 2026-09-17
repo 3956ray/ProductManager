@@ -1,0 +1,534 @@
+--- before/product-knowledge-base/ideas/gym-occupancy/decision-mock-backend-v1.1-2026-09-16.md
++++ after/product-knowledge-base/ideas/gym-occupancy/decision-mock-backend-v1.1-2026-09-16.md
+@@ -0,0 +1,59 @@
++# 自有动态演示后端补充决定 v1.1
++
++Owner: Product Lead；PM编制，指挥者验收
++Last updated: 2026-09-16
++Source: [用户最新决定](../../raw/SRC-20260916-gym-mock-decision-01.md)；[代码和工具事实](../../raw/SRC-20260916-gym-backend-code-01.md)
++Confidence: High（范围与现有实现）；Medium（待实现方案）
++Related decisions: GYM-MOCK-BACKEND-DECISION-001；GYM-MVP-PRD-001
++Next review date: 2026-09-30
++
++Decision: **APPROVED — 自有后端驱动的隔离动态演示MVP方向**（依据用户明确决定）；文档交付状态 **FINAL_FOR_REVIEW**，实施合同由指挥者验收后派发。APPROVED不表示工程/工具验收通过，也不授予部署或工具安全开关变更权限。
++
++Research Quality: 90/100（本次内部证据综合自评：决策15、来源17、引用18、事实分离14、冲突9、决策价值9、维护8；非新市场研究）
++Validation Level: V0（真实门店需求、使用和付款仍未验证）
++Next evidence: 演示身份经HTTP取得会话，持久场景变化在原生小程序读到；重启、拒绝和失败态证据
++Allowed next investment: 用户授权的本地可逆演示增量；不因V0等待馆方数据库，也不据演示升级验证等级
++Pause/Kill condition: 演示混入真实环境、绕过服务端权限或失败伪成功时暂停受影响项；外部缺口只阻塞其证据层
++
++## 1. 决定与依据
++
++1. **事实**：用户没有可用馆方后端；工程已经有自有Node24/SQLite后端。保留现有观察、会员、课表、注销、角色和事务，增加可运行的演示输入，不重建业务系统。[授权](../../raw/SRC-20260916-gym-mock-decision-01.md) [源码](../../raw/SRC-20260916-gym-backend-code-01.md)
++2. **产品决定**：“演示MVP完成”定义为自有持久后端＋动态合成业务＋隔离演示身份＋微信官方开发工具内的实际业务交互。未来CP6官方身份/真机、CP7真实门店另记，均不是当前演示的前置。
++3. **产品决定**：模拟的是数据来源和身份输入；业务验证、权限、数据库事务、版本冲突、时间规则与错误处理保持真实执行。页面醒目标“演示数据／演示身份”，不展示未经测量的实时人数。
++4. **事实与推断**：原生loopback HTTP已被合法域名拦截；新增数据不会改变网络校验。推荐同机本地HTTP路线，但其开发工具例外开关须用户明确确认。等待该确认不阻止后端工程和HTTP验收。[控制台证据](../../raw/SRC-20260916-gym-backend-code-01.md)
++5. **产品决定**：第一个外部数据形状验证选“版本化课表JSON → 候选 → 确认写入草稿 → 原有发布”。不先建设通用连接平台。未来数据库必须取得结构、授权、稳定键和增量语义后写具体适配器；不能承诺零改动或未知schema随时直连。
++
++## 2. 旧条款与增量适用顺序
++
++旧三份v1.0文件及SHA-256保持冻结。已验收CP0–CP4和CP5历史证据保留。**发生下列冲突时，本增量仅在明确启用的test演示模式优先；真实store规则继续用v1.0。**未列条款不变。
++
++| 原基线位置／原意 | v1.1变更与理由 |
++| --- | --- |
++| PRD §1，完整MVP到CP7；CP串行CP5→CP6→CP7 | 演示交付独立完成于CP5-D3；未来真实交付仍需CP6/CP7。不得让未取得馆方数据库阻塞演示 |
++| PRD §4.1，主动wx.login→官方交换；§3敏感操作新鲜微信认证 | 明确demo模式改为主动演示凭证交换/重新认证；同样会话及5分钟规则。official模式仍wx.login；失败不回退演示 |
++| CP1替身仅测试；实现README“无客户端测试登录按钮” | 允许test模式原生页面提供演示登录入口；受CLI发行的短期凭证约束，不能前端自选userId/role |
++| PRD §5现场人工观察、§6真实前台核验、§7真实课表 | 演示场景可模拟这些输入，但显示模拟来源；未来现场真实性验收不由合成记录满足 |
++| PRD §8真实持久化 | “真实”指真实数据库保存和事务，非要求真实馆方数据；复用SQLite，拒绝内存/页面计时器替代持久业务 |
++| CP5不得绕身份/DB；工程和工具必须通过 | 改为经过显式演示身份＋真实业务DB，仍需工程和原生工具交互两层通过；模拟会话不是绕过鉴权 |
++| CP5-TOOLS-002要求合法HTTPS和官方身份配置解除所有阻塞 | 作为当时报告保留；当前演示官方身份缺口不再阻塞。loopback仍需明确授权的本地开发工具例外；普通真机不适用 |
++| CP3自动会员同步范围外／CP4导入未定义 | 会员自动同步继续延期；仅增加课表JSON候选适配入口，不改变绑定、撤销或自动发布规则 |
++
++AC-L01/W01真实身份、AC-T01/T02真实门店不可标演示PASS；替身只满足对应工程/演示子层。详见[验收增量](acceptance-mock-backend-v1.1-2026-09-16.md)。
++
++## 3. 可选方案与唯一推荐
++
++| 方案 | 取舍 | 结论 |
++| --- | --- | --- |
++| 等馆方后端或官方身份再继续 | 用户已明确当前没有；无法展示既有业务 | 不采用 |
++| 客户端直接随机改UI或静态JSON伪响应 | 无法验证服务端状态、跨客户端一致性与重启持久化 | 不采用 |
++| 自有SQLite后端＋受控场景＋演示身份＋首个课表适配契约 | 增量小、输入可替换；需单独解决原生网络路径 | **唯一推荐** |
++
++## 4. 交付、边界与待确认项
++
++配套[PRD增量](prd-mock-backend-v1.1-2026-09-16.md)、[AC增量](acceptance-mock-backend-v1.1-2026-09-16.md)、[串行阶段与首任务](checkpoints-mock-backend-v1.1-2026-09-16.md)共同组成v1.1补充基线。
++
++唯一首dev任务推荐 **GYM-DEMO-FOUNDATION-001 / CP5-D1**：隔离演示身份＋可复用初始化＋通过现有API发布一条持久观察的最小闭环，验证重启和store拒绝。后续完整场景/适配器与原生交互另派。PM本轮仅交文档，不自行派dev。
++
++唯一当前需要用户确认的工具动作：是否允许**仅本项目、本机官方开发工具、本次模拟器联调**暂时启用“不校验合法域名、web-view（业务域名）、TLS版本以及HTTPS证书”选项；记录其实际组合范围、修改前状态和恢复结果，不修改全局、不提交宽松配置、不用于真机/部署。本轮不执行、不把创建测试号当作此项授权。指挥者在D3前取得确认；用户不确认则D1/D2继续，D3的HTTP业务交互BLOCKED。
++
++未来外部接入还缺馆方授权、接口或数据库schema/稳定主键、时区、字段语义和变更/删除机制；未来官方身份/真机还缺适用AppID/AppSecret与平台配置、合法HTTPS、设备和分发授权。它们不是当前后端演示工程的前置。
+--- before/product-knowledge-base/ideas/gym-occupancy/prd-mock-backend-v1.1-2026-09-16.md
++++ after/product-knowledge-base/ideas/gym-occupancy/prd-mock-backend-v1.1-2026-09-16.md
+@@ -0,0 +1,134 @@
++# 动态演示后端 PRD 增量 v1.1
++
++Owner: Product Lead；PM，指定dev实现
++Last updated: 2026-09-16
++Source: [用户授权](../../raw/SRC-20260916-gym-mock-decision-01.md)；[当前源码](../../raw/SRC-20260916-gym-backend-code-01.md)；[补充决定](decision-mock-backend-v1.1-2026-09-16.md)
++Confidence: High（现有边界）；Medium（新增功能待实现）
++Related decisions: GYM-MOCK-BACKEND-DECISION-001；GYM-MVP-PRD-001
++Next review date: 2026-09-30
++
++Status: FINAL_FOR_REVIEW；Decision: APPROVED方向，待指挥者验收本增量
++Research Quality: 90/100（内部决策证据质量，见补充决定评分；非市场需求评分）
++Validation Level: V0；合成演示不升级真实门店验证等级
++
++## P1. 目标与最小架构
++
++用户能在原生小程序浏览变化的忙闲和课表，以演示用户申请会员关联，以演示维护者核验、撤销和更新；关闭应用或重启后端后数据仍存在。此“动态”来自**服务端真实写事务**，不是前端随机数、固定成功响应或页面每次刷新重新生成。
++
++数据链：`演示脚本/原生操作 → 既有HTTP API/领域服务 → SQLite → 同一公开及本人API → 小程序`。未来数据链：`馆方导出/API/数据库 → 专用适配器 → 校验/候选 → 维护者确认 → 既有领域写入 → 同一API`。不重建现有业务，不引入消息队列、通用ETL平台或第二套业务数据库。
++
++演示仍为“场馆／我的＋受控维护页”，中文主界面，醒目轻量“演示数据”标签；状态大字、来源/更新时间和课程保持主次。会员页标“演示会员资格”，演示核验按钮解释“仅验证流程，不代表真实馆方核验”。未登录公共浏览继续可用。继续不做数字人数、定位、门禁、训练、支付或预约。
++
++## P2. 模式、身份及权限
++
++| 维度 | 演示模式 | 未来正式模式 |
++| --- | --- | --- |
++| 配置 | environment=test，simulation=true，identity.mode=test，identity.appId=test-app，新增显式demo.enabled=true | environment=store，simulation=false，identity.mode=wechat；demo关闭 |
++| 状态目录 | `.runtime/test/<gymId>`，独立DB/密钥；gymId使用`demo-*` | `.runtime/store/<gymId>`独立DB/密钥，不把演示DB改配置迁入 |
++| 登录来源 | 维护者CLI发行短期一次性演示凭证；不调用wx.login生成此凭证 | 客户端wx.login→服务端官方code2Session |
++| 业务鉴权 | 复用真实session、role、限流、撤销、审计与删除 | 同一领域规则；官方身份独立验证 |
++| 标识 | 页面及响应明确simulation和identityMode；原生演示入口需客户端显式demo配置及服务端相符 | 无演示入口；拒绝演示凭证，不因官方错误回退 |
++
++沿用当前test/store和test/wechat分支，不新增“假官方”模式。服务端是最终边界，前端隐藏按钮不足以隔离。`demo.enabled`与test/simulation/identity不匹配时启动拒绝；缺配置不自动启用演示。既有test fixture自动化测试可保留，其注入能力不能成为普通HTTP入口。
++
++**最小身份流程**：
++
++1. 新增本地CLI `demo.mjs init <gymId>`，只创建全新demo目录并启用上述配置；目录已存在则返回明确结果，不删除/重置。重启只用已有config；不重复初始化角色、会员或课程。
++2. `demo.mjs ticket <config> <actorAlias>`为允许的合成主体`member-a / member-b / operator-a`发行32字节安全随机base64url凭证，TTL=300秒；只输出一次供操作者手动输入演示登录页。摘要绑定环境/门店/合成主体，数据库只保存HMAC、issuedAt/expiresAt；不得硬编码到客户端、fixture文件、Git、截图或日志。到期凭证在下次小时清理删除，即使旧login_codes台账被清理也不能复活。
++3. 原生“演示登录”说明用途并提交凭证至**既有**`POST /v1/sessions/exchange`，复用consent/notice及session签发。test adapter检查演示凭证而非接受任意wx.login code。只有notice/consent及格式校验通过、未被前置限流拒绝、成功写入既有login_codes尝试台账的交换才消费凭证；用户拒绝不发请求，服务端CONSENT_REQUIRED也不消费。消费后即使adapter或建session失败也不能重试旧凭证；并发最多一次成功。响应丢失由维护者发新凭证；现有5会话上限和持久登录限流不变。
++4. 新鲜认证同样通过新凭证完成，不能把5分钟敏感操作规则关闭。客户端不自报userId、memberKey或role。首次演示operator登录后，仅本机维护者通过既有role CLI显式授予；ticket命令不授予角色，不根据alias自动恢复被撤销或删除的角色。
++5. 演示账号删除后，同alias新登录生成新userId，会员和operator不恢复。deleting期间不能复建。保留删除回执、会话撤销及最小资格防复活规则。
++
++允许继续复用现有`wechat_identities`表保存test命名空间内的synthetic subject，这是历史物理表名，不表示这些记录来自微信。无需为表名重构；域文档和界面必须标识真实来源。演示会话仅在本scope使用；缓存scope新增gymId/identityMode或等效命名空间识别，后端不匹配时清会话并关闭演示动作，不能只相信前端标签。
++
++## P3. 动态场景及操作方式
++
++默认无自动后台循环。提供本机CLI场景`start / step / status / resume`；拥挤场景可显式`play --interval-seconds 60`，执行有限三步后停止。真实写动作调用既有HTTP API；身份和初始角色引导例外仍走服务端受控流程，不用SQL替代领域校验。start/step/play/resume的每个管理写步骤均使用当前operator会话，由既有服务端逐请求重检权限；会员本人步骤使用对应会员自己的有效会话，不能用operator冒充本人。会话由操作者通过标准输入或0600临时文件提供，仅进程内使用，不写run记录、不写命令行或日志。401/403即标暂停，resume不自行发ticket/session或grant角色；需维护者重新认证、提供当前会话并显式恢复。CLI不公开到HTTP，不接任意SQL/脚本。未来每个场景的README给确切命令和预期状态。
++
++| 场景 | 操作序列 | 必须可观察的持久结果 |
++| --- | --- | --- |
++| DYN-O 忙闲变化 | 从无记录开始；operator发布较空→适中→较忙；再由操作者暂停/撤回；另一次发布后停止更新 | 每步revision递增、observedAt/validUntil来自服务器；两个客户端刷新同值；停止后900秒自然过期，无读请求续期 |
++| DYN-M 会员流程 | member-a申请→operator输入合成会员引用核验→撤销→新请求/显式恢复；member-b尝试绑定已占引用 | 配对消费、绑定/registry版本、撤销及恢复真实落库；抢占409；不因为切换alias自动成为会员 |
++| DYN-S 课表变化 | 今日及本周草稿→发布→取消一课/改期另一课→再次发布→撤回；另备明确无课与覆盖外状态 | 未发布草稿不可见；同稳定courseId更新；公共只见当前快照；冲突不覆盖旧草稿 |
++| DYN-F 故障和生命周期 | 同一写请求重放/不同body；停后端→刷新→重启；主动退出/拒绝登录；解绑/删除单独确认执行 | 重放不重复，409不丢数据，断网显示无法确认，重启读原状态；删除后无角色/资格复活 |
++
++初始课程日期以运行者明确选定的`anchorDate + Asia/Taipei`生成未来/当周UTC时刻；不得每天重启悄悄挪动原课。纯合成课程名称、引用和主体，不填真实姓名/人脸/手机号。演示脚本不虚构馆方联系信息。
++
++演示进度保存runId、scenarioVersion、anchorDate、stepId、operationId、请求创建时间/最小安全参数、状态与最后已确认revision；不得保存登录凭证/令牌/明文配对码。配对码由当前会话按既有API取用，过期即暂停并要求新请求。每个scope只允许一个执行中的场景runner，竞争返回409；进程终止后标示中断，维护者显式resume，不在服务启动时重放全部场景。
++
++已执行业务与进度写入之间中断：恢复时用原operationId查询并对账；不自动新key。超过intent窗口且确定未提交的步骤要求重新确认，不能把旧观察时间改新。已提交但台账清理后无法确认的操作标needs_review，不能盲重放。角色撤销、限流、版本冲突立即暂停当前场景，避免后台脚本覆盖用户手改；不自动重新授予operator。场景默认不自动执行账户删除、角色撤销、会员抢绑或覆盖测试数据，这些作为明确命名的人工确认验收步骤。
++
++工具层不新增客户端调时/缩短TTL接口。900秒自然过期至少一次实际演示；899→900等精确边界沿用服务端受控时钟工程测试。长等待不要求操作者停留页面，回前台按现有规则读取。
++
++## P4. 数据存储与保留
++
++| 内容 | 既有表／新增逻辑记录 | 写入归属及重启行为 |
++| --- | --- | --- |
++| 身份/会话/角色 | identity_namespace、accounts、wechat_identities、sessions、operator_roles | 后端；演示也是独立持久身份，重启不重授角色 |
++| 忙闲 | observation_head、observation_events | 领域服务；读、场景恢复和初始化均不重置TTL |
++| 会员/删除 | member_registry、bindings、pairings、deletion_jobs | 领域服务；合成memberRef也按既有HMAC保存，不把原始引用写日志 |
++| 课表 | schedule_draft、schedule_snapshots、schedule_head | 草稿、发布、撤回经既有角色/版本/事务 |
++| 操作/权限/清理 | operations、audit、rate_buckets及已有cleanup记录 | 延用原保留规则；演示不以清DB绕过限额 |
++| 演示凭证 | 新增demo_login_tickets或等效新增字段/表 | 本机CLI发行，test adapter消费；300秒即失效，小时清理；与自动化fixture区分 |
++| 演示进度 | 最小demo_runs及步骤记录 | 保存安全参数与结果引用；终态30天清理，进行中/待确认保留；新建显式run不重置业务数据 |
++| 导入 | source_bindings、source_entity_map、import_batches（逻辑名，可合并实现） | 来源配置/所有权、externalId映射、应用游标和候选摘要；确认导入与草稿事务原子提交 |
++
++**课表来源落点**：新增迁移为草稿和发布快照增加provenance摘要（JSON列或等效关联），历史记录默认manual。导入apply与草稿同事务写入kind=import、sourceId、安全sourceLabel、batchId、sourceRevision、mappingVersion、capturedAt、importedAt；publish同事务将当时摘要复制到不可变snapshot。后续人工编辑草稿标kind=import-edited，保留导入来源/原capturedAt并另记editedAt；纯人工草稿为manual。新导入替换为新来源摘要，不通过改旧snapshot追溯“更新”。`/v1/schedule`保留兼容的source=gym-schedule，新增公开provenance仅含kind/sourceLabel/capturedAt/importedAt/editedAt及simulation，不公开batchId、外部键或操作者。候选/批次明细清理不删当前草稿/快照自带来源摘要；历史快照随既有保留规则清理。没有导入时不得伪造capturedAt。
++
++新增表通过**新迁移**，不编辑001–005历史迁移或丢弃现有DB。所有外键/唯一性按environment/gym/source作用域处理；现有每scope独立DB可避免重复存储环境列，但API和导入仍核对scope。不新增自动备份承诺。
++
++导入批次含schemaVersion、sourceId、sourceRevision、内容SHA-256、mappingVersion、capturedAt、状态、准备时本地版本及安全错误码。候选24小时后不可apply；未应用候选随后小时清理，已应用明细30天后清理。保持每source最后已应用revision/hash和稳定键映射，用于拒绝乱序/重放；清理不重置游标、不复用已取消课程ID。实际清理实现纳入对应D2验收。
++
++## P5. API及外部适配边界
++
++公开/本人/维护读写继续使用当前`/v1/venue`、`/v1/observations/current`、`/v1/schedule`、`/v1/me/*`、`/v1/operator/*`、`/v1/operations/:id`和会话接口。现有响应`ok/serverNow/data/operation/current/error`保持兼容；为演示显示补充环境/来源元信息，只增字段，不换领域模型。禁止“网络失败返回内置mock数据”的客户端拦截器。
++
++原生小程序只连接自有业务API，永不保存馆方数据库凭证或直接查询数据库。适配器只产生标准化候选，不能自行签发session、绑定会员、授予角色或直接改公开快照。
++
++| 数据 | 权威来源与本地归属 | 同步/写回规则 |
++| --- | --- | --- |
++| 本应用身份、session、operator、Binding、删除及审计 | 自有后端唯一权威 | 外部不得写入；没有姓名/手机号匹配自动绑会员 |
++| 会员资格/有效期（未来） | 馆方系统可成为资格证据；当前MemberRegistry是前台核验后的本地登记 | 本次不实现同步。未来需显式映射稳定会员键、资格/撤销/期限、核验时间和冲突政策；外部active不能自动复活本地revoked或已删绑定 |
++| 忙闲等级 | 当前本地operator或隔离演示actor | 入场事件不能推出实时在场人数；无可靠离场/传感数据不改变此规则 |
++| 课表 | 外部提供排课候选；自有草稿和发布仍由维护者控制 | 第一适配器只读输入，确认替换草稿后再显式发布；不回写外部、不双向同步 |
++
++**首个可执行连接器：本机课表JSON v1**。这是未来适配器接口验证，不要求馆方给文件；本次用合成输入。只支持full快照，不实现轮询/增量/CDC/webhook。入口为受控CLI `import-schedule.mjs plan/apply/status`，无需新通用管理UI；apply要求当前有效operator会话（本地标准输入或0600临时凭证文件，不能命令行暴露token），并复用领域鉴权。实际馆方连接另开任务。
++
++输入固定：schemaVersion=1、sourceId、gymId、sourceRevision（正安全整数、每source严格递增）、mode=full、capturedAt（UTC）、timeZone、coverage{startDate,endDate}、courses[]。每课含externalId、name、localStart、localEnd、status=scheduled|cancelled。时间对象固定为`{ "local": "2026-09-16T18:00", "offset": "+08:00" }`，localStart/localEnd分别映射现有localInput.start/end，经既有period规则计算startAt/endAt；不接受含糊日期或自动猜offset。不接受未知字段、个人资料或数据库连接串；文件≤64KiB、输入及补齐取消后的标准课程集合均≤200、coverage为1–14天，startDate为包含端点、endDate为开区间终点（如16日至17日代表16日一天），时间和重叠规则沿用既有校验。
++
++1. 来源先由本机维护者显式注册至当前gym，固定schema/mappingVersion/timeZone；首个来源独占该店外部课表输入权。未知source、错gym、同一externalId重复或时区不符整批422。外部键映射为`sourceId+externalId → 本地UUID courseId`，持续保留，不按名称/时间生成ID；改名改期不换ID，外部回收键必须拒绝并人工决策。
++2. `plan`完整解析/校验，生成可审阅差异（新增/变更/取消/从覆盖删除）、候选hash及当前draft/publication版本，不改变草稿或公共页。任何一行错误整批拒绝，报告行号/字段/安全错误码，不部分导入；原始文件不额外归档进DB。
++3. `apply`必须明确确认**整份替换草稿**，再次鉴权并比较准备时draft及publication版本；仅确认时更新。人工编辑或其他导入先提交则409，保留对方修改，重新plan/审阅后才能apply；不自动merge、不取最后写入者获胜。已存在人工草稿同样需差异确认。
++4. 同一事务写入标准草稿、课程映射、批次applied和source游标，复用现有课程校验及审计；可最小扩展领域服务以纳入事务，禁止适配器先直接改表再调发布。此时公开课表仍不变，须另走现有publish的双版本校验与确认。
++5. 先鉴权和核对source，再按以下优先顺序处理版本：低于已应用revision→409；同一已知revision不同hash→409；当前已应用revision同hash→返回原applied结果，绝不重新修改草稿；未应用且同revision/hash的候选若**已过期**，plan必须废弃/替换旧候选并重新绑定当前draft/publication版本及差异，需要重新确认；只有未过期的同revision/hash候选才返回原候选。被替换候选的旧batchId不可apply。高版本允许跳号，不意味着能识别遗漏的增量。capturedAt只是来源信息，不用接收时间冒充最新，也不单凭时间戳排序。
++6. full快照遗漏课程的含义为“该覆盖内不再排课”，不是直接删除记录。候选将**旧草稿中与新coverage相交但输入遗漏的每一课**补成同courseId、保留名称/时间/localInput、status=cancelled的记录（已有cancelled继续保留），并用当前草稿course revision调用既有校验，满足EXPLICIT_CANCELLATION_REQUIRED；来源映射保持不变。历史映射中不在当前草稿的课程不凭映射捏造取消记录；输入再次引用该externalId时复用UUID，对当前草稿不存在的课程按revision=absent提交。正常列表仍可显示“已取消”，当前上课集合排除它们。补齐后超200课整批拒绝并报告，不能通过丢弃取消记录绕过上限。差异明确列出遗漏转取消、显式取消及覆盖变化，确认后才apply。覆盖外不隐含删除，但现有“单当前发布、整覆盖替换”仍成立，新发布会替换旧公共覆盖，须提示旧覆盖丢失范围。未来增量事件必须另定合同，不能把增量缺行当取消。
++7. 解析失败/读源失败/DB失败不推进游标、不修改草稿/公开页；DB提交响应丢失查batch状态，不盲重发。权限403、版本409、结构422、锁/存储503分开。最后已发布课表可继续显示其原覆盖与发布时间，维护者看到失败；不得以同步失败续期、清空、假造成功或把旧表标为刚同步。
++
++正式连接器上线前还需取得：读权限和密钥存储方式、schema/样例、主键及删除语义、时区/过期规则、API或DB读取方式/分页游标/频率、个人数据边界、来源故障处理及对账样例。MVP不开放数据库任意表写权限，不复制整馆人脸/会员库；只抽取获准的最小字段。未知来源“随时接入”解释为边界已预留、具体适配可增加，不是零工作承诺。
++
++## P6. 本地可执行联调路线
++
++**推荐唯一默认路线：同机官方开发工具模拟器 → loopback HTTP → 自有test后端。** 下列新增CLI是待实现合同，不声称当前已存在。既有Node24.18、SQLite、官方工具和用户选择的测试号可复用，无需馆方数据库、AppSecret或购买云资源。
++
++```text
++node scripts/demo.mjs init demo-local             # 仅首次；拒绝覆盖
++node scripts/db.mjs migrate .runtime/test/demo-local/config.json
++node server/main.mjs .runtime/test/demo-local/config.json
++curl --fail http://127.0.0.1:8787/health
++node scripts/demo.mjs ticket .runtime/test/demo-local/config.json member-a
++# 原生演示登录输入一次性凭证；operator-a同理，由维护者显式grant角色
++node scripts/demo.mjs run .runtime/test/demo-local/config.json start crowd-v1
++# step/play/status由README给出；复用同一DB和端口，不重初始化
++```
++
++执行前核对端口占用；冲突则明确选择空闲端口并同步客户端，不能杀不明进程。客户端显式配置baseUrl=`http://127.0.0.1:<port>`、environment=test、gymId及demo开关；GET health核实simulation=true/identityMode=test，再试wx.request。默认仓库配置保持未配置，不提交私人目录/凭证。
++
++**必须单列的工具确认门**：目前tracked/private的urlCheck=true，控制台已证明loopback请求不通。仅在用户明确授权后，在本项目开发工具“详情／本地设置”临时选择其实际显示的“不校验合法域名、web-view（业务域名）、TLS版本以及HTTPS证书”。这是组合安全开关，不能称只影响一项。记录前后值、作用项目/版本/运行时间；完成后恢复原值并验证。不得自行修改project.config/private配置绕开确认；不要改全局，不升级为真机证据。[既有微信网络来源](../../raw/SRC-20260916-gym-wechat-06.md)仅用于规则依据，具体开关显示和生效仍需D3实际核对。
++
++用户未确认时：可完成curl/HTTP多客户端/Node测试/实际编译，D3网络业务部分BLOCKED；用原生页面fixture或注入session不得替代此层通过。得到确认且打开开关也不自动PASS，须真实wx.request＋登录/读写证据。
++
++若用户拒绝本地例外而仍要求原生联网：另提受控HTTPS方案，需要用户可用域名/有效证书/平台request合法域名权限及部署或反向代理授权；当前test客户端仅接受loopback HTTP，必须另行最小扩展受控test HTTPS配置，后端可由本机代理转发，不直接改为全网监听。匿名公网隧道、借用他人域名或store模式塞合成数据均非替代方案，本轮不部署。真实手机的127.0.0.1指手机自身，不能复制本机地址当作真机方案。
++
++## P7. 完成定义
++
++演示完成须D1→D2→D3被逐项验收：自有持久后端、隔离演示身份、动态场景、JSON候选/冲突、真实原生交互、失败/重启证据均齐全。工程PASS不填成官方登录PASS；模拟器PASS不填成真机PASS；演示成功不填成门店需求验证。未来官方/门店按独立CP6/CP7授权执行，不需推倒上述领域层。
+--- before/product-knowledge-base/ideas/gym-occupancy/acceptance-mock-backend-v1.1-2026-09-16.md
++++ after/product-knowledge-base/ideas/gym-occupancy/acceptance-mock-backend-v1.1-2026-09-16.md
+@@ -0,0 +1,110 @@
++# 动态演示验收增量 v1.1
++
++Owner: Product Lead；指挥者验收，dev逐项提交证据
++Last updated: 2026-09-16
++Source: [补充决定](decision-mock-backend-v1.1-2026-09-16.md)；[PRD增量](prd-mock-backend-v1.1-2026-09-16.md)；[代码事实](../../raw/SRC-20260916-gym-backend-code-01.md)
++Confidence: High（验收定义）；新验收尚未执行
++Related decisions: GYM-MOCK-BACKEND-DECISION-001；GYM-MVP-PRD-001
++Next review date: 2026-09-30
++
++Status: FINAL_FOR_REVIEW
++Research Quality: 90/100（内部决策证据质量，见决定；非市场需求评分）
++Validation Level: V0
++
++## 证据规则与旧AC映射
++
++新增AC-DM01–DM12全部**NOT_RUN**。每行报告前置、步骤、实际结果、build/commit/config摘要、是否合成、命令/截图/DB安全摘要和PASS/FAIL/BLOCKED/NOT_RUN；不得把表中“预期”复制为实际结果。多层未齐可标PARTIAL。新代码引起的影响要回归，已有94/94仅为历史基线，不冒称本轮执行。
++
++| 原v1.0 AC | 本增量中的处理 |
++| --- | --- |
++| AC-B01、O01–O05、S01–S04 | 演示可使用合成观察/课表，但HTTP/DB/时间/缓存/冲突规则原样验收，工具证据须原生运行 |
++| AC-L01、F01、P01 | 演示子层改用显式演示凭证及用途说明；期限、撤销、同意/拒绝、权限不降级。官方wx.login交换部分单独NOT_RUN/BLOCKED |
++| AC-M01–M05、R01/R02、I01、X01、C01/C02、Z01、D01 | 合成会员/actor可验证机制，后端持久化与异常条件全部保留；不代表真实前台核验、真实隐私/备份声明完成 |
++| AC-E01 | 实际编译证据可保留；新演示入口和业务交互必须针对新构建补测；网络开关的授权/恢复另附证据 |
++| AC-W01、T01/T02 | 未来官方真机/门店层，演示成功不填PASS、不进入演示完成分母；继续独立保留未执行状态 |
++
++旧三份基线不改hash。以上是层级适用增量，不删除任何原AC。
++
++## AC-DM01 · 模式及身份隔离
++
++- 前置/操作：创建新demo目录；已有目录再次init；缺配置启动；将demo配置用于store/官方namespace；普通HTTP传入自选actor/role。
++- 预期：新建独立DB/密钥且只有合成内容；重复init不改任何既有业务或角色；不匹配配置失败关闭；store拒绝演示身份/入口；HTTP无法选用户或自授角色。服务端元信息与客户端模式不一致不展示登录成功。
++- 证据：配置校验、数据库隔离、已有数据前后hash或安全查询、负向HTTP结果。
++- 阶段/层：CP5-D1工程；D3界面；状态NOT_RUN。
++
++## AC-DM02 · 短期演示凭证与重新认证
++
++- 操作：CLI发行member-a凭证→同意登录；重复/并发交换、未知code、过期300秒、拒绝同意、响应丢失；删去旧已到期login_codes后再次提交过期凭证；5分钟外敏感操作重新认证。
++- 预期：有效凭证至多一次交换，未知/到期/重复不成功；拒绝不建会话且不消费凭证，CONSENT_REQUIRED或前置限流也不消费；成功登记login_codes尝试后即消费，后续失败不得重用。丢响应需新凭证；无论清理与否过期不复活；不调用wx.login伪造演示code。沿用7天/24小时、5会话和120/min持久限流，新凭证不清零计数。
++- 证据：边界/并发/重启测试、session元信息、凭证/日志泄漏检查；截图不留可用凭证。
++- 阶段/层：CP5-D1工程/客户端逻辑；D3实际登录；状态NOT_RUN。
++
++## AC-DM03 · operator与删除不得复活
++
++- 操作：operator-a登录但未grant即管理；本机显式grant后写入；撤销再发ticket/重启；解绑/删除后同alias重登。
++- 预期：未授权403；grant后写入有审计；撤销提交后下一管理请求403，ticket/runner/init不自动重授。删除中不得复建；完成后新userId无旧会员/operator，真实会话撤销和删除回执仍生效。
++- 证据：权限前后结果、role/账户安全摘要、删除任务/重启结果。
++- 阶段/层：CP5-D1权限基础；D2完整删除场景；D3原生验证；状态NOT_RUN。
++
++## AC-DM04 · 最小持久动态观察
++
++- 操作：空DB→通过现有API发布一条合成较空；另一个HTTP客户端读取；重启服务再读取；重复同操作、冲突body、普通用户发布。
++- 预期：同revision/observedAt/validUntil；重启不生成新数据或续TTL；同key不重复写，冲突409，普通用户403；服务停止时不返回成功mock。
++- 证据：两个真实HTTP调用、重启日志/DB摘要、操作台账及负向测试。
++- 阶段/层：CP5-D1工程；D3原生；状态NOT_RUN。
++
++## AC-DM05 · 有限场景运行与恢复
++
++- 操作：crowd-v1依次较空→适中→较忙；停止后过期；两runner竞争；业务已提交、进度尚未确认时中断；过期intent/台账清理后resume；operator撤销或人工抢先改状态。
++- 预期：步骤真实提交，有限play结束；同scope仅一runner；每个管理写请求重检当前operator会话，会员步骤用本人会话，run不存token；401/403暂停，resume不自行创建凭证/会话/角色。恢复查原operationId、不重复写/自动新key；无法确认则needs_review。启动后端不启动场景、清数据或挪课日期。精确899/900秒工程边界不变，工具至少一次自然900秒过期。
++- 证据：持久步骤/安全参数、故障点前后事务与revision、过期/暂停/撤回截图。
++- 阶段/层：CP5-D2工程；D3工具；状态NOT_RUN。
++
++## AC-DM06 · 会员和课表动态路径
++
++- 操作：member-a配对/核验/撤销/显式恢复，member-b争用同引用；课程草稿/发布/取消/改期/再次发布/撤回；分别展示明确无课、无覆盖、网络失败。
++- 预期：配对、Binding/Registry和课表版本全部存SQLite；同引用抢绑409；恢复走原显式核验事务；草稿不泄漏；同课稳定ID，公开仅当前发布；空课不表示瑜伽室无人。页面始终标示演示资格/模拟核验，无假真实会员卡或人数。
++- 证据：跨客户端读写与DB安全摘要，草稿/公开diff、异常态截图。
++- 阶段/层：CP5-D2工程；D3工具；状态NOT_RUN。
++
++## AC-DM07 · 课表JSON映射与导入归属
++
++- 操作：注册一个source；plan合法full v1合成JSON→查看差异→显式apply→读取公开→另行publish；同externalId改名改期；另一个source或错gym导入。
++- 预期：plan不动草稿/公开；apply仅改草稿；publish才改公开。映射稳定UUID；source绑定/独占和gym/时区校验生效。首次未知来源不可自动注册，不能通过外部数据写session/角色/Binding。
++- 证据：输入样例、plan diff、映射/批次/游标摘要、公开前后版本。
++- 阶段/层：CP5-D2工程；D3展示一次导入后发布；状态NOT_RUN。
++
++## AC-DM08 · schema、覆盖与整批拒绝
++
++- 操作：重复externalId、未知字段/个人资料、>64KiB、>200课、非法时区/offset/DST、覆盖0天/15天、重叠课；full遗漏一课、取消一课、更换覆盖范围。
++- 预期：非法批次422且无部分更新/游标推进；原状态不损坏。时间对象严格映射localInput；endDate为开区间终点。合法full把新覆盖内旧草稿遗漏课补成同ID/正确revision的cancelled，兼容EXPLICIT_CANCELLATION_REQUIRED；补齐后超过200课也拒绝。差异列出遗漏转取消和旧公开覆盖丢失范围，apply和publish均需明确确认；当前上课不含取消课程。不能把增量输入误读为全量；候选24小时到期不能apply。
++- 证据：边界输入/错误行号和safe code、DB不变检查、覆盖diff与确认请求。
++- 阶段/层：CP5-D2工程；状态NOT_RUN。
++
++## AC-DM09 · 重放、冲突、失败与清理
++
++- 操作：同版本同hash、同版本异hash、乱序版本；plan后人工编辑/发布再apply；DB锁/事务故障、apply响应丢失/重启；清理旧批次后重放低版本。
++- 预期：同内容已applied返原结果不双改；未过期候选复用，未应用已过期候选的plan优先废弃/替换旧候选并重新绑定当前本地版本/差异，旧batchId不可apply；异内容/乱序/本地版本冲突409且保留人工修改。草稿+来源摘要+映射+applied+游标同事务；失败不推进游标，未知结果先查询。publish原子复制来源摘要到snapshot；人工编辑标import-edited，不更改旧capturedAt或旧公开快照。清理后最低版本防线/映射和当前快照来源保留；公开provenance无batchId/外部键/actor，失败不假称刚同步。
++- 证据：并发与故障测试、事务前后摘要、30天及24小时清理边界、持久游标。
++- 阶段/层：CP5-D2工程；状态NOT_RUN。
++
++## AC-DM10 · 原生网络可达与工具授权
++
++- 操作：记录工具/基础库/新构建；curl health后实际wx.request；分别记录urlCheck原状态、授权及本项目临时例外、恢复后复查。
++- 预期：mock数据不改变域名阻断事实。未经用户明确确认不改开关；未确认可记HTTP PASS、原生联网BLOCKED。确认后真实wx.request获得正确scope/模拟标识并产生业务请求，才算网络层PASS。组合开关恢复原值、未提交宽松配置，既有测试号保留。
++- 证据：用户授权引用、前后配置安全摘要、控制台/服务端请求关联、恢复记录；curl或编译不能代替原生网络证据。
++- 阶段/层：CP5-D3工具；状态NOT_RUN。
++
++## AC-DM11 · 原生端到端与标签
++
++- 操作：在官方模拟器完成公共浏览、演示登录/拒绝/退出、operator与普通用户切换、观察/会员/课表维护、导入后发布、过期、断网重连及后端重启。
++- 预期：与同DB另一个独立HTTP客户端（独立会话）一致；无前端伪响应或注入token；演示入口/文案清楚，普通用户不可管理，状态持久化；记录关键正常/空/失败/过期画面。模拟器通过不声称官方微信身份、真机、真实馆方核验通过。
++- 证据：实际操作步骤/截图或录屏、安全HTTP/DB结果、构建hash与逐项结果。
++- 阶段/层：CP5-D3工具；状态NOT_RUN。
++
++## AC-DM12 · 增量与交付完整性
++
++- 操作：迁移现有test副本及全新demo库；执行受影响测试与check；核对v1.0三文件hash、原迁移、操作说明与真实命令；统计分层证据。
++- 预期：不重建业务、不改旧迁移/冻结文档、不碰真实store数据；新增脚本/字段均可追溯本增量。默认配置不启用demo；报告分别记录工程/原生演示/官方身份/真机/门店；缺后两层不阻塞演示完成。无源码/工具执行时不得填写产品测试PASS。
++- 证据：代码diff、输入输出hash、实际命令退出码、AC矩阵及限制。
++- 阶段/层：CP5-D1/D2/D3各自范围；状态NOT_RUN。
+--- before/product-knowledge-base/ideas/gym-occupancy/checkpoints-mock-backend-v1.1-2026-09-16.md
++++ after/product-knowledge-base/ideas/gym-occupancy/checkpoints-mock-backend-v1.1-2026-09-16.md
+@@ -0,0 +1,87 @@
++# 动态演示串行阶段增量 v1.1
++
++Owner: 指挥者唯一派单/验收；PM维护产品定义；指定dev实现
++Last updated: 2026-09-16
++Source: [补充决定](decision-mock-backend-v1.1-2026-09-16.md)；[PRD增量](prd-mock-backend-v1.1-2026-09-16.md)；[AC增量](acceptance-mock-backend-v1.1-2026-09-16.md)
++Confidence: High（阶段边界）；具体实现待执行
++Related decisions: GYM-MOCK-BACKEND-DECISION-001；GYM-MVP-PRD-001
++Next review date: 2026-09-30
++
++Status: FINAL_FOR_REVIEW
++Research Quality: 90/100（内部决策证据质量，见决定；非市场需求评分）
++Validation Level: V0
++
++## C1. 基线和证据层
++
++源码根`/Users/orderly_ray/Projects/gym-miniapp`，本次读取HEAD=`f22664d5f5b2320966df53c874eaaf120297be6b`、工作树干净；Node24/SQLite基础及观察/会员/课表/删除已存在。旧CP0–CP4结果保留，94/94为已有工程结果，本次PM不重跑。旧CP5已本地官方工具编译，业务联调因loopback域名和disabled身份未完成；原记录不改写为成功。
++
++新增顺序：**CP5-D1 → CP5-D2 → CP5-D3 → 演示MVP验收完成**。随后停下。未来CP6官方身份/双真机及CP7真实单店单独授权，不再作为演示交付前置。缺外部数据库不是D1–D3停止条件。
++
++所有新阶段当前NOT_STARTED，新AC均NOT_RUN。指挥者接受本增量后只能派唯一当前任务；dev提交后等ACCEPTED，再开始下一项。PM不派dev。RESULT仍只用COMPLETE/BLOCKED/PRODUCT_DECISION_REQUIRED；逐测试使用PASS/FAIL/BLOCKED/NOT_RUN/PARTIAL，不能把COMPLETE等同指挥者接受。
++
++## C2. CP5-D1 — 唯一第一项推荐任务
++
++**Task ID: GYM-DEMO-FOUNDATION-001**
++
++唯一结果：在隔离的自有持久后端上，维护者能发行演示凭证，普通/维护用户经过真实鉴权，并通过原API完成一条观察的写入、读取、重启保留；原生页面具备显式演示登录分支，逻辑验证通过。
++
++前置：指挥者接受v1.1四份补充文档；dev核对实际源码根、当前工作树及冻结v1.0 hashes。已有Node24和本地SQLite即可，不需馆方后端、AppSecret、域名或工具安全开关确认。
++
++范围内：
++
++1. 显式demo配置与全新初始化/已有目录保护；短期演示凭证CLI、持久摘要/期限/一次尝试和清理；test adapter增量与官方隔离。
++2. 最小原生“演示登录”输入与文案/模式校验，复用既有业务session及API，客户端逻辑测可先用VM；不伪称工具层通过。
++3. 两个演示主体取得真实业务会话；维护者显式沿用role CLI授予operator；通过现有API发布**一条**模拟观察、另HTTP客户端读取及重启验证，不做完整场景runner/JSON导入。
++4. README可执行初始化、凭证、角色、服务启动/停止/重启与HTTP烟测；不把可用凭证放入报告。新增迁移，不重构现有领域服务。
++
++范围外：完整动态场景编排、外部数据适配、真实官方身份、修改工具安全开关、原生联网验收、部署/真机/门店。
++
++验收：AC-DM01/02/04工程层、DM03角色基础、DM12本阶段；原session/role/限流/删除隔离受影响回归。普通用户403、凭证到期/并发重放、store拒绝和重启不恢复角色必须有负向证据。
++
++交付：提交或源码manifest、输入v1.0/v1.1 hash、受影响测试及check实际输出、两个HTTP客户端/重启记录、迁移与配置样例、逐AC状态，建议目录`reports/cp5/demo-foundation/`。记录工具业务NOT_RUN；无需等待D3条件。
++
++停止条件：跨环境演示可用、硬编码session、role自授、重启丢状态或原业务回归失败时先修当前项；实际环境依赖无法执行则如实BLOCKED。交付后等D1接受，不自动做D2。
++
++## C3. CP5-D2 — 场景与首适配器
++
++建议后续任务ID：GYM-DEMO-SCENARIOS-001（仅计划，非派单）。
++
++唯一结果：现有业务可由有界动态场景演示，且合成外部课表JSON能按稳定映射和冲突规则导入草稿，持久恢复可验证。
++
++前置：D1已接受，身份/角色/HTTP可靠；独立demo scope、合成anchorDate/场景配置确定。
++
++范围内：DYN-O/M/S/F、最小持久步骤/查询/resume、有限play与竞争/异常暂停；成员删除是显式测试步骤；课表JSON source注册/plan/apply/status、稳定映射、版本/内容hash/本地CAS、全量遗漏补取消、覆盖差异及清理。新增草稿provenance及发布时不可变复制，公开安全来源摘要。复用原领域服务，补充事务边界保持导入原子；手动发布仍用原接口。
++
++范围外：任意真实数据库连接、全量会员同步、双向写回、通用调度后台、无人值守持续运行、网络安全开关、云资源。
++
++验收：AC-DM03删除完整层、DM05/06/07/08/09工程、DM12本阶段；跨进程重启/锁竞争/提交后丢响应；旧场景/清理和权限受到影响时回归。工具900秒自然过期留D3，精确边界工程先测。
++
++证据：合成输入样例、数据字典/表和API说明、场景命令及有限运行记录、导入差异/错误/冲突报告、持久对账与清理结果、测试及check、hash和逐AC，建议目录`reports/cp5/demo-scenarios/`。
++
++停止条件：场景绕过权限/业务事务、导入静默覆盖人工改动、部分应用或重放游标错误时修复本项；缺真实数据库不构成BLOCKED。交付等D2接受。
++
++## C4. CP5-D3 — 原生动态演示验收
++
++建议后续任务ID：GYM-DEMO-TOOLS-001（仅计划，非派单）。
++
++唯一结果：新构建在官方开发工具内真实访问自有后端，并完成动态演示关键路径及分层证据包。
++
++前置：D2接受；实际官方工具/测试号可用；指挥者取得用户对本项目临时组合安全开关的明确确认，或另行批准并实现合法HTTPS方案。没有确认不改变urlCheck。
++
++范围内：执行PRD P6本地路线；实际编译、wx.request、主动演示登录/拒绝/退出、两角色业务读写与导入后发布、独立HTTP客户端对照、后端重启/断网、自然900秒过期；记录原设置、确认来源及恢复。修复本阶段发现的既有集成问题，不扩大功能。
++
++范围外：用HTML预览或注入session冒充原生结果；官方code交换、设备正常网络证明、体验版上传/部署/公开发布、馆方外联。
++
++验收：AC-DM10/11工具层；DM01–07相关界面/端到端及DM12最终矩阵，工程回归依据改动；DM08/09故障注入只需工程证据，不强行每例在GUI复演。
++
++证据：工具/基础库版本、构建与配置hash、授权及恢复记录、真实API请求与DB对照、关键正常/空/失败/过期截图、逐AC结果；记录官方身份NOT_RUN、真机NOT_RUN、门店NOT_RUN，不将三者计为演示失败。建议目录`reports/cp5/demo-tools/`。
++
++停止条件：未获开关授权且无合法HTTPS则网络子层BLOCKED，可交已有编译结果但不能接受完整演示；得到授权也须实测。演示/真实混淆、恢复设置失败必须报告修复。D3接受后当前演示MVP完成，停下等下一决定。
++
++## C5. 未来正式阶段与尚未实现的连接器
++
++- **CP6**：单独取官方身份/平台配置、合规说明、合法HTTPS、正常网络iOS/Android和测试分发授权；使用新的官方身份命名空间，禁用演示身份，不携demo DB切wechat绕过namespace。不得把合成业务放入store且标成正式数据；store只接受获准的真实数据。若未来官方身份/真机验收使用合成业务，必须在独立test scope保留数据演示标识，同时明确identity=wechat，身份和网络仍须真实；该组合的具体配置与最小支持另派合同，不能假定当前实现已经兼容。此处显式收窄旧CP6合成业务的环境边界，不将真实馆方数据库变成当前演示前置。
++- **CP7**：取得真实门店合作、会员核验流程/课表和运营人员，再做真实试点；馆方已有数据库API是可选数据来源，不是人工观察/前台核验试点的强制前置。
++- **未来外部连接器任务**：先拿到授权schema/样例，写字段映射、读取增量/删除/错误/对账合同，再实现专用adapter。会员资格自动同步或在场人数计算另作产品决定，不从本次课表JSON批准推导。
++
++后续所有任务由指挥者唯一派发，本文件仅提供可开发顺序。
+--- before/product-knowledge-base/raw/SRC-20260916-gym-mock-decision-01.md
++++ after/product-knowledge-base/raw/SRC-20260916-gym-mock-decision-01.md
+@@ -0,0 +1,33 @@
++---
++source_id: "SRC-20260916-gym-mock-decision-01"
++title: "用户决定使用自有动态mock后端及指挥者增量合同"
++source_url_or_path: "codex://threads/01a0a64a-8f38-7503-a202-29ed08322b14"
++publisher_or_author: "用户；指定指挥者转达"
++published_or_event_date: "2026-09-16"
++accessed_date: "2026-09-16"
++source_class: "D"
++source_type: "internal"
++projects: ["gym-occupancy"]
++storage_permission: "user-owned"
++access_status: "verified"
++summary: "用户要求自有后端驱动动态模拟、持久存储及未来数据适配；馆方真实后端不再是演示MVP前置。"
++quoted_or_referenced_location: "本任务收到的codex_delegation；GYM-MOCK-BACKEND-DECISION-001 current-task.json"
++supersedes: null
++---
++
++# 自有动态演示后端授权
++
++Owner: Product Lead
++Last updated: 2026-09-16
++Source: 本任务用户提供的指挥者委派原文；[任务合同](/Users/orderly_ray/Leader/projects/gym-miniapp/orchestration/current-task.json)
++Confidence: High（授权与约束）；不代表真实使用验证
++Related decisions: GYM-MOCK-BACKEND-DECISION-001；GYM-MVP-PRD-001
++Next review date: 2026-09-30
++
++转达的用户原话：
++
++> 真实后端是没有的…只能自己mock这个数据动态的过程…知道数据怎么存储…设计成可扩展的…随时接入他们数据库…有自己的后端进行mock
++
++指挥者要求：基于既有实现形成正式版本化补充决定、PRD/AC/Checkpoint增量；演示身份与官方身份分开；mock不解决域名校验；需要用户确认的工具安全开关单列；报告路径/hash后停止，不派dev。
++
++此来源确认需求与本地方案编制授权，不证明馆方数据库结构、网络可用性或商业需求。current-task会变化，读取时hash保存在本次交付清单；本摘录不覆盖旧批准记录。
+--- before/product-knowledge-base/raw/SRC-20260916-gym-backend-code-01.md
++++ after/product-knowledge-base/raw/SRC-20260916-gym-backend-code-01.md
+@@ -0,0 +1,34 @@
++---
++source_id: "SRC-20260916-gym-backend-code-01"
++title: "gym-miniapp f22664d代码与CP5原生工具网络证据"
++source_url_or_path: "/Users/orderly_ray/Projects/gym-miniapp/server/http.mjs"
++publisher_or_author: "gym-miniapp工程仓库"
++published_or_event_date: "2026-09-16"
++accessed_date: "2026-09-16"
++source_class: "B"
++source_type: "repository"
++projects: ["gym-occupancy"]
++storage_permission: "user-owned"
++access_status: "verified"
++summary: "已有Node/SQLite领域服务及HTTP接口；test身份依赖fixture，原生客户端仍调用wx.login；loopback请求实际被合法域名校验阻断。"
++quoted_or_referenced_location: "f22664d5f5b2320966df53c874eaaf120297be6b：server/*、miniprogram/lib/session.js、reports/cp5/tools-002/06-runtime-domain-error.txt"
++supersedes: null
++---
++
++# 当前实现证据
++
++Owner: Product Lead
++Last updated: 2026-09-16
++Source: 本地仓库提交 f22664d5f5b2320966df53c874eaaf120297be6b；[HTTP入口](/Users/orderly_ray/Projects/gym-miniapp/server/http.mjs)；[原生控制台记录](/Users/orderly_ray/Projects/gym-miniapp/reports/cp5/tools-002/06-runtime-domain-error.txt)
++Confidence: High（所读源码及错误记录）；端到端效果待验证
++Related decisions: GYM-MOCK-BACKEND-DECISION-001
++Next review date: 2026-09-30
++
++| Evidence | Fact及支持范围 | 原始位置与限制 |
++| --- | --- | --- |
++| E-M01 | 自有后端已有观察、会员、删除、课表、角色与会话服务；SQLite持久表已经存在 | server/http.mjs、server/migrations/001–005；代码存在不等于本轮执行通过 |
++| E-M02 | test/store配置、身份模式及密钥/目录隔离；服务只监听127.0.0.1 | server/config.mjs；不能直接假定已经支持托管HTTPS test端点 |
++| E-M03 | test adapter只接受预置摘要，客户端loginCode仍使用wx.login；没有可操作演示凭证发行流程 | server/wechat.mjs、server/identity.mjs、miniprogram/lib/session.js；测试替身不是微信验证 |
++| E-M04 | 模拟器实际报127.0.0.1不在request合法域名列表 | reports/cp5/tools-002/06-runtime-domain-error.txt；错误证据不代表未来更改配置后仍失败或已经成功 |
++
++工程94/94与官方工具编译通过为指挥者和已有开发报告的结果，本轮没有重跑。开发报告仅用于结果定位，源码/迁移和工具原始记录用于核查关键技术事实。无真实馆方数据库或真实身份交换的新证据。
+--- before/product-knowledge-base/BOARD.md
++++ after/product-knowledge-base/BOARD.md
+@@ -1,8 +1,8 @@
+ # 产品团队作战板
+ 
+ Owner: Product Lead
+-Last updated: 2026-08-30
+-Source: Manual setup；ChatGPT 分享讨论；外部公开数据调研；一人公司 PM 知识循环决策；Product Lead 暂停决定
++Last updated: 2026-09-16
++Source: Manual setup；ChatGPT 分享讨论；外部公开数据调研；一人公司 PM 知识循环决策；Product Lead 暂停决定；GYM-MOCK-BACKEND-DECISION-001用户最新决定
+ Confidence: High
+ Related decisions: `decisions/one-person-pm-knowledge-loop-2026-08-23.md`；`decisions/sold-too-soon-pause-2026-08-30.md`
+ Next review date: 2026-09-30
+@@ -135,3 +135,14 @@
+ | Research Agent | 家庭史市场已验证的是史料发现、低摩擦口述和实体成果，不是纯时间线订阅；第一验证产物应是一卷可浏览、可导出、可成册的真实家庭样本。 | 查看 `ideas/family-chronicle/idea-brief.md` |
+ | Research Agent | 父母／祖辈回忆录已形成从低价自助成书到高价真人代写的完整价格带；最大未解问题是完成率，“一年 52 个问题”常把礼物变成作业。互动数字人格产品 HereAfter 已停止服务，原始素材导出与平台存续必须成为基础要求。 | 查看 `ideas/family-chronicle/elder-memoir-market-research-2026-08-17.md` |
+ | Product Manager Agent | AI 无法直接补足护理人力；最小且相对低风险的切口是只整理护理师已口述事实的交班草稿。正式临床测试前必须经过院方风险、个资、资安与临床流程审批。 | 查看 `ideas/ai-nursing-handoff-draft/idea-brief.md` |
++
++
++## 健身房演示增量（2026-09-16）
++
++用户明确授权自有后端动态模拟；[v1.1决定与范围](ideas/gym-occupancy/decision-mock-backend-v1.1-2026-09-16.md)方向APPROVED，补充包待指挥者验收。现有Node/SQLite业务保留，新增演示身份、持久场景和课表JSON适配；不等待馆方真实后端。Research Quality 90/100（内部综合），Validation Level V0；获准投入为本地可逆演示增量，未改变其他项目WIP或对外承诺。
++
++- 当前PM任务：GYM-MOCK-BACKEND-DECISION-001，完成补充文档后交指挥者；不自行派dev。
++- 唯一首dev建议：GYM-DEMO-FOUNDATION-001，需指挥者验收后派发；[阶段与验收](ideas/gym-occupancy/checkpoints-mock-backend-v1.1-2026-09-16.md)。
++- 旧限制适用冲突：v1.0完整真实交付与CP5官方身份前置，演示层按v1.1显式替代，原冻结文件/历史证据不改。
++- 待确认：仅本项目官方开发工具临时跳过域名/TLS/证书等组合校验；由指挥者取得明确用户确认后才能执行，当前保持原设置。它只影响原生联网层，不阻塞后端工程。
++- Next evidence：新构建真实HTTP持久演示与原生wx.request；Pause condition：跨环境混用、绕鉴权或假成功；未来真机/真实门店独立验收，不提升V0。
+--- before/product-knowledge-base/INDEX.md
++++ after/product-knowledge-base/INDEX.md
+@@ -1,7 +1,7 @@
+ # 产品知识地图
+ 
+ Owner: Product Lead
+-Last updated: 2026-09-10
++Last updated: 2026-09-16
+ Source: 本工作区长期知识、项目文件与来源登记
+ Confidence: High
+ Related decisions: `decisions/one-person-pm-knowledge-loop-2026-08-23.md`
+@@ -171,7 +171,8 @@
+ - [健身房实时人数与拥挤度查询](ideas/gym-occupancy/idea-brief.md)：单店实验、必需会员入口、简洁首页与场地配置；V0，数据接入和拥挤阈值待核查
+ - [健身房产品功能与UI研究（2026-09-10）](ideas/gym-occupancy/product-feature-ui-research-2026-09-10.md)：11个相关产品／项目、科技公司赛事与开源许可；[来源证据卡](ideas/gym-occupancy/evidence-cards-2026-09-10.md)，新功能为建议、V0不变
+ - [健身房MVP开发准备（2026-09-16）](ideas/gym-occupancy/mvp-readiness-research-2026-09-16.md)：研究已验收、人工忙闲/会员核验/课表P0范围APPROVED；[平台证据](ideas/gym-occupancy/mvp-readiness-evidence-2026-09-16.md)
+-- [健身房正式PRD v1.0](ideas/gym-occupancy/prd-mvp-v1.0-2026-09-16.md)：FINAL_FOR_REVIEW；[30条验收矩阵](ideas/gym-occupancy/acceptance-mvp-v1.0-2026-09-16.md)／[串行CP0–CP7](ideas/gym-occupancy/checkpoints-mvp-v1.0-2026-09-16.md)，源码目标`/Users/orderly_ray/Projects/gym-miniapp`，本轮不派dev
++- [健身房正式PRD v1.0](ideas/gym-occupancy/prd-mvp-v1.0-2026-09-16.md)：已由指挥者ACCEPTED，三份文件保持冻结；[30条验收矩阵](ideas/gym-occupancy/acceptance-mvp-v1.0-2026-09-16.md)／[串行CP0–CP7](ideas/gym-occupancy/checkpoints-mvp-v1.0-2026-09-16.md)，源码`/Users/orderly_ray/Projects/gym-miniapp`
++- [健身房自有动态演示后端决定 v1.1](ideas/gym-occupancy/decision-mock-backend-v1.1-2026-09-16.md)：用户已批准方向，补充包FINAL_FOR_REVIEW；[PRD增量](ideas/gym-occupancy/prd-mock-backend-v1.1-2026-09-16.md)／[12项AC增量](ideas/gym-occupancy/acceptance-mock-backend-v1.1-2026-09-16.md)／[CP5-D1–D3与唯一首任务](ideas/gym-occupancy/checkpoints-mock-backend-v1.1-2026-09-16.md)。馆方后端不再是演示前置；本机工具网络例外须明确确认；V0不变。
+ 
+ - [AI 护理交班草稿器](ideas/ai-nursing-handoff-draft/idea-brief.md)
+ - [CTP 古籍阅读体验现代化](ideas/chinese-text-project-reading-experience/idea-brief.md)
+--- before/product-knowledge-base/LOG.md
++++ after/product-knowledge-base/LOG.md
+@@ -302,3 +302,7 @@
+ | 2026-09-16 | Formal PRD package | GYM-MVP-PRD-001 | COMPLETE / awaiting Leader acceptance | 新增PRD v1.0、完整验收矩阵、CP0–CP7；21原AC完整复制，9细化共30；冻结会话/operator/限流/配对/恢复/删除/时区/发布/保留清理；只更新idea-brief、研究后续基线、INDEX/LOG，源码路径已定未建项 |
+ | 2026-09-16 | Document review + scoped validation | GYM-MVP-PRD-001 | PASS / partial lint | gym_prd_review初审REVISE，修复600秒/60秒窗口及撤销Binding原子恢复语义，矩阵/CP3同步后复核PASS；顶层RESULT按Leader要求仅COMPLETE/BLOCKED/PRODUCT_DECISION_REQUIRED，测试状态单列。检查元数据/链接/21原场景完整性/30唯一AC/8CP结构/来源与历史/diff；标准lint脚本仍缺失，不声称全库通过。无源码/Leader配置/旧raw编辑、建项、发布、外联、派dev或提交 |
+ | 2026-09-16 | thinkV2 SenseVoice product admission | V2-OFFLINE-VOICE-002 / cb6a5460-1655-4778-9d85-6095d87906e4 | APPROVED evaluation / PAUSE embedding | 仅读合同及五份本地许可并固定SHA；§2.1与§3用途歧义、§4.2行为/终止、§6自动修订和转换来源缺口分列。仅合成隔离参考评估可接受，最终私人App嵌入/家庭交付暂停；非法律意见或取得/安全加载许可，不继承代码MIT覆盖权重，不降90%与27/30/隐私门槛，不选第二路线或循环研究 |
++
++| 2026-09-16 | Ingest | SRC-20260916-gym-mock-decision-01；SRC-20260916-gym-backend-code-01 | complete | 用户最新自有动态mock决定与f22664d源码/原生网络错误证据；raw只追加，未重复市场搜索，未把演示/代理报告当真实门店证据 |
++| 2026-09-16 | Decision/PRD increment | GYM-MOCK-BACKEND-DECISION-001；gym-occupancy v1.1四份增量 | complete | 方向APPROVED，补充包FINAL_FOR_REVIEW；12项新AC、CP5-D1–D3和唯一首dev建议；更新INDEX/BOARD，冻结v1.0三文件不变。未修改源码、工具开关、部署或派dev |
++| 2026-09-16 | Review + scoped validation | GYM-MOCK-BACKEND-DECISION-001 | complete | gym_mock_review最终PASS；修正遗漏课显式取消、草稿/快照来源、时间对象、凭证消费点、候选过期优先序及恢复鉴权/CP6数据隔离。4文档/12AC/3CP、链接/元数据/来源/历史和diff通过，原三份hash及f22664d源码不变；标准lint脚本缺失仅局部校验，产品测试NOT_RUN；等待指挥者验收 |

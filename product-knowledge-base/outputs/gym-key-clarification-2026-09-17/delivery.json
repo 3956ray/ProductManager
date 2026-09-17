@@ -1,0 +1,11 @@
+{
+  "RESULT": "COMPLETE",
+  "decision": "APPROVED interpretation",
+  "path": "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/ideas/gym-occupancy/clarification-external-key-v1.1-2026-09-17.md",
+  "sha256": "8f0e5da5bb94eff0d0f6111f680b301a183d83892cc0da9705264462d44313e2",
+  "frozen_four_hashes_unchanged": true,
+  "document_checks": "PASS",
+  "errors": [],
+  "full_library_lint": "unavailable: lint_knowledge.py missing",
+  "product_tests": "NOT_RUN"
+}

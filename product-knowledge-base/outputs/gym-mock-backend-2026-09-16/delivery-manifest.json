@@ -1,0 +1,60 @@
+{
+  "task_id": "GYM-MOCK-BACKEND-DECISION-001",
+  "RESULT": "COMPLETE",
+  "decision": "APPROVED direction per explicit user decision; addendum FINAL_FOR_REVIEW",
+  "Leader_acceptance": "PENDING",
+  "formal_documents": [
+    {
+      "path": "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/ideas/gym-occupancy/decision-mock-backend-v1.1-2026-09-16.md",
+      "sha256": "91bc4731b36c3448be4926537091bc98d759e9e9e9eee312beeaa0fab10ef07c"
+    },
+    {
+      "path": "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/ideas/gym-occupancy/prd-mock-backend-v1.1-2026-09-16.md",
+      "sha256": "1e6589aa1074cfb0c91ff999016d7dcf8fbe562493dacf7724384790f03a1ab5"
+    },
+    {
+      "path": "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/ideas/gym-occupancy/acceptance-mock-backend-v1.1-2026-09-16.md",
+      "sha256": "1d1aa65ceb25883a785231f9fbb73920de43489ff1dc78ba04ce266c4914af26"
+    },
+    {
+      "path": "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/ideas/gym-occupancy/checkpoints-mock-backend-v1.1-2026-09-16.md",
+      "sha256": "a041b64972f187b0655996d80dc5d9272c535437d001e7445a55b3ad22d6c6c7"
+    }
+  ],
+  "new_sources": [
+    "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/raw/SRC-20260916-gym-mock-decision-01.md",
+    "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/raw/SRC-20260916-gym-backend-code-01.md"
+  ],
+  "updated_files": [
+    "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/BOARD.md",
+    "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/INDEX.md",
+    "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/LOG.md"
+  ],
+  "baseline_commit": "f22664d5f5b2320966df53c874eaaf120297be6b",
+  "baseline_documents_unchanged": true,
+  "recommended_first_dev_task": "GYM-DEMO-FOUNDATION-001 / CP5-D1",
+  "dev_dispatched": false,
+  "source_edits": false,
+  "tool_settings_changed": false,
+  "check_results": "Scoped document checks PASS; independent review PASS; full-library lint unavailable (script missing); product tests NOT_RUN",
+  "changes": [
+    "Own persistent backend demo no longer waits for gym backend or official identity",
+    "Explicit demo credential flow isolated from official WeChat identity and store",
+    "Durable dynamic scenes reuse existing domain API and permissions",
+    "First read-only JSON schedule adapter stages mapped candidates; explicit draft replacement/publication, version/conflict/atomicity/provenance",
+    "CP5-D1–D3 demo acceptance separated from future CP6/CP7; 12 incremental AC"
+  ],
+  "unresolved": [
+    "Commander acceptance of addendum before dev dispatch",
+    "User confirmation before temporary project-local DevTools combined domain/TLS/certificate bypass; no setting changed",
+    "Future external source schema/authorization/mapping/sync semantics require separate adapter task",
+    "Future official identity/HTTPS/device/venue evidence remains unverified; not demo-backend prerequisites"
+  ],
+  "outputs": [
+    "input-snapshot.json",
+    "review-record.json",
+    "validation.json",
+    "knowledge-changes.patch",
+    "delivery-manifest.json"
+  ]
+}

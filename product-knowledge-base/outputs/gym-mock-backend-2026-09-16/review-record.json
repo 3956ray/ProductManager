@@ -1,0 +1,33 @@
+{
+  "reviewer": "/root/gym_mock_review",
+  "model": "gpt-5.6-terra",
+  "mode": "independent read-only",
+  "result": "PASS",
+  "rounds": [
+    {
+      "result": "REVISE",
+      "issues": [
+        "full snapshot missing classes must convert to explicit cancellation",
+        "draft/snapshot provenance persistence",
+        "fixed local time object and coverage exclusive end",
+        "demo ticket consumption point"
+      ]
+    },
+    {
+      "result": "REVISE",
+      "issues": [
+        "expired candidate replacement priority",
+        "runner current authorization and no automatic credentials/roles on resume",
+        "CP6 synthetic data isolation from store"
+      ]
+    },
+    {
+      "result": "PASS",
+      "issues": []
+    }
+  ],
+  "all_issues_resolved": true,
+  "research_quality": 90,
+  "validation_level": "V0",
+  "product_tests": "NOT_RUN"
+}

@@ -1,0 +1,74 @@
+{
+  "task_id": "GYM-MOCK-BACKEND-DECISION-001",
+  "baseline_commit": "f22664d5f5b2320966df53c874eaaf120297be6b",
+  "inputs": [
+    {
+      "path": "/Users/orderly_ray/Leader/projects/gym-miniapp/orchestration/current-task.json",
+      "sha256": "e1b2f1229b13ab200ed7d3fa5f48ea12efe5a37d3d89be32fdf228b73087ee9f"
+    },
+    {
+      "path": "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/ideas/gym-occupancy/prd-mvp-v1.0-2026-09-16.md",
+      "sha256": "7d9948f302f13119120c03043902fba7455437764eb57d4923efebda4254e1bd"
+    },
+    {
+      "path": "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/ideas/gym-occupancy/acceptance-mvp-v1.0-2026-09-16.md",
+      "sha256": "89cded4a468deaa20e6090d19b35dc31c77b6a01e3e45081d3d996484188ae71"
+    },
+    {
+      "path": "/Users/orderly_ray/Documents/Products Manager/product-knowledge-base/ideas/gym-occupancy/checkpoints-mvp-v1.0-2026-09-16.md",
+      "sha256": "13060548afb17731e033364817f0e7ee6b0569c334bbfc4138e308ee64678882"
+    },
+    {
+      "path": "/Users/orderly_ray/Projects/gym-miniapp/server/config.mjs",
+      "sha256": "f007a174f7fba35bc5d9fb36e14f67028f6b49c1dd222d33e13131ad661cbde9"
+    },
+    {
+      "path": "/Users/orderly_ray/Projects/gym-miniapp/server/http.mjs",
+      "sha256": "001f0c76183d83e97437d37e3db05b0a904251e4736a1c9a3de0b9d27f6461ba"
+    },
+    {
+      "path": "/Users/orderly_ray/Projects/gym-miniapp/server/identity.mjs",
+      "sha256": "4bbf7947202f10ddb5e61b908239bb82847e2fe0bcaf4f926b2e7e4676a5237a"
+    },
+    {
+      "path": "/Users/orderly_ray/Projects/gym-miniapp/server/wechat.mjs",
+      "sha256": "0630b77359fdcab2fbc4f5fa62e2a918fa53749483e2d34b7c010a89775c946c"
+    },
+    {
+      "path": "/Users/orderly_ray/Projects/gym-miniapp/server/membership.mjs",
+      "sha256": "c47d427c244c194d4de633f5024228f502d81382b7ac8e1efa041dca7c964261"
+    },
+    {
+      "path": "/Users/orderly_ray/Projects/gym-miniapp/server/observations.mjs",
+      "sha256": "aa8bc116d9c73ac77953ed5f44df30d8b2ca47a552119e612049655ecb5fe7a7"
+    },
+    {
+      "path": "/Users/orderly_ray/Projects/gym-miniapp/server/schedules.mjs",
+      "sha256": "f85f9b46f9a830f3c79a9c2210cbce5b32d203b1f4b2af482bbd19a12c933eb7"
+    },
+    {
+      "path": "/Users/orderly_ray/Projects/gym-miniapp/miniprogram/lib/session.js",
+      "sha256": "39c9f65c5ca25ad9ee8fc4e85568f91d666365ce62b1702e6f92861d83945534"
+    },
+    {
+      "path": "/Users/orderly_ray/Projects/gym-miniapp/reports/cp5/tools-002/developer-report.md",
+      "sha256": "f40278328b1c6883e9fb46053e5f38b4fdd62b58e0afe9a2a5dc154d4de51f8a"
+    },
+    {
+      "path": "/Users/orderly_ray/Projects/gym-miniapp/reports/cp5/tools-002/06-runtime-domain-error.txt",
+      "sha256": "9dfbc89ae669884ef1f5d9fa39ac0070fb034fbc00901413f1214ee0a39f9d51"
+    },
+    {
+      "path": "/Users/orderly_ray/Projects/gym-miniapp/server/schedule-time.mjs",
+      "sha256": "8a04aab485dfd0b4e04fbf08a0e3ca705aaa52b63ebce1aaa812113b3042b6e4"
+    },
+    {
+      "path": "/Users/orderly_ray/Projects/gym-miniapp/server/migrations/005-schedule.sql",
+      "sha256": "3203c8c86a7d36e217c6ae30debd682f743e42432cb5ef6b18157320dfe981bb"
+    },
+    {
+      "path": "/Users/orderly_ray/Projects/gym-miniapp/scripts/role.mjs",
+      "sha256": "6364055f61fb48c36196b6a9a8a7c5c063b3055a5f72a934c82f74eeaaf5e243"
+    }
+  ]
+}
